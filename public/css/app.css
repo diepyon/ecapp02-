@@ -10948,12 +10948,33 @@ span.genrebox {
   width: 30%;
 }
 
-img.cart {
+/*検索ボックスのジャンル選択プルダウン*/
+
+.stock_thumbnail {
+  position: relative;
+}
+
+.genre_icon {
+  color: #adb5bd99;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  cursor: pointer;
+  position: absolute;
+  bottom: 0%;
+  left: 0%;
+  margin: 8px;
+}
+
+/*サムネイルの左下に出るジャンル判別アイコン*/
+
+a img.cart {
   width: 30px;
 }
 
 img.incart {
-  width: 50%;
+  width: 100%;
   display: block;
   margin: 0 auto;
   height: 140px;
@@ -10961,16 +10982,31 @@ img.incart {
      object-fit: cover;
 }
 
+/*商品一覧の画像*/
+
 .mycart_box {
   color: #4c4c4c;
   font-weight: bold;
   text-align: center;
   margin-top: 24px;
-  padding: 24px 8px;
+  padding: 0px;
+  /*商品一覧の余白をなくす*/
   font-size: 1.1em;
   background-color: #fefefe;
   width: 100%;
 }
+
+.mycart_box_incart {
+  padding: 8px 0;
+}
+
+/*カートのページでは画像の上下に余白*/
+
+.img_box {
+  padding: 0;
+}
+
+/*商品一覧の余白をなくす*/
 
 .footer_design {
   background-color: #07728a;
