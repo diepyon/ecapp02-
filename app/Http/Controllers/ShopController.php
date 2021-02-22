@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Stock; //追加
 use App\Models\Cart; //追加
+use App\Models\Favorite; //追加
 use Illuminate\Support\Facades\Auth;//ログイン情報取得できるやつ
 use DB;
 use Illuminate\Support\Facades\Mail; //メール
@@ -17,7 +18,7 @@ class ShopController extends Controller
     {
         return view('top');
     }
-    public function images() //追加
+    public function images() //stocksテーブルのgenreカラムの値がimageのレコードを取得する
     {
         $stocks = DB::table('stocks')->where('genre', 'image')->Paginate(6);
 
@@ -56,10 +57,45 @@ class ShopController extends Controller
         return view('mycart', $data)->with('message', $message);
         //配列$dataをビューファイル->メソッド実行結果を格納した$messageも渡す（$data['message']=$message;と同じ意味）
     }
-    public function checkout(Cart $cart)
+    public function checkout(Request $request, Cart $cart)
     {
-        $checkout_info = $cart->checkoutCart();
-        Mail::to('test@example.com')->send(new Thanks); //メール送信処理
+       $user = Auth::user();//ログインユーザーの情報を取得
+       $mail_data['user']=$user->name; //ログインユーザーのnameカラムの情報を取得
+       $mail_data['checkout_items']=$cart->checkoutCart(); //checkoutCartメソッドの実行結果を連想配列$mail_dataのキーcheckout_itemsに格納
+       Mail::to($user->email)->send(new Thanks($mail_data));//ログインユーザーのemailカラムの情報（メールアドレス）を取得して、そのメールアドレスに情報を送る
+
         return view('checkout');
+    }
+    public function myFavorite(Favorite $favorite)
+    {
+        $data = $favorite->showFavorite();//showCartメソッドの実行結果を格納
+        return view('favorite', $data);
+    }
+    public function addMyfavorite(Request $request, Favorite $favorite)
+    {
+        //お気に入りに追加
+        $stock_id=$request->stock_id;
+        $message = $favorite->addFavorite($stock_id);
+
+        //追加後の情報を取得
+        $data = $favorite->showFavorite();
+        return view('favorite', $data)->with('message', $message);
+        //配列$dataをビューファイル->メソッド実行結果を格納した$messageも渡す（$data['message']=$message;と同じ意味）
+    }    
+    public function deleteFavorite(Request $request, Favorite $favorite)
+    {
+        $stock_id=$request->stock_id;
+        $message = $favorite->deleteFavorite($stock_id);//FavoriteモデルのshowFavboriteメソッドの実行結果を格納（stock_idもFavoriteモデルに連れて行ってね）
+
+        $data = $favorite->showFavorite($stock_id);
+        return view('favorite', $data)->with('message', $message);
+        //配列$dataをビューファイル->メソッド実行結果を格納した$messageも渡す（$data['message']=$message;と同じ意味）
+    }  
+    public function favoriteButton($favorite){/*お気に入り登録されているかどうかでハートボンタンの表示を変更*/
+        $user = Auth::user();//ログインユーザーの情報を取得
+        
+
+        //$message = $favorite->deleteFavorite($stock_id);
+        //$data=$favorite->showFavorite($stock_id);
     }
 }

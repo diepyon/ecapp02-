@@ -16,9 +16,9 @@ class Thanks extends Mailable
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($mail_data)//コントローラーから送付先ユーザーの情報を格納した配列を取得
     {
-        //
+        $this->mail_data = $mail_data; //thisクラスのmail_dataプロパティに送付先ユーザーの情報を格納
     }
 
     /**
@@ -28,6 +28,7 @@ class Thanks extends Mailable
      */
     public function build()
     {
-        return $this->markdown('mails.thanks');
+        return $this->markdown('mails.thanks', $this->mail_data)->subject(config('app.name', 'Laravel'). 'でのご購入ありがとうございます');
+        //$this->mail_dataは上記の__constructメソッドでしか定義していないのに、なぜこのbuildメソッドの中でも使えるのか
     }
 }

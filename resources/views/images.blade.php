@@ -29,19 +29,28 @@
                         <div class="mycart_box">
                             ジャンル：{{$stock->genre}} <br>
                             {{$stock->fee}}円<br>
+                            id:{{$stock->id}}<br>
                             <div class="stock_thumbnail">
                                 <img src="/image/{{$stock->path}}" alt="" class="incart">
+                                <form action="favorite" method="post">
+                                    @csrf
+                                    <input type="hidden" name="stock_id" value="{{ $stock->id }}">
+                                    <div class="favorite_icon">
+                                        <button><i class="far fa-heart"></i></button>
+                                    </div>
+                                </form>
                                 <div class="genre_icon">
                                     <i class="fas fa-image" aria-hidden="true"></i>
                                 </div>
-                            </div>
-                            <br>
-
-                            <form action="mycart" method="post">
+                           <form action="mycart" method="post">
                                 @csrf
                                 <input type="hidden" name="stock_id" value="{{ $stock->id }}">
-                                <input type="submit" value="カートに入れる">
+                                <div class="download_icon">
+                                     <button><i class="fas fa-cart-arrow-down"></i></button>
+                                </div>
                             </form>
+                            </div>
+                            <br>
                         </div>
 
                     </div>

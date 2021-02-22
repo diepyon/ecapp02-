@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -18,7 +19,11 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{{ asset('/siteparts/favicon.ico') }}">
 </head>
+
 <body>
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-dark bg-dark shadow-sm">
@@ -26,7 +31,9 @@
                 <a class="navbar-brand" href="{{ url('/') }}">
                     {{ config('app.name', 'Laravel') }}
                 </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
+                <button class="navbar-toggler" type="button" data-toggle="collapse"
+                    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
@@ -40,40 +47,46 @@
                     <ul class="navbar-nav ml-auto">
                         <!-- Authentication Links -->
                         @guest
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}">{{ __('ログイン') }}</a>
-                            </li>
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('新規登録') }}</a>
-                                </li>
-                            @endif
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('login') }}">{{ __('ログイン') }}</a>
+                        </li>
+                        @if (Route::has('register'))
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('register') }}">{{ __('新規登録') }}</a>
+                        </li>
+                        @endif
                         @else
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }} <span class="caret"></span>
+                        <li class="nav-item dropdown">
+                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                {{ Auth::user()->name }} <span class="caret"></span>
+                            </a>
+
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                    {{ __('ログアウト') }}
                                 </a>
 
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('ログアウト') }}
-                                    </a>
-
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                        @csrf
-                                    </form>
-                                                                   <a class="dropdown-item" href="{{ url('/mycart') }}">
-                                       カートを見る
-                                   </a>
-                                </div>
-                            </li>
-                            <li>
-                            <a class="nav-link" href="{{ url('/mycart') }}" >
-                               <i class="fas fa-cart-arrow-down"></i>
-                           </a>
-                           </li>
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                    style="display: none;">
+                                    @csrf
+                                </form>
+                                <a class="dropdown-item" href="{{ url('/mycart') }}">
+                                    カートを見る
+                                </a>
+                            </div>
+                        </li>
+                        <li>
+                            <a class="nav-link" href="{{ url('/favorite') }}">
+                                <i class="fas fa-heart"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="nav-link" href="{{ url('/mycart') }}">
+                                <i class="fas fa-cart-arrow-down"></i>
+                            </a>
+                        </li>
                         @endguest
                     </ul>
                 </div>
@@ -83,6 +96,31 @@
         <main class="py-4">
             @yield('content')
         </main>
+        <footer class="footer_design bg-dark">
+
+            @guest
+            <p class="nav-item" style="display:inline;">
+                <a class="nav-link" href="{{ route('login') }}"
+                    style="color:#fefefe; display:inline;">{{ __('ログイン') }}</a>
+
+                @if (Route::has('register'))
+
+                <a class="nav-link" href="{{ route('register') }}"
+                    style="color:#fefefe; display:inline;">{{ __('会員登録') }}</a>
+            </p>
+            @endif
+
+            @endguest
+            <br>
+            <div style="margin-top:24px;">
+                なんでも売ります<br>
+                <p style="font-size:2.4em">{{ config('app.name', 'Laravel') }}</p><br>
+            </div>
+<div><i class="fas fa-image"></i><i class="fab fa-cc-visa"></i></div>
+            <p style="font-size:0.7em;">@copyright @mukae9</p>
+
+        </footer>
     </div>
 </body>
+
 </html>

@@ -49,9 +49,9 @@ class Cart extends Model
     public function deleteCart($stock_id)
     {
         $user_id = Auth::id(); //ログインユーザーのIDを取得
+
         $delete = $this->where('user_id', $user_id)->where('stock_id', $stock_id)->delete();
         //user_idがログインユーザーと一致し、尚且つformからpostされてきた$stock_idとstock_idカラムの内容が一致するレコードを削除
-
         if ($delete > 0) {
             $message = 'カートから削除しました。';
         } else {
@@ -62,7 +62,12 @@ class Cart extends Model
     public function checkoutCart()
     {
         $user_id = Auth::id(); //ログインユーザーのIDを取得
-        $checkout_items=$this->where('user_id', $user_id)->get();//決済時のカートの中身（つもり購入したもの）を取得
+        $checkout_items=$this->where('user_id', $user_id)->get();//決済時のカートの中身（つまり購入したもの）を取得
+        
+        //dd($checkout_items);
+        //ddコマンドで中身を確認したが、どうやってここからstock_idなどの必要なカラムの情報だけを取り出すのかが不明
+        //商品が複数あればレコードも複数になると思うが、どう処理したら良いのかも不明。
+
         $this->where('user_id', $user_id)->delete();//そしてカートにあった情報を削除
         //user_idがログインユーザーと一致し、尚且つformからpostされてきた$stock_idとstock_idカラムの内容が一致するレコードを削除
         return $checkout_items;
