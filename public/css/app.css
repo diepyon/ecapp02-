@@ -10948,6 +10948,16 @@ a.text-dark:focus {
 parts
 -----*/
 
+.circle {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: skyblue;
+  text-align: center;
+  line-height: 20px;
+}
+
 /*----
 検索ボックス
 -----*/
@@ -11013,7 +11023,9 @@ archive
   margin: 8px;
 }
 
-.favorite_icon {
+/*お気に入りボタンデザイン*/
+
+div.favorite_icon button {
   color: #adb5bd99;
   display: flex;
   justify-content: center;
@@ -11024,9 +11036,22 @@ archive
   top: 0%;
   right: 0%;
   margin: 8px;
+  background-color: #adb5bd99;
+  border: none;
+  outline: none;
+  padding: 0;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  color: #fff;
 }
 
-.download_icon {
+/*ダウンロードボタンデザイン*/
+
+.download_icon button {
   color: #adb5bd99;
   display: flex;
   justify-content: center;
@@ -11035,30 +11060,10 @@ archive
   cursor: pointer;
   position: absolute;
   bottom: 0%;
-  right: 0%;
+  right: 8px;
   margin: 0px;
-}
-
-.favorite_icon button {
-  background-color: #adb5bd99;
-  border: none;
-  cursor: pointer;
-  outline: none;
-  padding: 0;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  height: 50px;
-  width: 50px;
-  border-radius: 50%;
-  color: #fff;
-  opacity: 0.5;
-}
-
-.download_icon button {
   background: none;
   border: none;
-  cursor: pointer;
   outline: none;
   padding: 0;
   -webkit-appearance: none;
@@ -11067,21 +11072,58 @@ archive
   height: 50px;
   width: 50px;
   border-radius: 50%;
-  color: #fff;
-  opacity: 0.5;
 }
 
-div.stock_thumbnail:hover div.favorite_icon button {
-  opacity: 1;
+/*マウスオンされるまで透明*/
+
+div.mouseon_icon button {
+  opacity: 0;
+}
+
+/*画像にマウスオンでアイコン出現*/
+
+/*スマホだと表示できないの考え中*/
+
+div.stock_thumbnail:hover div.mouseon_icon button {
+  opacity: 0.5;
   filter: alpha(opacity=0);
   -moz-opacity: 1;
   transition: 0.1s ease-in-out;
 }
 
-img.incart:hover　.download_icon {
-  opacity: 1;
-  filter: alpha(opacity=100);
+span.expert {
+  color: #adb5bd99;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  cursor: pointer;
+  position: absolute;
+  top: 0%;
+  right: 10px;
+  margin: 8px;
+  background: none;
+  border: none;
+  outline: none;
+  padding: 0;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+}
+
+/*アイコンにマウスオンでアイコン明るく*/
+
+div.mouseon_icon button:hover {
+  opacity: 1 !important;
+  filter: alpha(opacity=0);
   -moz-opacity: 1;
+  transition: 0.1s ease-in-out;
+}
+
+/*マウスオンで画像を暗く*/
+
+div.stock_thumbnail:hover img.incart {
+  filter: brightness(50%);
   transition: 0.1s ease-in-out;
 }
 

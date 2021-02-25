@@ -1,27 +1,13 @@
 @extends('layouts.app')
-
+@section('title', 'の検索結果')
 @section('content')
 <div class="container-fluid">
     <div class="">
         <div class="mx-auto" style="max-width:1200px">
+       @include('layouts.searchform')
 
-            <div class="input-group mb-3">
-                <span class="genrebox">
-                    <select class="form-control" id="exampleFormControlSelect1">
-                        <option>画像</option>
-                        <option>映像</option>
-                        <option>BGM</option>
-                    </select>
-                </span>
-                <input type="text" class="form-control" placeholder="keyword" aria-label=""
-                    aria-describedby="button-addon2">
-                <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="button" id="button-addon2"><i
-                            class="fas fa-search"></i></button>
-                </div>
-            </div>
+            詳細ページへのリンクとかはまだ貼ってない。<br>アイコンのデザインとかもまだ触ってない。
 
-            詳細ページへのリンクとかはまだ貼ってない。
 
             <h1 style="color:#555555; text-align:center; font-size:1.2em; padding:24px 0px; font-weight:bold;">商品一覧</h1>
             <div class="">

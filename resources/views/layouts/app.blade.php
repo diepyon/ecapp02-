@@ -7,8 +7,12 @@
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <!-- title -->
+    @hasSection('title')
+    <title>@yield('title') | {{ config('app.name') }}</title>
+    @else
+    <title>{{ config('app.name') }}</title>
+    @endif
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
@@ -65,6 +69,16 @@
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
+                                    {{ __('マイページ（未リンク）') }}
+                                </a>
+
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                    style="display: none;">
+                                    @csrf
+                                </form>
+
+                                <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
                                     {{ __('ログアウト') }}
                                 </a>
 
@@ -72,9 +86,7 @@
                                     style="display: none;">
                                     @csrf
                                 </form>
-                                <a class="dropdown-item" href="{{ url('/mycart') }}">
-                                    カートを見る
-                                </a>
+
                             </div>
                         </li>
                         <li>
@@ -85,6 +97,9 @@
                         <li>
                             <a class="nav-link" href="{{ url('/mycart') }}">
                                 <i class="fas fa-cart-arrow-down"></i>
+                                <span class="circle">
+                                    {{$count ??''}}
+                                </span>
                             </a>
                         </li>
                         @endguest
@@ -116,7 +131,7 @@
                 なんでも売ります<br>
                 <p style="font-size:2.4em">{{ config('app.name', 'Laravel') }}</p><br>
             </div>
-<div><i class="fas fa-image"></i><i class="fab fa-cc-visa"></i></div>
+            <div><i class="fas fa-image"></i><i class="fab fa-cc-visa"></i></div>
             <p style="font-size:0.7em;">@copyright @mukae9</p>
 
         </footer>

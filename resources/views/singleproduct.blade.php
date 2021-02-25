@@ -21,14 +21,15 @@
                 </div>
             </div>
             @foreach($stocks as $stock)
+            @section('title', $stock->name)
             <h1 style="color:#555555; text-align:center; font-size:1.2em; padding:24px 0px; font-weight:bold;">
                 {{$stock->name}}</h1>
             <div class="container">
                 <div class="row">
-                    <div class="col">
+                    <div class="col-sm-l">
                         <img src="/image/{{$stock->path}}" alt="" class="ditail_image">
                     </div>
-                    <div class="col">
+                    <div class="co-sm-l">
                             ここに画像のサイズの情報とか出したい
                         <form action="/mycart" method="post">
                             @csrf

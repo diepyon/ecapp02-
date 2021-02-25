@@ -37,13 +37,19 @@ class ShopController extends Controller
         return view('singleproduct', compact('stocks'));
     }
 
-
+    public function cartCount(Cart $cart)
+    {//cart内の商品数を取得してapp.blade.phpに渡したい
+        $data = $cart->showCart();
+        return view('top', $data);
+        //何も反応がない
+    } 
     
     public function myCart(Cart $cart)
     {
         $data = $cart->showCart();//showCartメソッドの実行結果を格納
         return view('mycart', $data);//compactは変数を配列にするメソッドなので、使わない。今回は$dataが既に配列型式
     }
+ 
     public function addMycart(Request $request, Cart $cart)
     {
         //カートに追加の処理
