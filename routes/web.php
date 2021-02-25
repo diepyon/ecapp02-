@@ -15,8 +15,12 @@ Route::get('/', 'ShopController@index');
 
 Route::get('/images', 'ShopController@images');//製品ジャンル画像を一覧するアクション
 
-Route::get('/product/1', 'ShopController@singleProduct');//stockテーブルのidごとの個別ページ
-//どうやって個別ページを作るかが不明、このままではidを１個ずつ手打ちする脳筋プレイになる
+Route::get('/product/{stocks_id}', 'ShopController@singleProduct');//stockテーブルのidごとの個別ページ
+//stock_idという変数をとりあえず作る
+//本当はジャンル/stock_idみたいなパーマリンクにしたいけど、やり方がわからん
+
+Route::get('/{genre}/key={key}', 'ShopController@searchItems');//検索アクション
+//ジャンル/key=検索キーワード
 
 Route::group(['middleware' => ['auth']], function () {//ログインしている人にしか使わせないアクション
     Route::get('/mycart', 'ShopController@myCart');

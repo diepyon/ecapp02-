@@ -13,23 +13,23 @@ class Favorite extends Model
     public function showFavorite()//追加
     {
         $user_id = Auth::id(); //ログインしているユーザーのIDを取得
-        $data['items'] = $this->where('user_id', $user_id)->get();//ログインユーザーのIDと同じ値を持つuser_idカラムのレコードを連想配列$dataのキー「my_favorites」に格納
+        $data['items'] = $this->where('user_id', $user_id)->get();//ログインユーザーのIDと同じ値を持つuser_idカラムのレコードを連想配列$dataのキー「items」に格納
 
         $data['count']=0; //お気に入り内の商品の個数は０からカウントアップするぜ
-        $data['sum']=0; //合計金額も０からカウントアップするぜ
+        //$data['sum']=0; //合計金額も０からカウントアップするぜ
   
         foreach ($data['items'] as $item) {
             $data['count']++;//繰り返しごとにカウントは１ずつアップ
-            $data['sum'] += $item->stock->fee;
+            //$data['sum'] += $item->stock->fee;
             //favoritesテーブルにおいて、ログインしているユーザーのIDとuser_idカラムが同じであるレコードの情報
             //そのレコードのstock_idを参照して、stocksテーブルの「id」が一致するレコードのfeeカラムの情報を取得
             //？？？belongtoを使っているからstocksテーブルを参照できるのはわかるが、「stock_id」カラムはどこにも指定してない。なぜ？？？
         
-            //繰り返すたびにsumに数字が足されていくπ
+            //繰り返すたびにsumに数字が足されていく
         }
         return $data; //連想配列データを実行結果として返す
     }
-        public function stock()
+    public function stock()
     {
         return $this->belongsTo('\App\Models\Stock');//Favoriteテーブル内に書かれたメソッドにもかかわらずストックテーブルの中身も参照できるようにするメソッド
     }
@@ -46,7 +46,7 @@ class Favorite extends Model
 
         return $message;
     }
-        public function deleteFavorite($stock_id)
+    public function deleteFavorite($stock_id)
     {
         $user_id = Auth::id(); //ログインユーザーのIDを取得
 
@@ -58,5 +58,9 @@ class Favorite extends Model
             $message = '削除できませんでした。';
         }
         return $message;
+    }
+    public function favoriteInfo()
+    {
+        echo 'a';
     }
 }

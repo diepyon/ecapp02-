@@ -18,19 +18,27 @@ class ShopController extends Controller
     {
         return view('top');
     }
-    public function images() //stocksテーブルのgenreカラムの値がimageのレコードを取得する
+    public function images(Favorite $favorite) //stocksテーブルのgenreカラムの値がimageのレコードを取得する
     {
-        $stocks = DB::table('stocks')->where('genre', 'image')->Paginate(6);
-
-        return view('images', compact('stocks'));
+        $stocks = DB::table('stocks')->where('genre', 'image')->Paginate(6);//genreがimageのデータをページネーションで取得
+        $data = $favorite->showFavorite();//showFavoriteメソッドの実行結果を格納
+        return view('images', compact('stocks'), $data);//compactは変数を配列にするメソッドなので、使わない。今回は$dataが既に配列型式
     }
-    public function singleProduct()
+    public function singleProduct($stocks_id)//viewから{{stock_id}}を取得
     {//商品個別ページを表示するメソッド
-        $stocks = DB::table('stocks')->where('id', 1)->get();//どうやって個別ページを作るかが不明
-        dd($stocks);
+
+        //$stocks_genre = "image";
+        //dd($stocks_genre);
+        
+        $stocks = DB::table('stocks')->where('id', $stocks_id)->get();
+        //dd($stocks[0]->path);
+        //getimagesize();
+
         return view('singleproduct', compact('stocks'));
     }
 
+
+    
     public function myCart(Cart $cart)
     {
         $data = $cart->showCart();//showCartメソッドの実行結果を格納
@@ -59,7 +67,7 @@ class ShopController extends Controller
     }
     public function checkout(Request $request, Cart $cart)
     {
-       $user = Auth::user();//ログインユーザーの情報を取得
+        $user = Auth::user();//ログインユーザーの情報を取得
        $mail_data['user']=$user->name; //ログインユーザーのnameカラムの情報を取得
        $mail_data['checkout_items']=$cart->checkoutCart(); //checkoutCartメソッドの実行結果を連想配列$mail_dataのキーcheckout_itemsに格納
        Mail::to($user->email)->send(new Thanks($mail_data));//ログインユーザーのemailカラムの情報（メールアドレス）を取得して、そのメールアドレスに情報を送る
@@ -81,7 +89,7 @@ class ShopController extends Controller
         $data = $favorite->showFavorite();
         return view('favorite', $data)->with('message', $message);
         //配列$dataをビューファイル->メソッド実行結果を格納した$messageも渡す（$data['message']=$message;と同じ意味）
-    }    
+    }
     public function deleteFavorite(Request $request, Favorite $favorite)
     {
         $stock_id=$request->stock_id;
@@ -90,12 +98,15 @@ class ShopController extends Controller
         $data = $favorite->showFavorite($stock_id);
         return view('favorite', $data)->with('message', $message);
         //配列$dataをビューファイル->メソッド実行結果を格納した$messageも渡す（$data['message']=$message;と同じ意味）
-    }  
-    public function favoriteButton($favorite){/*お気に入り登録されているかどうかでハートボンタンの表示を変更*/
-        $user = Auth::user();//ログインユーザーの情報を取得
-        
-
-        //$message = $favorite->deleteFavorite($stock_id);
-        //$data=$favorite->showFavorite($stock_id);
+    }
+    public function searchItems($genre, $key)
+    {
+        $stocks = DB::table('stocks')
+                ->where('genre', 'like', $genre)
+                ->where('name', 'like', '%'.$key.'%')
+                ->get();
+        //最終的にはページネーションにする
+        //dd($stocks);
+        return view('search', compact('stocks'));
     }
 }

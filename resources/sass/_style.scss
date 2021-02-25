@@ -1,19 +1,56 @@
+/*------
+parts
+-----*/
+
+
+/*----
+検索ボックス
+-----*/
 span.genrebox {
     width: 30%;
 }
 
 /*検索ボックスのジャンル選択プルダウン*/
+select#genre_select {
+    border-radius: 1rem 0 0 1rem;
+    border-right: 0px;
+}
 
+
+//検索プルダウンのまるみ
 .stock_thumbnail {
     position: relative;
 }
 
+button#search_button {
+    border-radius: 0 1rem 1rem 0 !important;
+    border-left: 0;
+    background-color: #fff;
+    border-color: #ced4da;
+}
+
+#search_keyword {
+    border-left: 0;
+    border-right: 0;
+}
+
+/*---
+footer
+--*/
+/*footer色*/
 footer.footer_design.bg-dark {
     color: #fff;
 }
 
-/*footer色*/
+.footer_design {
+    text-align: center;
+    padding: 60px;
+}
 
+/*---
+archive
+---*/
+/*サムネイルの左下に出るジャンル判別アイコン*/
 .genre_icon {
     color: #adb5bd99;
     display: flex;
@@ -27,7 +64,6 @@ footer.footer_design.bg-dark {
     margin: 8px;
 }
 
-/*サムネイルの左下に出るジャンル判別アイコン*/
 
 .favorite_icon {
     color: #adb5bd99;
@@ -83,24 +119,24 @@ footer.footer_design.bg-dark {
     opacity: 0.5;
 }
 
-.favorite_icon button:hover {
+div.stock_thumbnail:hover div.favorite_icon button{
     opacity: 1;
-    filter: alpha(opacity=100);
+    filter: alpha(opacity=0);
     -moz-opacity: 1.0;
-    -webkit-transition: 0.3s ease-in-out;
-    -moz-transition: 0.3s ease-in-out;
-    -o-transition: 0.3s ease-in-out;
-    transition: 0.3s ease-in-out;
+    -webkit-transition: 0.1s ease-in-out;
+    -moz-transition: 0.1s ease-in-out;
+    -o-transition: 0.1s ease-in-out;
+    transition: 0.1s ease-in-out;
 }
 
-.download_icon button:hover {
+img.incart:hover　.download_icon {
     opacity: 1;
     filter: alpha(opacity=100);
     -moz-opacity: 1.0;
-    -webkit-transition: 0.3s ease-in-out;
-    -moz-transition: 0.3s ease-in-out;
-    -o-transition: 0.3s ease-in-out;
-    transition: 0.3s ease-in-out;
+    -webkit-transition: 0.1s ease-in-out;
+    -moz-transition: 0.1s ease-in-out;
+    -o-transition: 0.1s ease-in-out;
+    transition: 0.1s ease-in-out;
 }
 
 
@@ -116,8 +152,8 @@ img.incart {
     object-fit: cover;
 }
 
-/*商品一覧の画像*/
 
+/*商品一覧の画像*/
 .mycart_box {
     color: #4c4c4c;
     font-weight: bold;
@@ -130,24 +166,28 @@ img.incart {
     width: 100%;
 }
 
-.mycart_box_incart {
-    padding: 8px 0;
-}
-
-/*カートのページでは画像の上下に余白*/
-
+/*商品一覧の余白をなくす*/
 .img_box {
     padding: 0;
 }
 
-/*商品一覧の余白をなくす*/
 
-.footer_design {
-    text-align: center;
-    //color: #fefefe;
-    padding: 60px;
+/*カートのページでは画像の上下に余白*/
+.mycart_box_incart {
+    padding: 8px 0;
 }
 
+/*-----
+single
+-----*/
+.ditail_image {
+    width: 100%
+}
+
+
+/*-----
+cart
+-----*/
 .buy-btn {
     margin: 40px auto 60px;
     width: 200px;

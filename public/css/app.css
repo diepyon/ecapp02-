@@ -10944,21 +10944,61 @@ a.text-dark:focus {
   }
 }
 
+/*------
+parts
+-----*/
+
+/*----
+検索ボックス
+-----*/
+
 span.genrebox {
   width: 30%;
 }
 
 /*検索ボックスのジャンル選択プルダウン*/
 
+select#genre_select {
+  border-radius: 1rem 0 0 1rem;
+  border-right: 0px;
+}
+
 .stock_thumbnail {
   position: relative;
 }
+
+button#search_button {
+  border-radius: 0 1rem 1rem 0 !important;
+  border-left: 0;
+  background-color: #fff;
+  border-color: #ced4da;
+}
+
+#search_keyword {
+  border-left: 0;
+  border-right: 0;
+}
+
+/*---
+footer
+--*/
+
+/*footer色*/
 
 footer.footer_design.bg-dark {
   color: #fff;
 }
 
-/*footer色*/
+.footer_design {
+  text-align: center;
+  padding: 60px;
+}
+
+/*---
+archive
+---*/
+
+/*サムネイルの左下に出るジャンル判別アイコン*/
 
 .genre_icon {
   color: #adb5bd99;
@@ -10972,8 +11012,6 @@ footer.footer_design.bg-dark {
   left: 0%;
   margin: 8px;
 }
-
-/*サムネイルの左下に出るジャンル判別アイコン*/
 
 .favorite_icon {
   color: #adb5bd99;
@@ -11033,18 +11071,18 @@ footer.footer_design.bg-dark {
   opacity: 0.5;
 }
 
-.favorite_icon button:hover {
+div.stock_thumbnail:hover div.favorite_icon button {
   opacity: 1;
-  filter: alpha(opacity=100);
+  filter: alpha(opacity=0);
   -moz-opacity: 1;
-  transition: 0.3s ease-in-out;
+  transition: 0.1s ease-in-out;
 }
 
-.download_icon button:hover {
+img.incart:hover　.download_icon {
   opacity: 1;
   filter: alpha(opacity=100);
   -moz-opacity: 1;
-  transition: 0.3s ease-in-out;
+  transition: 0.1s ease-in-out;
 }
 
 a img.cart {
@@ -11073,22 +11111,29 @@ img.incart {
   width: 100%;
 }
 
-.mycart_box_incart {
-  padding: 8px 0;
-}
-
-/*カートのページでは画像の上下に余白*/
+/*商品一覧の余白をなくす*/
 
 .img_box {
   padding: 0;
 }
 
-/*商品一覧の余白をなくす*/
+/*カートのページでは画像の上下に余白*/
 
-.footer_design {
-  text-align: center;
-  padding: 60px;
+.mycart_box_incart {
+  padding: 8px 0;
 }
+
+/*-----
+single
+-----*/
+
+.ditail_image {
+  width: 100%;
+}
+
+/*-----
+cart
+-----*/
 
 .buy-btn {
   margin: 40px auto 60px;
@@ -17202,8 +17247,8 @@ readers do not read off random characters that represent icons */
   font-style: normal;
   font-weight: 900;
   font-display: block;
-  src: url(/fonts/vendor/@fortawesome/fontawesome-free/webfa-solid-900.eot?00bb62bc33034479d5e82a0fd1c5efe3);
-  src: url(/fonts/vendor/@fortawesome/fontawesome-free/webfa-solid-900.eot?00bb62bc33034479d5e82a0fd1c5efe3) format("embedded-opentype"), url(/fonts/vendor/@fortawesome/fontawesome-free/webfa-solid-900.woff2?9ae050d1876ac1763eb6afe4264e6d5a) format("woff2"), url(/fonts/vendor/@fortawesome/fontawesome-free/webfa-solid-900.woff?4bfbf7eb4b19d9ff9293eb177b6d0070) format("woff"), url(/fonts/vendor/@fortawesome/fontawesome-free/webfa-solid-900.ttf?260d033f79f75d670fd09d8cf7c8bf8d) format("truetype"), url(/fonts/vendor/@fortawesome/fontawesome-free/webfa-solid-900.svg?2306f642b31b774ba1d8b6b784539e19) format("svg");
+  src: url(../fonts/vendor/@fortawesome/fontawesome-free/webfa-solid-900.eot?00bb62bc33034479d5e82a0fd1c5efe3);
+  src: url(../fonts/vendor/@fortawesome/fontawesome-free/webfa-solid-900.eot?00bb62bc33034479d5e82a0fd1c5efe3) format("embedded-opentype"), url(../fonts/vendor/@fortawesome/fontawesome-free/webfa-solid-900.woff2?9ae050d1876ac1763eb6afe4264e6d5a) format("woff2"), url(../fonts/vendor/@fortawesome/fontawesome-free/webfa-solid-900.woff?4bfbf7eb4b19d9ff9293eb177b6d0070) format("woff"), url(../fonts/vendor/@fortawesome/fontawesome-free/webfa-solid-900.ttf?260d033f79f75d670fd09d8cf7c8bf8d) format("truetype"), url(../fonts/vendor/@fortawesome/fontawesome-free/webfa-solid-900.svg?2306f642b31b774ba1d8b6b784539e19) format("svg");
 }
 
 .fa,
@@ -17222,8 +17267,8 @@ readers do not read off random characters that represent icons */
   font-style: normal;
   font-weight: 400;
   font-display: block;
-  src: url(/fonts/vendor/@fortawesome/fontawesome-free/webfa-regular-400.eot?0232fe8b09de812c88e6cc27f57a3a88);
-  src: url(/fonts/vendor/@fortawesome/fontawesome-free/webfa-regular-400.eot?0232fe8b09de812c88e6cc27f57a3a88) format("embedded-opentype"), url(/fonts/vendor/@fortawesome/fontawesome-free/webfa-regular-400.woff2?847712aaabbeba674afdda86d31cab17) format("woff2"), url(/fonts/vendor/@fortawesome/fontawesome-free/webfa-regular-400.woff?3cace4a04d941b5981ba32c6ce9afae1) format("woff"), url(/fonts/vendor/@fortawesome/fontawesome-free/webfa-regular-400.ttf?398be22b2308585b84da8e858e2d7b60) format("truetype"), url(/fonts/vendor/@fortawesome/fontawesome-free/webfa-regular-400.svg?d0fdc7c20b0b0b1aaf27327547735fa3) format("svg");
+  src: url(../fonts/vendor/@fortawesome/fontawesome-free/webfa-regular-400.eot?0232fe8b09de812c88e6cc27f57a3a88);
+  src: url(../fonts/vendor/@fortawesome/fontawesome-free/webfa-regular-400.eot?0232fe8b09de812c88e6cc27f57a3a88) format("embedded-opentype"), url(../fonts/vendor/@fortawesome/fontawesome-free/webfa-regular-400.woff2?847712aaabbeba674afdda86d31cab17) format("woff2"), url(../fonts/vendor/@fortawesome/fontawesome-free/webfa-regular-400.woff?3cace4a04d941b5981ba32c6ce9afae1) format("woff"), url(../fonts/vendor/@fortawesome/fontawesome-free/webfa-regular-400.ttf?398be22b2308585b84da8e858e2d7b60) format("truetype"), url(../fonts/vendor/@fortawesome/fontawesome-free/webfa-regular-400.svg?d0fdc7c20b0b0b1aaf27327547735fa3) format("svg");
 }
 
 .far {
