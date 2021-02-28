@@ -11023,6 +11023,12 @@ archive
   margin: 8px;
 }
 
+div.favorite_icon {
+  position: absolute;
+  top: 0%;
+  right: 0%;
+}
+
 /*お気に入りボタンデザイン*/
 
 div.favorite_icon button {
@@ -11032,9 +11038,6 @@ div.favorite_icon button {
   align-items: center;
   font-size: 1.5rem;
   cursor: pointer;
-  position: absolute;
-  top: 0%;
-  right: 0%;
   margin: 8px;
   background-color: #adb5bd99;
   border: none;
@@ -11099,9 +11102,6 @@ span.expert {
   font-size: 1.5rem;
   cursor: pointer;
   position: absolute;
-  top: 0%;
-  right: 10px;
-  margin: 8px;
   background: none;
   border: none;
   outline: none;

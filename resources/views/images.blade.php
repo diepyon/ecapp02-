@@ -31,8 +31,8 @@
                                     @csrf
                                     <input type="hidden" name="stock_id" value="{{ $stock->id }}">
                                     <div class="favorite_icon mouseon_icon">
-                                    <span class="expert">お気に入りに保存する </span>
-                                        <button><i class="far fa-heart"></i></button>
+                                        <span class="expert">aiueo</span>
+                                        <button class="favorite"><i class="far fa-heart"></i></button>
                                         
                                     </div>
                                 </form>

@@ -93,7 +93,7 @@ class ShopController extends Controller
 
         //追加後の情報を取得
         $data = $favorite->showFavorite();
-        return view('favorite', $data)->with('message', $message);
+        return view('favorite', $data)->with('message', $message);//favoriteページに移管させたくないから編集予定
         //配列$dataをビューファイル->メソッド実行結果を格納した$messageも渡す（$data['message']=$message;と同じ意味）
     }
     public function deleteFavorite(Request $request, Favorite $favorite)
