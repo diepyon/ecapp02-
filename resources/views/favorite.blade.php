@@ -8,7 +8,7 @@
                 {{ Auth::user()->name }}さんのお気に入り</h1>
 
             <div class="">
-                <p class="text-center">{{ $message ?? '' }}</p><br>
+            <p class="text-center">{{ session('message') ?? '' }}</p><br>
                 @if($items->isNotEmpty())
 
                 <div class="d-flex flex-row flex-wrap">

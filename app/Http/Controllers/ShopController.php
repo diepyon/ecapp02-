@@ -25,11 +25,7 @@ class ShopController extends Controller
         return view('images', compact('stocks'), $data);//compactは変数を配列にするメソッドなので、使わない。今回は$dataが既に配列型式
     }
     public function singleProduct($stocks_id)//viewから{{stock_id}}を取得
-    {//商品個別ページを表示するメソッド
-
-        //$stocks_genre = "image";
-        //dd($stocks_genre);
-        
+    {//商品個別ページを表示するメソッド 
         $stocks = DB::table('stocks')->where('id', $stocks_id)->get();
         //dd($stocks[0]->path);
         //getimagesize();
@@ -41,8 +37,8 @@ class ShopController extends Controller
     {//cart内の商品数を取得してapp.blade.phpに渡したい
         $data = $cart->showCart();
         return view('top', $data);
-        //何も反応がない
-    } 
+        //ここにreturn redirect()->back()->with('data', $data);みたいな書き方でいけるのか？
+    }
     
     public function myCart(Cart $cart)
     {
@@ -58,7 +54,8 @@ class ShopController extends Controller
 
         //追加後の情報を取得
         $data = $cart->showCart();
-        return view('mycart', $data)->with('message', $message);
+        //return view('mycart', $data)->with('message', $message);
+        return redirect()->back()->with('message', $message);
         //配列$dataをビューファイル->メソッド実行結果を格納した$messageも渡す（$data['message']=$message;と同じ意味）
     }
     
@@ -93,7 +90,7 @@ class ShopController extends Controller
 
         //追加後の情報を取得
         $data = $favorite->showFavorite();
-        return view('favorite', $data)->with('message', $message);//favoriteページに移管させたくないから編集予定
+        return redirect()->back()->with('message', $message);//ページを移管させたくないから今いるページに移管
         //配列$dataをビューファイル->メソッド実行結果を格納した$messageも渡す（$data['message']=$message;と同じ意味）
     }
     public function deleteFavorite(Request $request, Favorite $favorite)
@@ -102,17 +99,27 @@ class ShopController extends Controller
         $message = $favorite->deleteFavorite($stock_id);//FavoriteモデルのshowFavboriteメソッドの実行結果を格納（stock_idもFavoriteモデルに連れて行ってね）
 
         $data = $favorite->showFavorite($stock_id);
-        return view('favorite', $data)->with('message', $message);
+        return redirect()->back()->with('message', $message);//ページを移管させたくないから今いるページに移管
         //配列$dataをビューファイル->メソッド実行結果を格納した$messageも渡す（$data['message']=$message;と同じ意味）
     }
-    public function searchItems($genre, $key)
+    public function searchItems(Request $request)
     {
-        $stocks = DB::table('stocks')
-                ->where('genre', 'like', $genre)
-                ->where('name', 'like', '%'.$key.'%')
-                ->get();
-        //最終的にはページネーションにする
-        //dd($stocks);
-        return view('search', compact('stocks'));
+        #キーワード受け取り
+        $key = $request->input('key');//inputタグに入力されたキーワードを取得
+        $genre = $request->genre;//selectタグからジャンルのvalueを取得
+
+        #クエリ生成(Stockテーブルを参照)
+        $query = Stock::query();
+
+        #もしキーワードがあったら
+        if (!empty($key)) {
+            $query->where('name', 'like', '%'.$key.'%')
+                  ->Where('genre', 'like', $genre);
+        }
+        #ページネーション
+        $stocks = $query->orderBy('created_at', 'desc')->paginate(6);
+  
+        return view('search')->with('stocks', $stocks)->with('key', $key)->with('genre', $genre);
+        //->with('genre', $genre)も含めないとジャンルプルダウンが検索語に維持できなさそう
     }
 }

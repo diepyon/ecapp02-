@@ -1,7 +1,7 @@
 /*------
 parts
 -----*/
-.circle{
+.circle {
     display: inline-block;
     width: 20px;
     height: 20px;
@@ -9,7 +9,13 @@ parts
     background: skyblue;
     text-align: center;
     line-height: 20px;
-  }
+}
+
+#search_form {
+    display: flex;
+    width:100%;
+}
+
 
 /*----
 検索ボックス
@@ -23,7 +29,6 @@ select#genre_select {
     border-radius: 1rem 0 0 1rem;
     border-right: 0px;
 }
-
 
 //検索プルダウンのまるみ
 .stock_thumbnail {
@@ -40,6 +45,10 @@ button#search_button {
 #search_keyword {
     border-left: 0;
     border-right: 0;
+}
+
+input#search_keyword {
+    border-radius: 0;
 }
 
 /*---
@@ -72,16 +81,16 @@ archive
     margin: 8px;
 }
 
-div.favorite_icon{
-        position: absolute;
-        top: 0%;
-        right: 0%;
+div.favorite_icon {
+    position: absolute;
+    top: 0%;
+    right: 0%;
 }
 
 /*お気に入りボタンデザイン*/
 div.favorite_icon button {
     color: #adb5bd99;
-    display: flex;
+    //display: flex;
     justify-content: center;
     align-items: center;
     font-size: 1.5rem;
@@ -122,14 +131,14 @@ div.favorite_icon button {
 }
 
 /*マウスオンされるまで透明*/
-div.mouseon_icon button{
-    opacity: 0;
+div.mouseon_icon button {
+    //opacity: 0;
 }
 
 /*画像にマウスオンでアイコン出現*/
 /*スマホだと表示できないの考え中*/
-div.stock_thumbnail:hover div.mouseon_icon button{
-    opacity: 0.5  ;
+div.stock_thumbnail:hover div.mouseon_icon button {
+    opacity: 0.5;
     filter: alpha(opacity=0);
     -moz-opacity: 1.0;
     -webkit-transition: 0.1s ease-in-out;
@@ -137,43 +146,11 @@ div.stock_thumbnail:hover div.mouseon_icon button{
     -o-transition: 0.1s ease-in-out;
     transition: 0.1s ease-in-out;
 }
-
-span.expert{
-    //opacity: 0;
-    color: #adb5bd99;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 1.5rem;
-    cursor: pointer;
-    position: absolute;
-    //top: 0%;
-    //right: 10px;
-    //margin: 8px;
-    background: none;
-    border: none;
-    outline: none;
-    padding: 0;
-    appearance: none;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 /*アイコンにマウスオンでアイコン明るく*/
 div.mouseon_icon button:hover {
-    opacity: 1.0  !important;
+    opacity: 1.0 !important;
     filter: alpha(opacity=0);
     -moz-opacity: 1.0;
     -webkit-transition: 0.1s ease-in-out;
@@ -182,8 +159,19 @@ div.mouseon_icon button:hover {
     transition: 0.1s ease-in-out;
 }
 
+#target.hover {
+    color:red;
+}
+
+
+/* .trigger:hover +.expert {
+    color: red ;
+
+}
+ */
+
 /*マウスオンで画像を暗く*/
-div.stock_thumbnail:hover img.incart{
+div.stock_thumbnail:hover img.incart {
     filter: brightness(50%);
     -webkit-transition: 0.1s ease-in-out;
     -moz-transition: 0.1s ease-in-out;

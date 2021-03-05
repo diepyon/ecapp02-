@@ -10958,6 +10958,11 @@ parts
   line-height: 20px;
 }
 
+#search_form {
+  display: flex;
+  width: 100%;
+}
+
 /*----
 検索ボックス
 -----*/
@@ -10987,6 +10992,10 @@ button#search_button {
 #search_keyword {
   border-left: 0;
   border-right: 0;
+}
+
+input#search_keyword {
+  border-radius: 0;
 }
 
 /*---
@@ -11033,7 +11042,6 @@ div.favorite_icon {
 
 div.favorite_icon button {
   color: #adb5bd99;
-  display: flex;
   justify-content: center;
   align-items: center;
   font-size: 1.5rem;
@@ -11079,10 +11087,6 @@ div.favorite_icon button {
 
 /*マウスオンされるまで透明*/
 
-div.mouseon_icon button {
-  opacity: 0;
-}
-
 /*画像にマウスオンでアイコン出現*/
 
 /*スマホだと表示できないの考え中*/
@@ -11094,23 +11098,6 @@ div.stock_thumbnail:hover div.mouseon_icon button {
   transition: 0.1s ease-in-out;
 }
 
-span.expert {
-  color: #adb5bd99;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 1.5rem;
-  cursor: pointer;
-  position: absolute;
-  background: none;
-  border: none;
-  outline: none;
-  padding: 0;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-}
-
 /*アイコンにマウスオンでアイコン明るく*/
 
 div.mouseon_icon button:hover {
@@ -11119,6 +11106,16 @@ div.mouseon_icon button:hover {
   -moz-opacity: 1;
   transition: 0.1s ease-in-out;
 }
+
+#target.hover {
+  color: red;
+}
+
+/* .trigger:hover +.expert {
+    color: red ;
+
+}
+ */
 
 /*マウスオンで画像を暗く*/
 

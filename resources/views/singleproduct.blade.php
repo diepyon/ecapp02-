@@ -5,26 +5,15 @@
     <div class="">
         <div class="mx-auto" style="max-width:1200px">
 
-            <div class="input-group mb-3">
-                <span lass="genrebox">
-                    <select class="form-control" id="exampleFormControlSelect1">
-                        <option>画像</option>
-                        <option>映像</option>
-                        <option>BGM</option>
-                    </select>
-                </span>
-                <input type="text" class="form-control" placeholder="keyword" aria-label=""
-                    aria-describedby="button-addon2">
-                <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="button" id="button-addon2"><i
-                            class="fas fa-search"></i></button>
-                </div>
-            </div>
+
+
+        
             @foreach($stocks as $stock)
             @section('title', $stock->name)
             <h1 style="color:#555555; text-align:center; font-size:1.2em; padding:24px 0px; font-weight:bold;">
                 {{$stock->name}}</h1>
             @endforeach
+            @include('layouts.searchform')
 
             @foreach($stocks as $stock)
             <div class="row">

@@ -19,15 +19,14 @@ Route::get('/product/{stocks_id}', 'ShopController@singleProduct');//stockテー
 //stock_idという変数をとりあえず作る
 //本当はジャンル/stock_idみたいなパーマリンクにしたいけど、やり方がわからん
 
-Route::get('/{genre}/key={key}', 'ShopController@searchItems');//検索アクション
+Route::get('/search', 'ShopController@searchItems');//検索アクション
 //ジャンル/key=検索キーワード
 
 Route::group(['middleware' => ['auth']], function () {//ログインしている人にしか使わせないアクション
     Route::get('/mycart', 'ShopController@myCart');
     Route::post('/mycart', 'ShopController@addMycart');//カートに商品を追加する
     Route::post('/cartdelete', 'ShopController@deleteCart');//カートから商品を削除する
-    Route::post('/checkout', 'ShopController@checkout');//支払いのアクション
-    
+    Route::post('/checkout', 'ShopController@checkout');//支払いのアクション 
     Route::get('/favorite', 'ShopController@myFavorite');//お気に入り表示
     Route::post('/favorite', 'ShopController@addMyfavorite');//お気に入り追加
     Route::post('/favoritedelete', 'ShopController@deleteFavorite');//お気に入り削除する
