@@ -29,21 +29,21 @@ class ShopController extends Controller
         $stocks = DB::table('stocks')->where('id', $stocks_id)->get();
         //dd($stocks[0]->path);
         //getimagesize();
-
         return view('singleproduct', compact('stocks'));
     }
 
     public function cartCount(Cart $cart)
     {//cart内の商品数を取得してapp.blade.phpに渡したい
         $data = $cart->showCart();
-        return view('top', $data);
+        return view('mycart', $data);
+        //return redirect()->back()->with('data', $data);
         //ここにreturn redirect()->back()->with('data', $data);みたいな書き方でいけるのか？
     }
     
     public function myCart(Cart $cart)
     {
         $data = $cart->showCart();//showCartメソッドの実行結果を格納
-        return view('mycart', $data);//compactは変数を配列にするメソッドなので、使わない。今回は$dataが既に配列型式
+        return view('mycart', $data);//compactは変数を配列にするメソッドなので、使わない。今回は$dataが既に配列型式      
     }
  
     public function addMycart(Request $request, Cart $cart)
@@ -54,7 +54,6 @@ class ShopController extends Controller
 
         //追加後の情報を取得
         $data = $cart->showCart();
-        //return view('mycart', $data)->with('message', $message);
         return redirect()->back()->with('message', $message);
         //配列$dataをビューファイル->メソッド実行結果を格納した$messageも渡す（$data['message']=$message;と同じ意味）
     }
@@ -63,14 +62,13 @@ class ShopController extends Controller
     {
         $stock_id=$request->stock_id;
         $message = $cart->deleteCart($stock_id);//Cartモデルのshowcartメソッドの実行結果を格納（stock_idもCartモデルに連れて行ってね）
-
         $data = $cart->showCart($stock_id);
         return view('mycart', $data)->with('message', $message);
         //配列$dataをビューファイル->メソッド実行結果を格納した$messageも渡す（$data['message']=$message;と同じ意味）
     }
-    public function checkout(Request $request, Cart $cart)
+    public function checkout(Request $request, Cart $cart,Favorite $favorite)//cartモデムとfavoriteモデルも使うぜ
     {
-        $user = Auth::user();//ログインユーザーの情報を取得
+       $user = Auth::user();//ログインユーザーの情報を取得
        $mail_data['user']=$user->name; //ログインユーザーのnameカラムの情報を取得
        $mail_data['checkout_items']=$cart->checkoutCart(); //checkoutCartメソッドの実行結果を連想配列$mail_dataのキーcheckout_itemsに格納
        Mail::to($user->email)->send(new Thanks($mail_data));//ログインユーザーのemailカラムの情報（メールアドレス）を取得して、そのメールアドレスに情報を送る
@@ -102,7 +100,7 @@ class ShopController extends Controller
         return redirect()->back()->with('message', $message);//ページを移管させたくないから今いるページに移管
         //配列$dataをビューファイル->メソッド実行結果を格納した$messageも渡す（$data['message']=$message;と同じ意味）
     }
-    public function searchItems(Request $request)
+    public function searchItems(Favorite $favorite ,Request $request)
     {
         #キーワード受け取り
         $key = $request->input('key');//inputタグに入力されたキーワードを取得
@@ -110,16 +108,15 @@ class ShopController extends Controller
 
         #クエリ生成(Stockテーブルを参照)
         $query = Stock::query();
-
-        #もしキーワードがあったら
-        if (!empty($key)) {
+       
             $query->where('name', 'like', '%'.$key.'%')
                   ->Where('genre', 'like', $genre);
-        }
+  
         #ページネーション
         $stocks = $query->orderBy('created_at', 'desc')->paginate(6);
-  
-        return view('search')->with('stocks', $stocks)->with('key', $key)->with('genre', $genre);
+        $data = $favorite->showFavorite();//showFavoriteメソッドの実行結果を格納
+        return view('search')->with('stocks', $stocks)->with('key', $key)->with('genre', $genre)->with($data);
         //->with('genre', $genre)も含めないとジャンルプルダウンが検索語に維持できなさそう
     }
+    
 }

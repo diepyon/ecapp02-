@@ -17,7 +17,6 @@ Route::get('/images', 'ShopController@images');//製品ジャンル画像を一�
 
 Route::get('/product/{stocks_id}', 'ShopController@singleProduct');//stockテーブルのidごとの個別ページ
 //stock_idという変数をとりあえず作る
-//本当はジャンル/stock_idみたいなパーマリンクにしたいけど、やり方がわからん
 
 Route::get('/search', 'ShopController@searchItems');//検索アクション
 //ジャンル/key=検索キーワード

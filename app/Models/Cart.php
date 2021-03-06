@@ -25,7 +25,7 @@ class Cart extends Model
             //そのレコードのstock_idを参照して、stocksテーブルの「id」が一致するレコードのfeeカラムの情報を取得
             //？？？belongtoを使っているからstocksテーブルを参照できるのはわかるが、「stock_id」カラムはどこにも指定してない。なぜ？？？
         
-            //繰り返すたびにsumに数字が足されていくπ
+            //繰り返すたびにsumに数字が足されていく
         }
         return $data; //連想配列データを実行結果として返す
     }
@@ -36,7 +36,7 @@ class Cart extends Model
     public function addCart($stock_id)
     {
         $user_id = Auth::id(); //ログインユーザーのIDを取得
-        $cart_add_info = Cart::firstOrCreate(['stock_id' => $stock_id,'user_id' => $user_id]);//ユーザーIDとストックIDの組み合わせが完全に一致するレコードが既にないか確認
+        $cart_add_info = Cart::firstOrCreate(['stock_id' => $stock_id,'user_id' => $user_id]);//ユーザーIDとストックIDの組み合わせが完全に一致するレコードが既にないか確認、なければ保存する。
 
        if ($cart_add_info->wasRecentlyCreated) {//Cart::firstOrCreateを格納した変数に対して直近で保存された場合はtrueを保存されていない場合はfalseを返してくれます。
            $message = 'カートに追加しました';
@@ -63,10 +63,23 @@ class Cart extends Model
     {
         $user_id = Auth::id(); //ログインユーザーのIDを取得
         $checkout_items=$this->where('user_id', $user_id)->get();//決済時のカートの中身（つまり購入したもの）を取得
-        
-        //dd($checkout_items);
+        //$purchase_items=$this->where('user_id', $user_id)->get();
+
+        dd($checkout_items);
         //ddコマンドで中身を確認したが、どうやってここからstock_idなどの必要なカラムの情報だけを取り出すのかが不明
         //商品が複数あればレコードも複数になると思うが、どう処理したら良いのかも不明。
+
+        //$this->where('user_id', $user_id)->
+        //↑purchasehistories テーブルに保存したい
+
+        //$purchase_info = Favorite::firstOrCreate(['stock_id' => $stock_id,'user_id' => $user_id]);//ユーザーIDとストックIDの組み合わせが完全に一致するレコードが既にないか確認
+
+  /*      if ($purchase_info->wasRecentlyCreated) {//Favorite::firstOrCreateを格納した変数に対して直近で保存された場合はtrueを保存されていない場合はfalseを返してくれます。
+           $message = '購入履歴に保存しました。';
+       } else {
+           $message = '購入履歴に保存できませんでした。';
+       }
+        return $message; */
 
         $this->where('user_id', $user_id)->delete();//そしてカートにあった情報を削除
         //user_idがログインユーザーと一致し、尚且つformからpostされてきた$stock_idとstock_idカラムの内容が一致するレコードを削除

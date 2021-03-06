@@ -14,13 +14,13 @@ class Favorite extends Model
     {
         $user_id = Auth::id(); //ログインしているユーザーのIDを取得
         $data['items'] = $this->where('user_id', $user_id)->get();//ログインユーザーのIDと同じ値を持つuser_idカラムのレコードを連想配列$dataのキー「items」に格納
-        $data['count']=0; //お気に入り内の商品の個数は０からカウントアップするぜ
-     
         foreach ($data['items'] as $item) {
-            $data['count']++;//繰り返しごとにカウントは１ずつアップ
-        }
-       
+            $data['favorite_list'][] = $item->stock->id;//連想配列$dataのfavorite_listキーにお気に入り灯登録済み商品のIDを配列として格納
+        } 
+        $data['favorite_list'][] ='dammy';  
+        //dd($data); 
         return $data; //連想配列データを実行結果として返す
+
     }
     public function stock()
     {

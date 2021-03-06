@@ -21,7 +21,6 @@
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
-    <!-- Styles fontawesome-->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
     <!-- Favicon -->
@@ -132,7 +131,7 @@
                 <p style="font-size:2.4em">{{ config('app.name', 'Laravel') }}</p><br>
             </div>
             <div><i class="fas fa-image"></i><i class="fab fa-cc-visa"></i></div>
-            <p style="font-size:0.7em;">@copyright @mukae9</p>
+            <p style="font-size:0.7em;">@copyright @shimizu</p>
 
         </footer>
     </div>

@@ -1,16 +1,4 @@
-ログインユーザーがお気に入りに登録しているのは
-@foreach($items as $item)
-id:{{$item->stock->id}}
-@endforeach
-<br>
-<br>
-<?php 
-    foreach($items as $item){
-        $favorite_list[] = $item->stock->id;//イイネ済みの商品IDを配列に格納
-    }
-    $favorite_list[]='dammy';//お気に入りリストが空だとなぜかエラーになるのでダミーを配列に付与
-?>
-
+<p class="text-center">{{ session('message') ?? '' }}</p>
 <div class="">
     <div class="d-flex flex-row flex-wrap">
         @foreach($stocks as $stock)
