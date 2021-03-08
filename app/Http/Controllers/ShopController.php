@@ -35,7 +35,7 @@ class ShopController extends Controller
     public function cartCount(Cart $cart)
     {//cart内の商品数を取得してapp.blade.phpに渡したい
         $data = $cart->showCart();
-        return view('mycart', $data);
+        return view('layouts.app', $data);
         //return redirect()->back()->with('data', $data);
         //ここにreturn redirect()->back()->with('data', $data);みたいな書き方でいけるのか？
     }
@@ -117,6 +117,5 @@ class ShopController extends Controller
         $data = $favorite->showFavorite();//showFavoriteメソッドの実行結果を格納
         return view('search')->with('stocks', $stocks)->with('key', $key)->with('genre', $genre)->with($data);
         //->with('genre', $genre)も含めないとジャンルプルダウンが検索語に維持できなさそう
-    }
-    
+    }   
 }

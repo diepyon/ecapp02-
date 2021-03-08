@@ -10963,6 +10963,10 @@ parts
   width: 100%;
 }
 
+.added_favorite i {
+  color: #f66d9b;
+}
+
 /*----
 検索ボックス
 -----*/

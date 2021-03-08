@@ -13,7 +13,11 @@ parts
 
 #search_form {
     display: flex;
-    width:100%;
+    width: 100%;
+}
+
+.added_favorite i {
+    color: $pink; //ハイフンあかんのか？
 }
 
 
@@ -160,7 +164,7 @@ div.mouseon_icon button:hover {
 }
 
 #target.hover {
-    color:red;
+    color: red;
 }
 
 

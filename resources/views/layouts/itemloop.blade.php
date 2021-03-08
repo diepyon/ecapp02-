@@ -16,7 +16,7 @@
                     <form action="/favoritedelete" method="post">
                         @csrf
                         <input type="hidden" name="stock_id" value="{{ $stock->id }}">
-                        <div class="favorite_icon mouseon_icon">
+                        <div class="favorite_icon mouseon_icon added_favorite">
                             <span class="expert">お気に入りに登録済み </span>
                             <span class="trigger"><button class=""><i class="fas fa-heart"></i></button></span>
                         </div>
@@ -54,26 +54,29 @@
 </div>
 
 
-<div class="elem">マウスポインターを乗せると色が変わりますa</div>
-<div id="box"></div>
+<div id="favorite_expert1">1</div>
+<div id="favoriteexpert2">2</div>
+<div id="favoriteexpert3">3</div>
+<div id="favoriteexpert4">4</div>
+<div id="favoriteexpert5">5</div>
+<div id="favoriteexpert6">6</div>
+
 <script>
-    var day = new Date().toLocaleString();
+for (let step = 1; step < 6; step++) {
+//1-9
+}
 
+document.addEventListener('DOMContentLoaded', function() {
+ let favorite_expert01 = document.getElementById('favorite_expert01')
 
-    document.addEventListener('DOMContentLoaded', function () {
-        let elem = document.getElementsByClassName('elem')
+ //マウスポインターが乗ったタイミングで背景色を変更
+ favorite_expert01.addEventListener('mouseover', function() {
+  this.style.backgroundColor = 'Yellow'
+ }, false)
 
-        document.getElementById("box").innerHTML = elem[0];
-
-        //マウスポインターが乗ったタイミングで背景色を変更
-        elem[0].addEventListener('mouseover', function () {
-            this.style.backgroundColor = 'Yellow'
-        }, false)
-
-        //マウスポインターが外れたタイミングで背景色を戻す
-        elem[0].addEventListener('mouseout', function () {
-            this.style.backgroundColor = ''
-        }, false)
-    }, false)
-
+ //マウスポインターが外れたタイミングで背景色を戻す
+ favorite_expert01.addEventListener('mouseout', function() {
+  this.style.backgroundColor = ''
+ }, false)
+}, false)
 </script>

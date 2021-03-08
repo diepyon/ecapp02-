@@ -29,6 +29,8 @@ Route::group(['middleware' => ['auth']], function () {//ログインしている
     Route::get('/favorite', 'ShopController@myFavorite');//お気に入り表示
     Route::post('/favorite', 'ShopController@addMyfavorite');//お気に入り追加
     Route::post('/favoritedelete', 'ShopController@deleteFavorite');//お気に入り削除する
+    
+    Route::post('/',  'ShopController@judge')->name('judge');//singlepageのform内に3つのボタン
 });
 
 Auth::routes();

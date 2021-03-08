@@ -19,13 +19,13 @@
                     <img src="/image/{{$stock->path}}" alt="" class="ditail_image">
                 </div>
                 <div class="col-sm-4">
-                    <form action="/favorite" method="post">
+                    <form style="display:inline-block;" action="/favorite"artComposer method="post">
                         @csrf
                         <input type="hidden" name="stock_id" value="{{ $stock->id }}">
                         <button class="btn btn-outline-secondary"><i class="far fa-heart">お気に入りに保存</i></button>
                     </form>
 
-                    <form action="/favorite" method="post">
+                    <form style="display:inline-block;" action="/favorite"artComposer method="post">
                         @csrf
                         <input type="hidden" name="stock_id" value="{{ $stock->id }}">
                         <button class="btn btn-outline-secondary"><i class="far fa-heart">サンプルダウンロード</i></button>

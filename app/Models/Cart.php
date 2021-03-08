@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;//ログイン情報取得できるやつ
+use DB;
 
 class Cart extends Model
 {
@@ -14,7 +15,6 @@ class Cart extends Model
     {
         $user_id = Auth::id(); //ログインしているユーザーのIDを取得
         $data['items'] = $this->where('user_id', $user_id)->get();//ログインユーザーのIDと同じ値を持つuser_idカラムのレコードを連想配列$dataのキー「my_carts」に格納
-
         $data['count']=0; //カート内の商品の個数は０からカウントアップするぜ
         $data['sum']=0; //合計金額も０からカウントアップするぜ
   
@@ -24,7 +24,6 @@ class Cart extends Model
             //cartsテーブルにおいて、ログインしているユーザーのIDとuser_idカラムが同じであるレコードの情報
             //そのレコードのstock_idを参照して、stocksテーブルの「id」が一致するレコードのfeeカラムの情報を取得
             //？？？belongtoを使っているからstocksテーブルを参照できるのはわかるが、「stock_id」カラムはどこにも指定してない。なぜ？？？
-        
             //繰り返すたびにsumに数字が足されていく
         }
         return $data; //連想配列データを実行結果として返す
@@ -63,24 +62,15 @@ class Cart extends Model
     {
         $user_id = Auth::id(); //ログインユーザーのIDを取得
         $checkout_items=$this->where('user_id', $user_id)->get();//決済時のカートの中身（つまり購入したもの）を取得
-        //$purchase_items=$this->where('user_id', $user_id)->get();
-
-        dd($checkout_items);
-        //ddコマンドで中身を確認したが、どうやってここからstock_idなどの必要なカラムの情報だけを取り出すのかが不明
-        //商品が複数あればレコードも複数になると思うが、どう処理したら良いのかも不明。
-
-        //$this->where('user_id', $user_id)->
-        //↑purchasehistories テーブルに保存したい
-
-        //$purchase_info = Favorite::firstOrCreate(['stock_id' => $stock_id,'user_id' => $user_id]);//ユーザーIDとストックIDの組み合わせが完全に一致するレコードが既にないか確認
-
-  /*      if ($purchase_info->wasRecentlyCreated) {//Favorite::firstOrCreateを格納した変数に対して直近で保存された場合はtrueを保存されていない場合はfalseを返してくれます。
-           $message = '購入履歴に保存しました。';
-       } else {
-           $message = '購入履歴に保存できませんでした。';
-       }
-        return $message; */
-
+  
+        foreach ($checkout_items as $item) {
+            DB::table('purchasehistories')->insert([
+                'user_id'=>$user_id,
+                'stock_id'=>$item->stock_id,
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+        }
         $this->where('user_id', $user_id)->delete();//そしてカートにあった情報を削除
         //user_idがログインユーザーと一致し、尚且つformからpostされてきた$stock_idとstock_idカラムの内容が一致するレコードを削除
         return $checkout_items;
