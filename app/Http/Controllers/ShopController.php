@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Stock; //追加
 use App\Models\Cart; //追加
 use App\Models\Favorite; //追加
+use App\Models\Orderhistory; //追加
 use Illuminate\Support\Facades\Auth;//ログイン情報取得できるやつ
 use DB;
 use Illuminate\Support\Facades\Mail; //メール
@@ -30,14 +31,6 @@ class ShopController extends Controller
         //dd($stocks[0]->path);
         //getimagesize();
         return view('singleproduct', compact('stocks'));
-    }
-
-    public function cartCount(Cart $cart)
-    {//cart内の商品数を取得してapp.blade.phpに渡したい
-        $data = $cart->showCart();
-        return view('layouts.app', $data);
-        //return redirect()->back()->with('data', $data);
-        //ここにreturn redirect()->back()->with('data', $data);みたいな書き方でいけるのか？
     }
     
     public function myCart(Cart $cart)
@@ -115,7 +108,37 @@ class ShopController extends Controller
         #ページネーション
         $stocks = $query->orderBy('created_at', 'desc')->paginate(6);
         $data = $favorite->showFavorite();//showFavoriteメソッドの実行結果を格納
+       
         return view('search')->with('stocks', $stocks)->with('key', $key)->with('genre', $genre)->with($data);
         //->with('genre', $genre)も含めないとジャンルプルダウンが検索語に維持できなさそう
     }   
+
+    public function searchOrderHistory(Orderhistory $orderhistory ,Request $request)
+    {
+        #キーワード受け取り
+        $key = $request->input('key');//inputタグに入力されたキーワードを取得
+        $genre = $request->genre;//selectタグからジャンルのvalueを取得
+
+        #クエリ生成(Stockテーブルを参照)
+        $query = Orderhistory::query();
+       
+            $query->where('name', 'like', '%'.$key.'%')
+                  ->Where('genre', 'like', $genre);
+  
+        #ページネーション
+        $stocks = $query->orderBy('created_at', 'desc')->paginate(2);
+        $data = $orderhistory->showOrderHistory();//showFavoriteメソッドの実行結果を格納
+       
+        return view('searchorderhistory')->with('stocks', $stocks)->with('key', $key)->with('genre', $genre)->with($data);
+        //->with('genre', $genre)も含めないとジャンルプルダウンが検索語に維持できなさそう
+    }   
+
+
+    public function orderHistory(Orderhistory $orderhistory){
+        $data = $orderhistory->showOrderHistory();
+        //dd($data);
+        //$data = DB::table('stocks')->where('user_id', 'image')->Paginate(6);
+        return view('orderhistory', $data);//compactは変数を配列にするメソッドなので、使わない。今回は$dataが既に配列型式 
+    }
+
 }

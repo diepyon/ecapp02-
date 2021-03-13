@@ -64,11 +64,22 @@ class Cart extends Model
         $checkout_items=$this->where('user_id', $user_id)->get();//決済時のカートの中身（つまり購入したもの）を取得
   
         foreach ($checkout_items as $item) {
-            DB::table('purchasehistories')->insert([
+            DB::table('orderhistories')->insert([
                 'user_id'=>$user_id,
                 'stock_id'=>$item->stock_id,
                 'created_at' => now(),
-                'updated_at' => now()
+                'updated_at' => now(),
+                'name'=>$item->stock->name,
+                'fee_at_that_time'=>$item->stock->fee,//注文時の料金として格納（履歴を見た時に値段が変動するいけないので）
+                'genre' =>$item->stock->genre,
+                'subgenre' =>$item->stock->subgenre,
+                'tag1' =>$item->stock->tag1,
+                'tag2' =>$item->stock->tag2,
+                'tag3' =>$item->stock->tag3,
+                'tag4' =>$item->stock->tag4,
+                'tag5' =>$item->stock->tag5,
+                'detail'=>$item->stock->detail,
+                'path'=>$item->stock->path
             ]);
         }
         $this->where('user_id', $user_id)->delete();//そしてカートにあった情報を削除

@@ -71,6 +71,11 @@
                                     {{ __('マイページ（未リンク）') }}
                                 </a>
 
+
+                                <a class="dropdown-item" href="{{ url('/orderhistory') }}">
+                                <i class="fas fa-arrow-down"></i>購入履歴
+                            </a>
+
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST"
                                     style="display: none;">
                                     @csrf
@@ -86,54 +91,56 @@
                                     @csrf
                                 </form>
 
-                            </div>
-                        </li>
-                        <li>
-                            <a class="nav-link" href="{{ url('/favorite') }}">
-                                <i class="fas fa-heart"></i>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="nav-link" href="{{ url('/mycart') }}">
-                                <i class="fas fa-cart-arrow-down"></i>
-                                <span class="circle">
-                                    {{$count ??''}}
-                                </span>
-                            </a>
-                        </li>
-                        @endguest
-                    </ul>
+
+   
+
                 </div>
+                </li>
+                <li>
+                    <a class="nav-link" href="{{ url('/favorite') }}">
+                        <i class="fas fa-heart"></i>
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link" href="{{ url('/mycart') }}">
+                        <i class="fas fa-cart-arrow-down"></i>
+                        <span class="circle">
+                            {{$count ??''}}
+                        </span>
+                    </a>
+                </li>
+                @endguest
+                </ul>
             </div>
-        </nav>
+    </div>
+    </nav>
 
-        <main class="py-4">
-            @yield('content')
-        </main>
-        <footer class="footer_design bg-dark">
+    <main class="py-4">
+        @yield('content')
+    </main>
+    <footer class="footer_design bg-dark">
 
-            @guest
-            <p class="nav-item" style="display:inline;">
-                <a class="nav-link" href="{{ route('login') }}"
-                    style="color:#fefefe; display:inline;">{{ __('ログイン') }}</a>
+        @guest
+        <p class="nav-item" style="display:inline;">
+            <a class="nav-link" href="{{ route('login') }}" style="color:#fefefe; display:inline;">{{ __('ログイン') }}</a>
 
-                @if (Route::has('register'))
+            @if (Route::has('register'))
 
-                <a class="nav-link" href="{{ route('register') }}"
-                    style="color:#fefefe; display:inline;">{{ __('会員登録') }}</a>
-            </p>
-            @endif
+            <a class="nav-link" href="{{ route('register') }}"
+                style="color:#fefefe; display:inline;">{{ __('会員登録') }}</a>
+        </p>
+        @endif
 
-            @endguest
-            <br>
-            <div style="margin-top:24px;">
-                なんでも売ります<br>
-                <p style="font-size:2.4em">{{ config('app.name', 'Laravel') }}</p><br>
-            </div>
-            <div><i class="fas fa-image"></i><i class="fab fa-cc-visa"></i></div>
-            <p style="font-size:0.7em;">@copyright @shimizu</p>
+        @endguest
+        <br>
+        <div style="margin-top:24px;">
+            なんでも売ります<br>
+            <p style="font-size:2.4em">{{ config('app.name', 'Laravel') }}</p><br>
+        </div>
+        <div><i class="fas fa-image"></i><i class="fab fa-cc-visa"></i></div>
+        <p style="font-size:0.7em;">@copyright @shimizu</p>
 
-        </footer>
+    </footer>
     </div>
 </body>
 

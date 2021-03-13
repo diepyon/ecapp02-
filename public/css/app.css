@@ -10967,6 +10967,10 @@ parts
   color: #f66d9b;
 }
 
+.icon_expert {
+  opacity: 0;
+}
+
 /*----
 検索ボックス
 -----*/

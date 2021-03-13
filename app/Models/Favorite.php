@@ -17,8 +17,7 @@ class Favorite extends Model
         foreach ($data['items'] as $item) {
             $data['favorite_list'][] = $item->stock->id;//連想配列$dataのfavorite_listキーにお気に入り灯登録済み商品のIDを配列として格納
         } 
-        $data['favorite_list'][] ='dammy';  
-        //dd($data); 
+        $data['favorite_list'][] ='dammy'; 
         return $data; //連想配列データを実行結果として返す
 
     }
@@ -41,7 +40,6 @@ class Favorite extends Model
     public function deleteFavorite($stock_id)
     {
         $user_id = Auth::id(); //ログインユーザーのIDを取得
-
         $delete = $this->where('user_id', $user_id)->where('stock_id', $stock_id)->delete();
         //user_idがログインユーザーと一致し、尚且つformからpostされてきた$stock_idとstock_idカラムの内容が一致するレコードを削除
         if ($delete > 0) {
@@ -50,9 +48,5 @@ class Favorite extends Model
             $message = '削除できませんでした。';
         }
         return $message;
-    }
-    public function favoriteInfo()
-    {
-        echo 'a';
     }
 }
