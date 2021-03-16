@@ -22,6 +22,10 @@ parts
 
 .icon_expert {
     opacity: 0; //普段iconの説明は透明
+    background-color: #adb5bd99;
+    color:white;
+    padding:5px;
+    border-radius: 10px;
 }
 
 /*----
@@ -102,7 +106,6 @@ div.favorite_icon button {
     align-items: center;
     font-size: 1.5rem;
     cursor: pointer;
-
     margin: 8px;
     background-color: #adb5bd99;
     border: none;
@@ -116,16 +119,19 @@ div.favorite_icon button {
 }
 
 /*ダウンロードボタンデザイン*/
-.download_icon button {
+div.download_icon{
+    bottom: 0%;
+    right: 8px;
+    position: absolute;
+}
+
+div.download_icon button {
     color: #adb5bd99;
-    display: flex;
+    //display: flex;
     justify-content: center;
     align-items: center;
     font-size: 1.5rem;
     cursor: pointer;
-    position: absolute;
-    bottom: 0%;
-    right: 8px;
     margin: 0px;
     background: none;
     border: none;
@@ -138,20 +144,20 @@ div.favorite_icon button {
 }
 
 /*マウスオンされるまで透明*/
-div.mouseon_icon button {
-    //opacity: 0;
+div.download_icon button  {
+    opacity: 0;
 }
 
 /*画像にマウスオンでアイコン出現*/
 /*スマホだと表示できないの考え中*/
 div.stock_thumbnail:hover div.mouseon_icon button {
     opacity: 0.5;
-    filter: alpha(opacity=0);
+/*     filter: alpha(opacity=0);
     -moz-opacity: 1.0;
     -webkit-transition: 0.1s ease-in-out;
     -moz-transition: 0.1s ease-in-out;
     -o-transition: 0.1s ease-in-out;
-    transition: 0.1s ease-in-out;
+    transition: 0.1s ease-in-out; */
 }
 
 

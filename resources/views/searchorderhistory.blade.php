@@ -28,34 +28,37 @@
 
 
             <h1 style="color:#555555; text-align:center; font-size:1.2em; padding:24px 0px; font-weight:bold;">商品一覧</h1>
-            @if($stocks->isEmpty() )
+            @if($orders->isEmpty() )
             <p class="text-center">見つかりませんでした。</p>
             @else
 
 
-            @if($items->isNotEmpty())
+            @if($orders->isNotEmpty())
             <div class="d-flex flex-row flex-wrap">
-                @foreach($items as $item)
+                @foreach($orders as $order)
                 <div class="col-xs-6 col-sm-4 col-md-4 img_box ">
                     <div class="mycart_box">
-                        {{$item->name}}<br>
-                        ジャンル：{{$item->genre}} <br>
+                        {{$order->name}}<br>
+                        ジャンル：{{$order->genre}} <br>
                         <div class="stock_thumbnail">
-                            <a href="{{url('/product/')}}/{{$item->id}}">
-                                <img src="/image/{{$item->path}}" alt="" class="incart">
+                            <a href="{{url('/product/')}}/{{$order->stock_id}}">
+                                <img src="/image/{{$order->path}}" alt="" class="incart">
                             </a>
                             <div class="genre_icon">
                                 <i class="fas fa-image" aria-hidden="true"></i>
                             </div>
                         </div>
-                        {{$item->id}}<br>
-                        {{$item->created_at->format('Y年m月d日') }}<br>
-                        購入時の金額：￥{{$item->fee_at_that_time }}{{-- 購入時の金額を取得 --}}<br>
+                        {{$order->id}}<br>
+                        {{$order->created_at->format('Y年m月d日') }}<br>
+                        購入時の金額：￥{{$order->fee_at_that_time }}{{-- 購入時の金額を取得 --}}<br>
                         <br>
                     </div>
                 </div>
                 @endforeach
             </div>
+                                <div class="text-center" style="width: 200px;margin: 20px auto;">
+        {{$orders->appends(request()->input())->links() }}
+    </div>
             @else
             <p class="text-center">購入履歴はありません</p>
             @endif

@@ -25,15 +25,20 @@ Route::group(['middleware' => ['auth']], function () {//ログインしている
     Route::get('/mycart', 'ShopController@myCart');
     Route::post('/mycart', 'ShopController@addMycart');//カートに商品を追加する
     Route::post('/cartdelete', 'ShopController@deleteCart');//カートから商品を削除する
-    Route::post('/checkout', 'ShopController@checkout');//支払いのアクション 
+    Route::post('/checkout', 'ShopController@checkout');//支払いのアクション
     Route::get('/favorite', 'ShopController@myFavorite');//お気に入り表示
     Route::post('/favorite', 'ShopController@addMyfavorite');//お気に入り追加
     Route::post('/favoritedelete', 'ShopController@deleteFavorite');//お気に入り削除する
 
     Route::get('/orderhistory', 'ShopController@orderHistory');//購入履歴表示
     Route::get('/searchorderhistory', 'ShopController@searchOrderHistory');//購入履歴検索
+    
+    Route::get('/mypage', 'UserController@myPage');//マイページ表示
+    Route::post('/mypage', 'UserController@myPageUpdate');//ユーザー情報編集
+
+    Route::get('user/index', 'UserController@index');
+    Route::get('user/edit', 'UserController@edit');
+    Route::post('user/edit', 'UserController@update');
 });
-
 Auth::routes();
-
 Route::get('/home', 'HomeController@index')->name('home');//これを消すとログイン後に移管するページがなくてバグる

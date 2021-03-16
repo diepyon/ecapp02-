@@ -18,6 +18,8 @@ class Favorite extends Model
             $data['favorite_list'][] = $item->stock->id;//連想配列$dataのfavorite_listキーにお気に入り灯登録済み商品のIDを配列として格納
         } 
         $data['favorite_list'][] ='dammy'; 
+
+       //dd($data['favorite_list']);
         return $data; //連想配列データを実行結果として返す
 
     }

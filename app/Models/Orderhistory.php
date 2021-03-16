@@ -14,7 +14,9 @@ class Orderhistory extends Model
        public function showOrderHistory()
        {
            $user_id = Auth::id(); //ログインしているユーザーのIDを取得
-           $data['items'] = $this->where('user_id', $user_id)->get();//ログインユーザーのIDと同じ値を持つuser_idカラムのレコードを連想配列$dataのキー「my_carts」に格納
+           $data['items'] = $this->where('user_id', $user_id)->orderBy('created_at', 'desc')->paginate(2);
+           //ログインユーザーのIDと同じ値を持つuser_idカラムのレコードを連想配列$dataのキー「items」に格納
+            //尚且つ並べ替え
            $data['count']=0; //カート内の商品の個数は０からカウントアップするぜ
            $data['sum']=0; //合計金額も０からカウントアップするぜ
      

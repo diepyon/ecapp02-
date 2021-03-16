@@ -43,7 +43,7 @@
                         {{$item->name}}<br>
                         ジャンル：{{$item->genre}} <br>
                         <div class="stock_thumbnail">
-                            <a href="{{url('/product/')}}/{{$item->id}}">
+                            <a href="{{url('/product/')}}/{{$item->stock_id}}">
                                 <img src="/image/{{$item->path}}" alt="" class="incart">
                             </a>
                             <div class="genre_icon">
@@ -58,8 +58,13 @@
                 </div>
                 @endforeach
             </div>
+             <div class="text-center" style="width: 200px;margin: 20px auto;">
+              {{$items->links()}}
+              </div>
             @else
+           
             <p class="text-center">購入履歴はありません</p>
+            
             @endif
         </div>
     </div>

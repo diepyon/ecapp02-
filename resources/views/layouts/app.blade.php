@@ -66,9 +66,8 @@
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                    {{ __('マイページ（未リンク）') }}
+                                <a class="dropdown-item" href="/mypage">
+                                    {{ __('マイページ') }}
                                 </a>
 
 
@@ -143,5 +142,6 @@
     </footer>
     </div>
 </body>
-
+ <script src="{{ asset('js/main.js') }}" defer></script>
+<!--ここにJavaスクリプトを読み込むタグ　ecapp02/public/js直下にmain.jsを作成-->
 </html>

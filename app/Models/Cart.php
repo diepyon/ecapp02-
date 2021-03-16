@@ -25,7 +25,10 @@ class Cart extends Model
             //そのレコードのstock_idを参照して、stocksテーブルの「id」が一致するレコードのfeeカラムの情報を取得
             //？？？belongtoを使っているからstocksテーブルを参照できるのはわかるが、「stock_id」カラムはどこにも指定してない。なぜ？？？
             //繰り返すたびにsumに数字が足されていく
+            $data['cart_list'][] = $item->stock->id;//連想配列$dataのcart_listキーにカート登録済み商品のIDを配列として格納
         }
+        $data['cart_list'][] ='dammy'; 
+        //dd($data['cart_list']);
         return $data; //連想配列データを実行結果として返す
     }
     public function stock()

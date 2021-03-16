@@ -19,14 +19,16 @@ class ShopController extends Controller
     {
         return view('top');
     }
-    public function images(Favorite $favorite) //stocksテーブルのgenreカラムの値がimageのレコードを取得する
+    public function images(Favorite $favorite, Cart $cart) //stocksテーブルのgenreカラムの値がimageのレコードを取得する
     {
         $stocks = DB::table('stocks')->where('genre', 'image')->Paginate(6);//genreがimageのデータをページネーションで取得
-        $data = $favorite->showFavorite();//showFavoriteメソッドの実行結果を格納
-        return view('images', compact('stocks'), $data);//compactは変数を配列にするメソッドなので、使わない。今回は$dataが既に配列型式
+        $favorite_data = $favorite->showFavorite();//showFavoriteメソッドの実行結果を格納
+        $cart_data = $cart->showCart();
+        
+        return view('images', compact('stocks','favorite_data','cart_data'));
     }
     public function singleProduct($stocks_id)//viewから{{stock_id}}を取得
-    {//商品個別ページを表示するメソッド 
+    {//商品個別ページを表示するメソッド
         $stocks = DB::table('stocks')->where('id', $stocks_id)->get();
         //dd($stocks[0]->path);
         //getimagesize();
@@ -36,7 +38,7 @@ class ShopController extends Controller
     public function myCart(Cart $cart)
     {
         $data = $cart->showCart();//showCartメソッドの実行結果を格納
-        return view('mycart', $data);//compactは変数を配列にするメソッドなので、使わない。今回は$dataが既に配列型式      
+        return view('mycart', $data);//compactは変数を配列にするメソッドなので、使わない。今回は$dataが既に配列型式
     }
  
     public function addMycart(Request $request, Cart $cart)
@@ -59,9 +61,9 @@ class ShopController extends Controller
         return view('mycart', $data)->with('message', $message);
         //配列$dataをビューファイル->メソッド実行結果を格納した$messageも渡す（$data['message']=$message;と同じ意味）
     }
-    public function checkout(Request $request, Cart $cart,Favorite $favorite)//cartモデムとfavoriteモデルも使うぜ
+    public function checkout(Request $request, Cart $cart, Favorite $favorite)//cartモデムとfavoriteモデルも使うぜ
     {
-       $user = Auth::user();//ログインユーザーの情報を取得
+        $user = Auth::user();//ログインユーザーの情報を取得
        $mail_data['user']=$user->name; //ログインユーザーのnameカラムの情報を取得
        $mail_data['checkout_items']=$cart->checkoutCart(); //checkoutCartメソッドの実行結果を連想配列$mail_dataのキーcheckout_itemsに格納
        Mail::to($user->email)->send(new Thanks($mail_data));//ログインユーザーのemailカラムの情報（メールアドレス）を取得して、そのメールアドレスに情報を送る
@@ -93,7 +95,7 @@ class ShopController extends Controller
         return redirect()->back()->with('message', $message);//ページを移管させたくないから今いるページに移管
         //配列$dataをビューファイル->メソッド実行結果を格納した$messageも渡す（$data['message']=$message;と同じ意味）
     }
-    public function searchItems(Favorite $favorite ,Request $request)
+    public function searchItems(Favorite $favorite, Request $request)
     {
         #キーワード受け取り
         $key = $request->input('key');//inputタグに入力されたキーワードを取得
@@ -102,7 +104,7 @@ class ShopController extends Controller
         #クエリ生成(Stockテーブルを参照)
         $query = Stock::query();
        
-            $query->where('name', 'like', '%'.$key.'%')
+        $query->where('name', 'like', '%'.$key.'%')
                   ->Where('genre', 'like', $genre);
   
         #ページネーション
@@ -111,10 +113,10 @@ class ShopController extends Controller
        
         return view('search')->with('stocks', $stocks)->with('key', $key)->with('genre', $genre)->with($data);
         //->with('genre', $genre)も含めないとジャンルプルダウンが検索語に維持できなさそう
-    }   
+    }
 
-    public function searchOrderHistory(Orderhistory $orderhistory ,Request $request)
-    {
+    public function searchOrderHistory(Orderhistory $orderhistory, Request $request)
+    {//注文履歴を検索するメソッド
         #キーワード受け取り
         $key = $request->input('key');//inputタグに入力されたキーワードを取得
         $genre = $request->genre;//selectタグからジャンルのvalueを取得
@@ -122,23 +124,22 @@ class ShopController extends Controller
         #クエリ生成(Stockテーブルを参照)
         $query = Orderhistory::query();
        
-            $query->where('name', 'like', '%'.$key.'%')
+        $query->where('name', 'like', '%'.$key.'%')
                   ->Where('genre', 'like', $genre);
   
+                
         #ページネーション
-        $stocks = $query->orderBy('created_at', 'desc')->paginate(2);
-        $data = $orderhistory->showOrderHistory();//showFavoriteメソッドの実行結果を格納
-       
-        return view('searchorderhistory')->with('stocks', $stocks)->with('key', $key)->with('genre', $genre)->with($data);
+        $orders = $query->orderBy('created_at', 'desc')->paginate(2);//最終的に数ふやす  
+        $data = $orderhistory->showOrderHistory();//検索されなければは全権表示するの実行結果を格納
+        return view('searchorderhistory')->with('orders', $orders)->with('key', $key)->with('genre', $genre)->with($data);
         //->with('genre', $genre)も含めないとジャンルプルダウンが検索語に維持できなさそう
-    }   
-
-
-    public function orderHistory(Orderhistory $orderhistory){
-        $data = $orderhistory->showOrderHistory();
-        //dd($data);
-        //$data = DB::table('stocks')->where('user_id', 'image')->Paginate(6);
-        return view('orderhistory', $data);//compactは変数を配列にするメソッドなので、使わない。今回は$dataが既に配列型式 
     }
 
+
+    public function orderHistory(Orderhistory $orderhistory)
+    {
+        $data = $orderhistory->showOrderHistory();
+
+        return view('orderhistory', $data);//compactは変数を配列にするメソッドなので、使わない。今回は$dataが既に配列型式
+    }
 }
