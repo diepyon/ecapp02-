@@ -29,7 +29,7 @@
                             <th scope="row">メールアドレス</th>
                             <td>
                                 <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
-                                    name="email" value="{{ old('email') }}" required autocomplete="email">
+                                    name="email" value="{{$afteremail ?? Auth::user()->email}}" required autocomplete="email">
 
                                 @error('email')
                                 <span class="invalid-feedback" role="alert">

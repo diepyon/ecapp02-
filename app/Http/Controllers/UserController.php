@@ -8,7 +8,6 @@ namespace App\Http\Controllers;
 //use App\Models\Orderhistory; //追加
 use App\User; //追加
 use Illuminate\Support\Facades\Auth;//ログイン情報取得できるやつ
-use Illuminate\Validation\Rule;//バリテーションルール
 use DB;
 //use Illuminate\Support\Facades\Mail; //メール
 //use App\Mail\Thanks;//メール
@@ -23,27 +22,14 @@ class UserController extends Controller
     }
     public function myPageUpdate(Request $request,User $user) 
     {
-        Validator::make($input, [
-            'name' => ['required', 'string', 'max:255'],
+        $user =Auth::user();
+        $aftername = $request->input('name');
+        $afteremail = $request->input('email');
 
-            'email' => [
-                'required',
-                'string',
-                'email',
-                'max:255',
-                Rule::unique('users')->ignore($user->id),
-            ],
-        ])->validateWithBag('updateProfileInformation');
+        $user_record = User::where('id', $user->id);
 
-        if ($input['email'] !== $user->email &&
-            $user instanceof MustVerifyEmail) {
-            $this->updateVerifiedUser($user, $input);
-        } else {
-            $user->forceFill([
-                'name' => $input['name'],
-                'email' => $input['email'],
-            ])->save();
-        }
+        $user_record->update(['name' => $request->name]);
+        $user_record->update(['email' => $request->email]);          
         return view('mypage')->with('aftername', $aftername)->with('afteremail', $afteremail);
     }
 }

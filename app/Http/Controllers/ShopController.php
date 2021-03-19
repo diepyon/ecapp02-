@@ -19,14 +19,32 @@ class ShopController extends Controller
     {
         return view('top');
     }
-    public function images(Favorite $favorite, Cart $cart) //stocksテーブルのgenreカラムの値がimageのレコードを取得する
+    public function images() //stocksテーブルのgenreカラムの値がimageのレコードを取得する
     {
-        $stocks = DB::table('stocks')->where('genre', 'image')->Paginate(6);//genreがimageのデータをページネーションで取得
-        $favorite_data = $favorite->showFavorite();//showFavoriteメソッドの実行結果を格納
-        $cart_data = $cart->showCart();
-        
-        return view('images', compact('stocks','favorite_data','cart_data'));
+        $stocks = DB::table('stocks')->where('genre', 'image')->Paginate(3);//genreがimageのデータをページネーションで取得
+        return view('images', compact('stocks'));
     }
+
+    public function searchItems( Request $request)
+    {
+        #キーワード受け取り
+        $key = $request->input('key');//inputタグに入力されたキーワードを取得
+        $genre = $request->genre;//selectタグからジャンルのvalueを取得
+
+        #クエリ生成(Stockテーブルを参照)
+        $query = Stock::query();
+       
+        $query->where('name', 'like', '%'.$key.'%')
+                  ->Where('genre', 'like', $genre);
+  
+        #ページネーション
+        $stocks = $query->orderBy('created_at', 'desc')->paginate(2);
+       
+        return view('search', compact('stocks'))->with('genre', $genre)->with('key', $key);
+        //->with('genre', $genre)も渡さないとフォームの入力内容をページ移管後に維持できない
+
+    }
+
     public function singleProduct($stocks_id)//viewから{{stock_id}}を取得
     {//商品個別ページを表示するメソッド
         $stocks = DB::table('stocks')->where('id', $stocks_id)->get();
@@ -95,25 +113,7 @@ class ShopController extends Controller
         return redirect()->back()->with('message', $message);//ページを移管させたくないから今いるページに移管
         //配列$dataをビューファイル->メソッド実行結果を格納した$messageも渡す（$data['message']=$message;と同じ意味）
     }
-    public function searchItems(Favorite $favorite, Request $request)
-    {
-        #キーワード受け取り
-        $key = $request->input('key');//inputタグに入力されたキーワードを取得
-        $genre = $request->genre;//selectタグからジャンルのvalueを取得
 
-        #クエリ生成(Stockテーブルを参照)
-        $query = Stock::query();
-       
-        $query->where('name', 'like', '%'.$key.'%')
-                  ->Where('genre', 'like', $genre);
-  
-        #ページネーション
-        $stocks = $query->orderBy('created_at', 'desc')->paginate(6);
-        $data = $favorite->showFavorite();//showFavoriteメソッドの実行結果を格納
-       
-        return view('search')->with('stocks', $stocks)->with('key', $key)->with('genre', $genre)->with($data);
-        //->with('genre', $genre)も含めないとジャンルプルダウンが検索語に維持できなさそう
-    }
 
     public function searchOrderHistory(Orderhistory $orderhistory, Request $request)
     {//注文履歴を検索するメソッド

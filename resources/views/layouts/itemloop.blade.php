@@ -1,4 +1,5 @@
 <p class="text-center">{{ session('message') ?? '' }}</p>
+
 <div class="">
     <div class="d-flex flex-row flex-wrap">
         @foreach($stocks as $stock)
@@ -8,11 +9,25 @@
                 id:{{$stock->id}}<br>
                 ジャンル：{{$stock->genre}} <br>
                 {{$stock->fee}}円<br>
+                @if(in_array($stock->id, $orderhistory_data['orderhistory_list'],true))
+
                 <div class="stock_thumbnail">
                     <a href="{{url('/product/')}}/{{$stock->id}}">
-                        <img src="/image/{{$stock->path}}" alt="" class="incart">
+                        <img src="/image/{{$stock->path}}" alt="" class="incart purchased">
                     </a>
 
+                    <div class="purchased_txt">
+                        購入済み
+                    </div>
+                    <div class="genre_icon">
+                        <i class="fas fa-image" aria-hidden="true"></i>
+                    </div>
+                </div>
+                @else
+                <div class="stock_thumbnail">
+                    <a href="{{url('/product/')}}/{{$stock->id}}">
+                        <img src="/image/{{$stock->path}}" alt="" class="incart not_purchased">
+                    </a>
                     @if(in_array($stock->id, $favorite_data['favorite_list'],true))
                     <form action="/favoritedelete" method="post">
                         @csrf
@@ -59,15 +74,13 @@
                         </div>
                     </form>
                     @endif
-
                 </div>
+                @endif
+
                 <br>
             </div>
-
         </div>
         @endforeach
     </div>
-    <div class="text-center" style="width: 200px;margin: 20px auto;">
-        {{$stocks->links()}}
-    </div>
+
 </div>

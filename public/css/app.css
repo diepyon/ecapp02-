@@ -11044,6 +11044,16 @@ archive
   margin: 8px;
 }
 
+.purchased_txt {
+  color: #fff;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+}
+
 div.favorite_icon {
   position: absolute;
   top: 0%;
@@ -11128,19 +11138,16 @@ div.mouseon_icon button:hover {
   transition: 0.1s ease-in-out;
 }
 
-#target.hover {
-  color: red;
-}
-
-/* .trigger:hover +.expert {
-    color: red ;
-
-}
- */
-
 /*マウスオンで画像を暗く*/
 
-div.stock_thumbnail:hover img.incart {
+div.stock_thumbnail:hover img.not_purchased {
+  filter: brightness(50%);
+  transition: 0.1s ease-in-out;
+}
+
+/*購入済み商品は元から暗く*/
+
+img.purchased {
   filter: brightness(50%);
   transition: 0.1s ease-in-out;
 }

@@ -12,7 +12,6 @@
 */
 
 Route::get('/', 'ShopController@index');
-
 Route::get('/images', 'ShopController@images');//製品ジャンル画像を一覧するアクション
 
 Route::get('/product/{stocks_id}', 'ShopController@singleProduct');//stockテーブルのidごとの個別ページ
@@ -35,10 +34,9 @@ Route::group(['middleware' => ['auth']], function () {//ログインしている
     
     Route::get('/mypage', 'UserController@myPage');//マイページ表示
     Route::post('/mypage', 'UserController@myPageUpdate');//ユーザー情報編集
-
-    Route::get('user/index', 'UserController@index');
-    Route::get('user/edit', 'UserController@edit');
-    Route::post('user/edit', 'UserController@update');
 });
 Auth::routes();
+
+Route::get('/post', 'PostController@index');
+
 Route::get('/home', 'HomeController@index')->name('home');//これを消すとログイン後に移管するページがなくてバグる

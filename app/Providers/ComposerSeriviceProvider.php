@@ -5,6 +5,7 @@ namespace App\Providers;
 use View;
 use Illuminate\Support\ServiceProvider;
 use App\Http\ViewComposers\CartComposer;
+use App\Http\ViewComposers\ListComposer;
 
 class ComposerSeriviceProvider extends ServiceProvider
 {
@@ -20,6 +21,11 @@ class ComposerSeriviceProvider extends ServiceProvider
             '*'
           ]
       ]);
+      View::composers([
+        ListComposer::class => [
+          '*'
+        ]
+    ]);
     }
 
     /**

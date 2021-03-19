@@ -1,10 +1,16 @@
 @extends('layouts.app')
-@section('title', 'の検索結果')
+
+@if($key=="" )
+    @section('title', '購入履歴検索結果')
+@else
+    @section('title',    $key.'の購入履歴検索結果')
+@endif
+
 @section('content')
 <div class="container-fluid">
     <div class="">
         <div class="mx-auto" style="max-width:1200px">
-<p>購入履歴検索</p>
+            <p>購入履歴検索</p>
             <div class="input-group mb-3">
                 <form id="search_form" action="{{url('/searchorderhistory')}}">
                     <?php if(empty($genre)){$genre = '';}
@@ -25,9 +31,13 @@
                     </div>
                 </form>
             </div>
-
-
-            <h1 style="color:#555555; text-align:center; font-size:1.2em; padding:24px 0px; font-weight:bold;">商品一覧</h1>
+            <h1 style="color:#555555; text-align:center; font-size:1.2em; padding:24px 0px; font-weight:bold;">
+                @if($key=="" )
+                購入履歴検索結果
+                @else
+                「{{$key ?? ''}}」の購入履歴検索結果
+                @endif
+            </h1>
             @if($orders->isEmpty() )
             <p class="text-center">見つかりませんでした。</p>
             @else
@@ -56,14 +66,12 @@
                 </div>
                 @endforeach
             </div>
-                                <div class="text-center" style="width: 200px;margin: 20px auto;">
-        {{$orders->appends(request()->input())->links() }}
-    </div>
+            <div class="text-center" style="width: 200px;margin: 20px auto;">
+                {{$orders->appends(request()->input())->links() }}
+            </div>
             @else
             <p class="text-center">購入履歴はありません</p>
             @endif
-
-
             @endif
         </div>
     </div>

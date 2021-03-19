@@ -29,10 +29,6 @@
                     </div>
                 </form>
             </div>
-
-
-
-
             <h1 class="text-center font-weight-bold" style="color:#555555;  font-size:1.2em; padding:24px 0px;">
                 {{ Auth::user()->name }}さんのカートの購入履歴</h1>
             @if($items->isNotEmpty())
