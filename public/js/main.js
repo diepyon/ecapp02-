@@ -1,3 +1,7 @@
+/*---
+itemloop
+---*/
+    //マウスオンでメッセージを表示
     for (let step = 1; step <= 6; step++) {
 
         document.addEventListener('DOMContentLoaded', function () {
@@ -26,8 +30,29 @@
             cart_trigger.addEventListener('mouseout', function () {
                 cart_expert.style.opacity = '0'
             }, false)
-
-
-
         }, false)
     }
+
+/*---
+mypage
+---*/
+//alert('unko')
+/*ファイル選択時にプレビュー*/
+function imgPreView(event) {
+    var file = event.target.files[0];
+    var reader = new FileReader();
+    var preview = document.getElementById("preview");
+    var previewImage = document.getElementById("previewImage");
+     
+    if(previewImage != null) {
+      preview.removeChild(previewImage);
+    }
+    reader.onload = function(event) {
+      var img = document.createElement("img");
+      img.setAttribute("src", reader.result);
+      img.setAttribute("id", "previewImage");
+      preview.appendChild(img);
+    };
+   
+    reader.readAsDataURL(file);
+  }

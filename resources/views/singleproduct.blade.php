@@ -21,19 +21,19 @@
                 </div>
                 <div class="col-sm-4">
                 @if(in_array($stock->id, $favorite_data['favorite_list'],true))
-                <form style="display:inline-block;" action="/favoritedelete"artComposer method="post">
+                <form style="display:inline-block;" action="/favoritedelete" method="post">
                         @csrf
                         <input type="hidden" name="stock_id" value="{{ $stock->id }}">
                         <button class="btn btn-outline-secondary"><i class="fas fa-heart">お気に入りから削除</i></button>
                     </form>
                 @else
-                <form style="display:inline-block;" action="/favorite"artComposer method="post">
+                <form style="display:inline-block;" action="/favorite" method="post">
                         @csrf
                         <input type="hidden" name="stock_id" value="{{ $stock->id }}">
                         <button class="btn btn-outline-secondary"><i class="far fa-heart">お気に入りに保存</i></button>
                     </form>
                 @endif
-                    <form style="display:inline-block;" action="/favorite"artComposer method="post">
+                    <form style="display:inline-block;" action="/favorite" method="post">
                         @csrf
                         <input type="hidden" name="stock_id" value="{{ $stock->id }}">
                         <button class="btn btn-outline-secondary"><i class="far fa-heart">サンプルダウンロード（未リンク）</i></button>

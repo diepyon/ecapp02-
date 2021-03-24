@@ -18,7 +18,7 @@ class CreateStocksTable extends Migration
             $table->timestamps();
             $table->string('name', '100');//商品名
             $table->string('genre', '100');//ジャンル
-            $table->string('subgenre', '100');//ジャンル
+            $table->string('subgenre', '100')->nullable();//ジャンル
             $table->string('tag1', '100');//tag
             $table->string('tag2', '100');//tag
             $table->string('tag3', '100');//tag

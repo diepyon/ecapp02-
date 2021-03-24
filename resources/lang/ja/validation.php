@@ -154,6 +154,12 @@ return [
       |
     */
 
-    'attributes' => [],
+    'attributes' => [
+                 
+             'stock_name' => '作品名',
+             'user_name' => 'ユーザー名',
+             'detail'=>'商品説明'
+    ],
+    
 
 ];

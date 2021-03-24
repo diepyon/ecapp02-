@@ -48,6 +48,7 @@ class ShopController extends Controller
     public function singleProduct($stocks_id)//viewから{{stock_id}}を取得
     {//商品個別ページを表示するメソッド
         $stocks = DB::table('stocks')->where('id', $stocks_id)->get();
+        
         //dd($stocks[0]->path);
         //getimagesize();
         return view('singleproduct', compact('stocks'));

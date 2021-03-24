@@ -34,9 +34,16 @@ Route::group(['middleware' => ['auth']], function () {//ログインしている
     
     Route::get('/mypage', 'UserController@myPage');//マイページ表示
     Route::post('/mypage', 'UserController@myPageUpdate');//ユーザー情報編集
+
+    //投稿フォームページ
+    Route::get('/stock', 'StockController@showCreateForm')->name('stocks.create');
+    Route::post('/stock', 'StockController@create');
+
+    //投稿確認ページ
+    Route::get('/stock/{stock_id}', 'StockController@detail')->name('stocks.detail');
 });
 Auth::routes();
 
-Route::get('/post', 'PostController@index');
+
 
 Route::get('/home', 'HomeController@index')->name('home');//これを消すとログイン後に移管するページがなくてバグる

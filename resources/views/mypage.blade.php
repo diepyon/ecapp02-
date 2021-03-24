@@ -9,10 +9,29 @@
 
             <h1 class="text-center font-weight-bold" style="color:#555555;  font-size:1.2em; padding:24px 0px;">
                 {{$aftername ?? Auth::user()->name}}さんのアカウント情報</h1>
-            <form id="search_form" action="{{url('/mypage')}} " method="post">
+
+            <form id="search_form" action="{{url('/mypage')}} " method="post" enctype="multipart/form-data">
                 @csrf
                 <table class="table">
                     <tbody>
+                        <tr>
+                            <th scope="row" style="width:%">アイコン</th>
+                            <td style="width:%">
+                                <input type="file" class="form-control-file" id="myImage" name="profile_file"
+                                    onChange="imgPreView(event)" accept=".jpg,.jpeg,.png,.gif">
+                                <div id="preview"> 
+                                    @if( Auth::user()->user_icon=="")
+                                    未設定
+                                    @else
+                                    <img
+                                        src="{{asset('storage/user_icon/')}}/{{ Auth::user()->user_icon }}"
+                                        id="previewImage"
+                                    >
+                                    @endif
+                                </div>
+                            </td>
+                            <td></td>
+                        </tr>
                         <tr>
                             <th scope="row" style="width:%">ユーザーID</th>
                             <td style="width:%">{{ Auth::user()->id }}</td>
@@ -20,8 +39,13 @@
                         </tr>
                         <tr>
                             <th scope="row">ユーザー名</th>
-                            <td> <input type="text" id="name" name="name" value="{{$aftername ?? Auth::user()->name}}"
-                                    required="required" autocomplete="name" autofocus="autofocus" class="form-control">
+                            <td>
+                                @error('user_name')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
+                                <input type="text" id="name" name="user_name"
+                                    value="{{$aftername ?? Auth::user()->name}}" required="required" autocomplete="name"
+                                    autofocus="autofocus" class="form-control">
                             </td>
                             <td></td>
                         </tr>
@@ -29,7 +53,23 @@
                             <th scope="row">メールアドレス</th>
                             <td>
                                 <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
-                                    name="email" value="{{$afteremail ?? Auth::user()->email}}" required autocomplete="email">
+                                    name="email" value="{{$afteremail ?? Auth::user()->email}}" required
+                                    autocomplete="email">
+
+                                @error('email')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">パスワード(変更時のみ入力)</th>
+                            <td>
+                                <input id="password" type="password"
+                                    class="form-control @error('email') is-invalid @enderror" name="password" value=""
+                                    autocomplete="password">
 
                                 @error('email')
                                 <span class="invalid-feedback" role="alert">
