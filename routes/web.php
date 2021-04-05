@@ -33,7 +33,9 @@ Route::group(['middleware' => ['auth']], function () {//ログインしている
     Route::get('/searchorderhistory', 'ShopController@searchOrderHistory');//購入履歴検索
     
     Route::get('/mypage', 'UserController@myPage');//マイページ表示
-    Route::post('/mypage', 'UserController@myPageUpdate');//ユーザー情報編集
+    Route::get('/mypage/edit', 'UserController@myPageEdit');//マイページ編集画面表示
+    Route::get('/mypage/update', 'UserController@myPageUpdate');
+    Route::post('/mypage/update', 'UserController@myPageUpdate');//ユーザー情報編集アクション
 
     //投稿フォームページ
     Route::get('/stock', 'StockController@showCreateForm')->name('stocks.create');
@@ -41,6 +43,8 @@ Route::group(['middleware' => ['auth']], function () {//ログインしている
 
     //投稿確認ページ
     Route::get('/stock/{stock_id}', 'StockController@detail')->name('stocks.detail');
+
+    Route::get('/watermark', 'ShopController@watermark');
 });
 Auth::routes();
 

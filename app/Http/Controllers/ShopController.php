@@ -6,10 +6,13 @@ use App\Models\Stock; //追加
 use App\Models\Cart; //追加
 use App\Models\Favorite; //追加
 use App\Models\Orderhistory; //追加
+use App\Models\User; //登録されているユーザー情報を引っ張りたくて追加した
 use Illuminate\Support\Facades\Auth;//ログイン情報取得できるやつ
 use DB;
 use Illuminate\Support\Facades\Mail; //メール
 use App\Mail\Thanks;//メール
+use Intervention\Image\Facades\Image;//画像加工のライブラリ
+
 
 use Illuminate\Http\Request;
 
@@ -25,7 +28,8 @@ class ShopController extends Controller
         return view('images', compact('stocks'));
     }
 
-    public function searchItems( Request $request)
+
+    public function searchItems(Request $request)
     {
         #キーワード受け取り
         $key = $request->input('key');//inputタグに入力されたキーワードを取得
@@ -42,16 +46,18 @@ class ShopController extends Controller
        
         return view('search', compact('stocks'))->with('genre', $genre)->with('key', $key);
         //->with('genre', $genre)も渡さないとフォームの入力内容をページ移管後に維持できない
-
     }
 
-    public function singleProduct($stocks_id)//viewから{{stock_id}}を取得
+    public function singleProduct($stocks_id)//コントローラーから{{stock_id}}を取得
     {//商品個別ページを表示するメソッド
-        $stocks = DB::table('stocks')->where('id', $stocks_id)->get();
-        
+        $stock = DB::table('stocks')->where('id', $stocks_id)->first();//商品の情報を取得
+        $author_id = ($stock->user_id);//商品投稿者のidを取得
+
+        $user = DB::table('users')->where('id', $author_id)->first();//商品投稿者の情報を取得
+
         //dd($stocks[0]->path);
         //getimagesize();
-        return view('singleproduct', compact('stocks'));
+        return view('singleproduct', compact('stock', 'user'));
     }
     
     public function myCart(Cart $cart)
@@ -77,12 +83,12 @@ class ShopController extends Controller
         $stock_id=$request->stock_id;
         $message = $cart->deleteCart($stock_id);//Cartモデルのshowcartメソッドの実行結果を格納（stock_idもCartモデルに連れて行ってね）
         $data = $cart->showCart($stock_id);
-        return view('mycart', $data)->with('message', $message);
+        return redirect()->back()->with('message', $message);//ページを移管させたくないから今いるページに移管
         //配列$dataをビューファイル->メソッド実行結果を格納した$messageも渡す（$data['message']=$message;と同じ意味）
     }
     public function checkout(Request $request, Cart $cart, Favorite $favorite)//cartモデムとfavoriteモデルも使うぜ
     {
-        $user = Auth::user();//ログインユーザーの情報を取得
+       $user = Auth::user();//ログインユーザーの情報を取得
        $mail_data['user']=$user->name; //ログインユーザーのnameカラムの情報を取得
        $mail_data['checkout_items']=$cart->checkoutCart(); //checkoutCartメソッドの実行結果を連想配列$mail_dataのキーcheckout_itemsに格納
        Mail::to($user->email)->send(new Thanks($mail_data));//ログインユーザーのemailカラムの情報（メールアドレス）を取得して、そのメールアドレスに情報を送る
@@ -130,7 +136,7 @@ class ShopController extends Controller
   
                 
         #ページネーション
-        $orders = $query->orderBy('created_at', 'desc')->paginate(2);//最終的に数ふやす  
+        $orders = $query->orderBy('created_at', 'desc')->paginate(2);//最終的に数ふやす
         $data = $orderhistory->showOrderHistory();//検索されなければは全権表示するの実行結果を格納
         return view('searchorderhistory')->with('orders', $orders)->with('key', $key)->with('genre', $genre)->with($data);
         //->with('genre', $genre)も含めないとジャンルプルダウンが検索語に維持できなさそう

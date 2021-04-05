@@ -62,7 +62,7 @@
                         <li class="nav-item dropdown">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                {{ Auth::user()->name }} <span class="caret"></span>
+                                {{$aftername ?? Auth::user()->name}} <span class="caret"></span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="/mypage">
@@ -94,9 +94,11 @@
                         <li>
                             <a class="nav-link" href="{{ url('/mycart') }}">
                                 <i class="fas fa-cart-arrow-down"></i>
-                                <span class="circle">
-                                    {{$count ??''}}
-                                </span>
+                                    @if($count !==0)
+                                    <span class="circle">
+                                     {{$count ??''}}
+                                     </span>
+                                    @endif
                             </a>
                         </li>
                         @endguest
@@ -135,6 +137,6 @@
     </div>
 </body>
 <script src="{{ asset('js/main.js') }}" defer></script>
-<!--ここにJavaスクリプトを読み込むタグ　ecapp02/public/js直下にmain.jsを作成-->
+<?php //自作した/js/main.jsを読み込み?>
 
 </html>

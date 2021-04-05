@@ -22,19 +22,20 @@ class StockController extends Controller
     {
     //dd($request->file('stock_file'));
 
-    $request->file('stock_file')->store('public');//ファイル保存メソッド
+    
 
     //$filename = pathinfo($request->file('stock_file'), PATHINFO_FILENAME);//ファイル名のみ
-
-
-
     //$extension = pathinfo(file('stock_file'), PATHINFO_EXTENSION);//拡張子のみ
 
 
     $request->validate([
-    'stock_name' => 'required|max:2',
+    'stock_file'=> 'required |mimes:jpg,png,gif,mp4,mp3,wav,m4a',
+    'stock_name' => 'required|max:20',
     'detail'=>'required',
+
     ]);
+        $request->file('stock_file')->store('public');//ファイル保存メソッド
+
        // Stockモデルのインスタンスを作成する
        $stock = new Stock();
        $stock->name = $request->stock_name;

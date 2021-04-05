@@ -1,5 +1,16 @@
 <p class="text-center">{{ session('message') ?? '' }}</p>
 
+
+<?php
+$img = Image::make('image/a.jpg')->insert('image/watermark.png');
+
+echo $img.'ここ' ;
+?>
+
+
+
+
+
 <div class="">
     <div class="d-flex flex-row flex-wrap">
         @foreach($stocks as $stock)

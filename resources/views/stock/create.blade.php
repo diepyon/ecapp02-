@@ -3,9 +3,6 @@
 
 <div class="d-flex flex-row flex-wrap">
     <div class="mx-auto" style="max-width:1200px">
-
-
-
         <form method="post" action="{{ route('stocks.create') }}" enctype="multipart/form-data">
             @csrf
             <div class="form">
@@ -13,26 +10,33 @@
 
                     <div class="form-group">
                         <label for="exampleFormControlInput1">作品名</label>
-                        @error('stock_name')
-                        <div class="alert alert-danger">{{ $message }}</div>
-                        @enderror
                         <input type="txt" class="form-control" id="exampleFormControlInput1"
                             value="{{ old('stock_name') }}" placeholder="(例)富士山" name="stock_name">
-                    </div>
-
-
-                    <div class="form-group">
-                        <label for="exampleFormControlFile1">ファイル</label>
-                        <a href="/storage/upload_file.pdf">アップロードファイル</a>
-                        <input type="file" class="form-control-file" id="exampleFormControlFile1" name="stock_file">
+                        @error('stock_name')
+                        <div><span class="invalid_message"><strong>{{ $message }}</strong></span></div>
+                        @enderror
                     </div>
 
                     <div class="form-group">
-                        <label for="exampleFormControlSelect1">ジャンル(ファイル拡張子から自動判別のほうがいいかも)</label>
-                        <select class="form-control" id="exampleFormControlSelect1" name="genre">
-                            <option value="image">画像</option>
-                            <option value="movie">映像</option>
-                            <option value="bgm">BGM</option>
+                        <span id="file_input_area">
+                            <input type="file" class="form-control-file " id="myImage" name="stock_file"
+                                onChange="stockPreView(event)" accept=".jpg,.jpeg,.png,.gif,.mp3,.wav,.m4a,.mp4">
+
+                            <span id="mimemessage">
+                                @error('stock_file')
+                                <div class=""><span class="invalid_message"><strong>{{ $message }}</strong></span></div>
+                                @enderror
+                            </span>
+                            <input type="button" id="btn1" value="クリア" onclick="clear_file();">
+                        </span>
+
+                        <div id="stockPreview">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleFormControlSelect1">ジャンル</label>
+                        <select class="form-control" id="genreSelect" name="genre" readonly>
+
                         </select>
                     </div>
 
@@ -50,7 +54,7 @@
                     <div class="form-group">
                         <label for="exampleFormControlTextarea1">商品説明</label>
                         @error('detail')
-                        <div class="alert alert-danger">{{ $message }}</div>
+                        <div><span class="invalid_message"><strong>{{ $message }}</strong></span></div>
                         @enderror
                         <textarea class="form-control" id="exampleFormControlTextarea1" rows="5" name="detail"
                             value="{{ old('detail') }}"></textarea>

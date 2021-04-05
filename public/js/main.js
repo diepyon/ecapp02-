@@ -36,12 +36,11 @@ itemloop
 /*---
 mypage
 ---*/
-//alert('unko')
-/*ファイル選択時にプレビュー*/
+/*プロフィールアイコンファイル選択時にプレビュー*/
 function imgPreView(event) {
-    var file = event.target.files[0];
-    var reader = new FileReader();
-    var preview = document.getElementById("preview");
+    var file = event.target.files[0];//1個目のfile
+    var reader = new FileReader();//新しいファイルリーダー
+    var preview = document.getElementById("preview");//
     var previewImage = document.getElementById("previewImage");
      
     if(previewImage != null) {
@@ -53,6 +52,71 @@ function imgPreView(event) {
       img.setAttribute("id", "previewImage");
       preview.appendChild(img);
     };
-   
-    reader.readAsDataURL(file);
+ 
+    if(file.type.match('image')){//画像が選ばれたら
+        reader.readAsDataURL(file);//画像をプレビュー
+    }else{//画像以外が選ばれたら
+        let mimeError = '<div class=""><span id="invalid_message" class="invalid_message"><strong>選択できない形式のデータです。</strong></span></div>'
+        document.getElementById('mimemessage').innerHTML = `${mimeError}`;//エラーメッセージを生成
+    }
   }
+
+ /*作品ファイル選択時にプレビュー*/
+function stockPreView(event) {
+    var file = event.target.files[0];//1個目のfile
+    var reader = new FileReader();//新しいファイルリーダー
+    var preview = document.getElementById("stockPreview");//
+    var previewImage = document.getElementById("previewImage");
+     
+    if(previewImage != null) {
+      preview.removeChild(previewImage);
+    }
+
+    if(file.type.match('image')){
+    reader.onload = function(event) {
+      var img = document.createElement("img");
+      img.setAttribute("src", reader.result);
+      img.setAttribute("id", "previewImage");
+      preview.appendChild(img);
+    }
+    }else if(file.type.match('video')){
+        var img = document.createElement("video");
+        img.setAttribute("src", reader.result);
+        img.setAttribute("id", "previewImage");
+        }
+ 
+  
+    if(file.type.match('image')){//画像が選ばれたら
+        reader.readAsDataURL(file);//画像をプレビュー
+        document.getElementById('genreSelect').innerHTML = '<option value="image">画像</option>'
+    }else if(file.type.match('video')){
+        alert('動画やん！')
+        reader.readAsDataURL(file);//画像をプレビュー
+        document.getElementById('genreSelect').innerHTML = '<option value="movie">動画</option>'
+    }else if(file.type.match('audio')){
+        alert('オーディオやん')
+        document.getElementById('genreSelect').innerHTML = '<option value="bgm">BGM</option>'
+    }else{//画像以外が選ばれたら
+        let mimeError = '<div class=""><span id="invalid_message" class="invalid_message"><strong>選択できない形式のデータです。</strong></span></div>'
+        document.getElementById('mimemessage').innerHTML = `${mimeError}`;//エラーメッセージを生成
+    }
+  }
+
+
+/*ファイル選択キャンセル*/
+   function clear_file(){
+    var area = document.getElementById('file_input_area'); 
+    var temp = area.innerHTML;  
+       area.innerHTML = temp;//span#file_input_are内を空にする
+
+    var  invalidMessage = document.getElementById('mimemessage');
+    invalidMessage.innerHTML =''//プロフィールアイコンに画像以外が選択されていた場合に表示されるエラーメッセージを削除
+   
+    if(document.getElementById('genreSelect')){
+    var  genreSelect = document.getElementById('genreSelect');
+    genreSelect.innerHTML =''//ファイル選択時に自動判別される製品ジャンルをクリア
+    }
+    var imageArea = document.getElementById('previewImage');
+    imageArea.remove();//プレビュー画像削除
+  }
+  

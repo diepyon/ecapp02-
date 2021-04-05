@@ -158,7 +158,10 @@ return [
                  
              'stock_name' => '作品名',
              'user_name' => 'ユーザー名',
-             'detail'=>'商品説明'
+             'detail'=>'商品説明',
+             'password'=>'パスワード',
+             'profile_file'=>'アイコンに指定できるデータ',
+             'stock_file'=>'データ'
     ],
     
 
