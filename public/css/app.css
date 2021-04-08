@@ -11208,7 +11208,7 @@ single
   width: 100%;
 }
 
-div#single_form button {
+div#single_form .btn {
   margin: 5px;
 }
 
@@ -11225,6 +11225,8 @@ div#author img {
   width: 50px;
   border-radius: 50%;
   padding: 5px;
+  -o-object-fit: cover;
+     object-fit: cover;
 }
 
 /*投稿者アイコン*/

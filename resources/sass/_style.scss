@@ -258,7 +258,7 @@ single
     width: 100%
 }
 
-div#single_form button {
+div#single_form .btn {
     margin: 5px;
 }/*ボタンの間隔*/
 
@@ -271,6 +271,7 @@ div#author img {
     width: 50px;
     border-radius: 50%;
     padding :5px;
+    object-fit: cover;//縦横比固定
 }/*投稿者アイコン*/
 
 

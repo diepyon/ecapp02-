@@ -20,49 +20,50 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    public function myPage() {
+    public function myPage()
+    {
         return view('mypage');
     }
 
-    public function myPageEdit() 
-    {        
+    public function myPageEdit()
+    {
         return view('mypage_edit');
     }
-    public function myPageUpdate(Request $request,User $user) 
+    public function myPageUpdate(Request $request, User $user)
     {
-    $user =Auth::user(); 
+        $user =Auth::user();
 
-    $request->validate([
+        $request->validate([
     'user_name' => 'required|max:15',
     'email' => ['required','string','email','max:255',Rule::unique('users')->ignore($user->id)],
     'profile_file'=>'mimes:jpg,png',
     'password' => 'confirmed',
-    ]);        
+    ]);
         $aftername = $request->input('user_name');
         $afteremail = $request->input('email');
 
         $password = Hash::make($request->input('password'));
         $user_record = User::where('id', $user->id);
         $user_record->update(['name' => $request->user_name]);
-        $user_record->update(['email' => $request->email]); 
+        $user_record->update(['email' => $request->email]);
        
-        if($request->file('profile_file')==""){//変更があった場合のみアイコン更新（アップロードした画像を表示させておいて、クリアしたらデフォルトに戻すとかでもいいかも）
+        if ($request->file('profile_file')=="") {//変更があった場合のみアイコン更新（アップロードした画像を表示させておいて、クリアしたらデフォルトに戻すとかでもいいかも）
             $file="";
-        }else{
+        } else {
             $file=$request->file('profile_file')->getClientOriginalName();
             //$filename = pathinfo($file, PATHINFO_FILENAME);//ファイル名のみ
             $extension = pathinfo($file, PATHINFO_EXTENSION);//拡張子のみ
             $fileinfo = $request->file('profile_file');
             $save_path = storage_path('app/public/user_icon/'.$user->id.'.'.$extension);
 
-            InterventionImage::make($fileinfo)->resize(300, 300, function ($constraint) {
+            InterventionImage::make($fileinfo)
+            ->resize(500, 500, function ($constraint) {//縦横比を維持しながら圧縮
                 $constraint->aspectRatio();
-            })->save($save_path);
-            
-            //$request->file('profile_file')->storeAs('public/user_icon',$user->id.'.'.$extension);//storageにファイルを保存
+            }
+            )->save($save_path,100);//100%の品質で保存
 
             $filepath = $user->id.'.'.$extension;
-            $user_record->update(['user_icon' => $filepath]); 
+            $user_record->update(['user_icon' => $filepath]);
         }
 
         if ($request->input('password')!="") {//入力があった場合のみパスワード変更
@@ -71,6 +72,6 @@ class UserController extends Controller
 
         $status = "更新しました";
 
-        return view('mypage')->with('aftername', $aftername)->with('afteremail', $afteremail)->with('status',$status);
+        return view('mypage')->with('aftername', $aftername)->with('afteremail', $afteremail)->with('status', $status);
     }
 }

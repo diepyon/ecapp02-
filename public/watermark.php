@@ -1,29 +1,19 @@
 <?php
-        //watermark(作成中、モデルに書いた方が美しいと思う)
-        //create Image from file
-        $img = Image::make('image/a.jpg');
-        
+// スタンプと、それをすかしとして適用する写真を読み込みます
+$stamp = imagecreatefromjpeg('http://localhost/image/a.jpg');
+$im = imagecreatefromjpeg('http://localhost/image/c.jpg');
 
-        // write text
-        $img->text('The quick brown fox jumps over the lazy dog.');
+// スタンプの余白を設定し、スタンプ画像の幅と高さを取得します
+$marge_right = 10;
+$marge_bottom = 10;
+$sx = imagesx($stamp);
+$sy = imagesy($stamp);
 
-        // write text at position
-        $img->text('The quick brown fox jumps over the lazy dog.', 120, 100);
+// スタンプ画像を写真の上にコピーします。余白の値と
+// 写真の幅を元にスタンプの位置を決定します
+imagecopy($im, $stamp, imagesx($im) - $sx - $marge_right, imagesy($im) - $sy - $marge_bottom, 0, 0, imagesx($stamp), imagesy($stamp));
 
-        // use callback to define details
-        $img->text('foo', 0, 0, function ($font) {
-            $font->file('fonts/localfont/uzura.ttf');
-            $font->size(24);
-            $font->color('#fdf6e3');
-            $font->align('center');
-            $font->valign('top');
-            $font->angle(45);
-        });
-
-        // draw transparent text
-        $img->text('foo', 0, 0, function ($font) {
-        $font->color(array(255, 255, 255, 0.5));
-        }
-    );
-        return $img;
-        //watermark終わり
+// 出力し、メモリを開放します
+header('Content-type: image/png');
+imagepng($im);
+imagedestroy($im);

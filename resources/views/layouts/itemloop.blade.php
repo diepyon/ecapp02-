@@ -1,16 +1,5 @@
 <p class="text-center">{{ session('message') ?? '' }}</p>
 
-
-<?php
-$img = Image::make('image/a.jpg')->insert('image/watermark.png');
-
-echo $img.'ここ' ;
-?>
-
-
-
-
-
 <div class="">
     <div class="d-flex flex-row flex-wrap">
         @foreach($stocks as $stock)
@@ -24,7 +13,7 @@ echo $img.'ここ' ;
 
                 <div class="stock_thumbnail">
                     <a href="{{url('/product/')}}/{{$stock->id}}">
-                        <img src="/image/{{$stock->path}}" alt="" class="incart purchased">
+                        <img src="/storage/stock_thumbnail/{{$stock->path}}" alt="" class="incart purchased">
                     </a>
 
                     <div class="purchased_txt">
@@ -37,7 +26,7 @@ echo $img.'ここ' ;
                 @else
                 <div class="stock_thumbnail">
                     <a href="{{url('/product/')}}/{{$stock->id}}">
-                        <img src="/image/{{$stock->path}}" alt="" class="incart not_purchased">
+                        <img src="/storage/stock_thumbnail/{{$stock->path}}" alt="" class="incart not_purchased">
                     </a>
                     @if(in_array($stock->id, $favorite_data['favorite_list'],true))
                     <form action="/favoritedelete" method="post">
