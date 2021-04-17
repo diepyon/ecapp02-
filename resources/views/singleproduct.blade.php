@@ -5,20 +5,31 @@
 <div class="container-fluid">
     <div class="">
         <div class="mx-auto" style="max-width:1200px">
-           
+
             @section('title', $stock->name)
             <h1 style="color:#555555; text-align:center; font-size:1.2em; padding:24px 0px; font-weight:bold;">
                 {{$stock->name}}</h1>
-            
+
             @include('layouts.searchform')
 
             <p class="text-center">{{ session('message') ?? '' }}</p>
-            
+
             <div class="row">
                 <div class="col-sm-8">
                     <img src="/storage/stock_sample/{{$stock->path}}" alt="" class="ditail_image">
                 </div>
                 <div class="col-sm-4" id="single_form">
+
+                    <div id="stock_info">
+                        <ul class="list-group list-group-flush">                            
+                            <li class="list-group-item">{{$width}}x{{$height}}px</li>
+                            <li class="list-group-item">{{$mime}}</li>
+                            <li class="list-group-item">{{$filesize}}</li>
+                            <li class="list-group-item">アスペクト比</li>
+                            <li class="list-group-item">￥{{ number_format($stock->fee)}}</li>
+                        </ul>
+                    </div>
+
                     @if(in_array($stock->id, $favorite_data['favorite_list'],true))
                     <form style="display:inline-block;" action="/favoritedelete" method="post">
                         @csrf
@@ -32,9 +43,11 @@
                         <button class="btn btn-outline-secondary"><i class="far fa-heart"></i>お気に入りに保存</button>
                     </form>
                     @endif
-                    
-                    <a class="btn btn-outline-secondary" href="{{ url('/storage/stock_download_sample/')}}/{{$stock->path}}" role="button" download><i class="fas fa-arrow-down"></i>サンプルダウンロード</a>
-                      
+
+                    <a class="btn btn-outline-secondary"
+                        href="{{ url('/storage/stock_download_sample/')}}/{{$stock->path}}" role="button" download><i
+                            class="fas fa-arrow-down"></i>サンプルダウンロード</a>
+
                     @if(in_array($stock->id, $cart_data['cart_list'],true))
                     <form action="/cartdelete" method="post">
                         @csrf
@@ -44,7 +57,8 @@
                     </form>
                     @elseif(in_array($stock->id, $orderhistory_data['orderhistory_list'],true))
 
-                    <a class="btn btn-warning cart_button btn-lg btn-primary btn-lg btn-block" href="{{ url('/storage/stock_data/')}}/{{$stock->path}}" role="button" download>
+                    <a class="btn btn-warning cart_button btn-lg btn-primary btn-lg btn-block"
+                        href="{{ url('/storage/stock_data/')}}/{{$stock->path}}" role="button" download>
                         <i class="fas fa-arrow-down">データダウンロード</i>
                     </a>
 
@@ -56,18 +70,17 @@
                                 class="fas fa-cart-arrow-down">カートに追加</i></button>
                     </form>
                     @endif
- 
+
 
                     <div id="author">
-                    <img src="{{asset('storage/user_icon/')}}/{{ $user->user_icon }}" id="previewImage">
-                    投稿者　{{ $user->name }}
+                        <img src="{{asset('storage/user_icon/')}}/{{ $user->user_icon }}" id="previewImage">
+                        投稿者　{{ $user->name }}
                     </div>
 
                 </div>
             </div>
-           
+
         </div>
     </div>
 </div>
 @endsection
-

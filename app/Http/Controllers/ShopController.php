@@ -55,9 +55,44 @@ class ShopController extends Controller
 
         $user = DB::table('users')->where('id', $author_id)->first();//商品投稿者の情報を取得
 
-        //dd($stocks[0]->path);
-        //getimagesize();
-        return view('singleproduct', compact('stock', 'user'));
+        $file = './storage/stock_sample/'.$stock->path;//販売データのファイルパスを取得
+        $imgSize = getimagesize($file);//販売画像データ情報を取得
+        $width = $imgSize[0];//販売画像データの横幅を取得
+        $height= $imgSize[1];//販売画像データの高さを取得
+        $mime =$imgSize['mime']; 
+    
+        function calcFileSize($size)
+        {//ファイルサイズをいい感じの単位に調整する関数
+          $b = 1024;    // バイト
+          $mb = pow($b, 2);   // メガバイト
+          $gb = pow($b, 3);   // ギガバイト
+        
+          switch(true){
+            case $size >= $gb:
+              $target = $gb;
+              $unit = 'GB';
+              break;
+            case $size >= $mb:
+              $target = $mb;
+              $unit = 'MB';
+              break;
+            default:
+              $target = $b;
+              $unit = 'KB';
+              break;
+          }
+        
+          $new_size = round($size / $target, 2);
+          $file_size = number_format($new_size, 2, '.', ',') . $unit;
+        
+          return $file_size;
+        }
+
+        $filesize =  calcFileSize(filesize('./storage/stock_sample/'.$stock->path));
+
+        //$hoge = gmp_lcm("12", "21");←最小公倍数　エラーになるのでコメントアウト
+        
+        return view('singleproduct', compact('stock', 'user','width','height','mime','filesize'));
     }
     
     public function myCart(Cart $cart)
@@ -141,7 +176,6 @@ class ShopController extends Controller
         return view('searchorderhistory')->with('orders', $orders)->with('key', $key)->with('genre', $genre)->with($data);
         //->with('genre', $genre)も含めないとジャンルプルダウンが検索語に維持できなさそう
     }
-
 
     public function orderHistory(Orderhistory $orderhistory)
     {

@@ -254,6 +254,11 @@ img.incart {
 /*-----
 single
 -----*/
+div#stock_info li {
+    background: transparent;
+}//データ情報詳細背景透明
+
+
 .ditail_image {
     width: 100%
 }
@@ -265,6 +270,7 @@ div#single_form .btn {
 div#author{
     padding:5px;
 }/*投稿者ブロック余白*/
+
 
 div#author img {
     height: 50px;

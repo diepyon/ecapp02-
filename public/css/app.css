@@ -11204,6 +11204,10 @@ img.incart {
 single
 -----*/
 
+div#stock_info li {
+  background: transparent;
+}
+
 .ditail_image {
   width: 100%;
 }

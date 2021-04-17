@@ -13,4 +13,9 @@ class Stock extends Model
    {
        return $this->belongsTo('\App\Models\Stock');//stockテーブルのくせにuserテーブルのデータを参照できるやつ
    }
+
+   public function saveStockFil(Request $request){
+     //dd('unko');
+   }
+
 }

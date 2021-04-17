@@ -3,7 +3,7 @@
 
 <div class="d-flex flex-row flex-wrap">
     <div class="mx-auto" style="max-width:1200px">
-        <form method="post" action="{{ route('stocks.create') }}" enctype="multipart/form-data">
+        <form method="post" action="/stock" enctype="multipart/form-data">
             @csrf
             <div class="form">
                 <div class="form-title">

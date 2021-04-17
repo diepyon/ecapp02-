@@ -8,7 +8,7 @@
                 {{$loop->iteration}}回目<br>
                 id:{{$stock->id}}<br>
                 ジャンル：{{$stock->genre}} <br>
-                {{$stock->fee}}円<br>
+                {{ number_format($stock->fee)}}円<br>
                 @if(in_array($stock->id, $orderhistory_data['orderhistory_list'],true))
 
                 <div class="stock_thumbnail">

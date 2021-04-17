@@ -34,10 +34,10 @@ class UserController extends Controller
         $user =Auth::user();
 
         $request->validate([
-    'user_name' => 'required|max:15',
-    'email' => ['required','string','email','max:255',Rule::unique('users')->ignore($user->id)],
-    'profile_file'=>'mimes:jpg,png',
-    'password' => 'confirmed',
+        'user_name' => 'required|max:15',
+        'email' => ['required','string','email','max:255',Rule::unique('users')->ignore($user->id)],
+        'profile_file'=>'mimes:jpg,png',
+        'password' => 'confirmed',
     ]);
         $aftername = $request->input('user_name');
         $afteremail = $request->input('email');
