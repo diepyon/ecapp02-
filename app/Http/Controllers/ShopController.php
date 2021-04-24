@@ -24,7 +24,7 @@ class ShopController extends Controller
     }
     public function images() //stocksテーブルのgenreカラムの値がimageのレコードを取得する
     {
-        $stocks = DB::table('stocks')->where('genre', 'image')->Paginate(3);//genreがimageのデータをページネーションで取得
+        $stocks = DB::table('stocks')->where('genre', 'image')->where('status', 'publish')->Paginate(30);//genreがimageのデータをページネーションで取得
         return view('images', compact('stocks'));
     }
 
@@ -39,7 +39,8 @@ class ShopController extends Controller
         $query = Stock::query();
        
         $query->where('name', 'like', '%'.$key.'%')
-                  ->Where('genre', 'like', $genre);
+                  ->Where('genre', 'like', $genre)
+                  ->where('status', 'publish');
   
         #ページネーション
         $stocks = $query->orderBy('created_at', 'desc')->paginate(2);
@@ -49,7 +50,10 @@ class ShopController extends Controller
     }
 
     public function singleProduct($stocks_id)//コントローラーから{{stock_id}}を取得
+    
     {//商品個別ページを表示するメソッド
+        //$hoge = gmp_lcm("12", "21");
+
         $stock = DB::table('stocks')->where('id', $stocks_id)->first();//商品の情報を取得
         $author_id = ($stock->user_id);//商品投稿者のidを取得
 
@@ -116,6 +120,9 @@ class ShopController extends Controller
     public function deleteCart(Request $request, Cart $cart)
     {
         $stock_id=$request->stock_id;
+
+       
+
         $message = $cart->deleteCart($stock_id);//Cartモデルのshowcartメソッドの実行結果を格納（stock_idもCartモデルに連れて行ってね）
         $data = $cart->showCart($stock_id);
         return redirect()->back()->with('message', $message);//ページを移管させたくないから今いるページに移管
@@ -150,7 +157,6 @@ class ShopController extends Controller
     {
         $stock_id=$request->stock_id;
         $message = $favorite->deleteFavorite($stock_id);//FavoriteモデルのshowFavboriteメソッドの実行結果を格納（stock_idもFavoriteモデルに連れて行ってね）
-
         $data = $favorite->showFavorite($stock_id);
         return redirect()->back()->with('message', $message);//ページを移管させたくないから今いるページに移管
         //配列$dataをビューファイル->メソッド実行結果を格納した$messageも渡す（$data['message']=$message;と同じ意味）
@@ -168,7 +174,6 @@ class ShopController extends Controller
        
         $query->where('name', 'like', '%'.$key.'%')
                   ->Where('genre', 'like', $genre);
-  
                 
         #ページネーション
         $orders = $query->orderBy('created_at', 'desc')->paginate(2);//最終的に数ふやす
@@ -180,7 +185,6 @@ class ShopController extends Controller
     public function orderHistory(Orderhistory $orderhistory)
     {
         $data = $orderhistory->showOrderHistory();
-
         return view('orderhistory', $data);//compactは変数を配列にするメソッドなので、使わない。今回は$dataが既に配列型式
     }
 }

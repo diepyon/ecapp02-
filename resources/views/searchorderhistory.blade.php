@@ -52,7 +52,7 @@
                         ジャンル：{{$order->genre}} <br>
                         <div class="stock_thumbnail">
                             <a href="{{url('/product/')}}/{{$order->stock_id}}">
-                                <img src="/image/{{$order->path}}" alt="" class="incart">
+                                <img src="/storage/stock_thumbnail/{{$order->path}}" alt="" class="incart">
                             </a>
                             <div class="genre_icon">
                                 <i class="fas fa-image" aria-hidden="true"></i>
@@ -60,7 +60,7 @@
                         </div>
                         {{$order->id}}<br>
                         {{$order->created_at->format('Y年m月d日') }}<br>
-                        購入時の金額：￥{{$order->fee_at_that_time }}{{-- 購入時の金額を取得 --}}<br>
+                        購入時の金額：￥{{number_format($order->fee_at_that_time) }}{{-- 購入時の金額を取得 --}}<br>
                         <br>
                     </div>
                 </div>

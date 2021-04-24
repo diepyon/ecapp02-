@@ -5,10 +5,10 @@
     <div class="">
 
         <div class="mx-auto" style="max-width:1200px">
- 
 
 
-        <p>購入履歴検索</p>
+
+            <p>購入履歴検索</p>
             <div class="input-group mb-3">
                 <form id="search_form" action="{{url('/searchorderhistory')}}">
                     <?php if(empty($genre)){$genre = '';}
@@ -40,7 +40,7 @@
                         ジャンル：{{$item->genre}} <br>
                         <div class="stock_thumbnail">
                             <a href="{{url('/product/')}}/{{$item->stock_id}}">
-                                <img src="/image/{{$item->path}}" alt="" class="incart">
+                                <img src="/storage/stock_thumbnail/{{$item->path}}" alt="" class="incart">
                             </a>
                             <div class="genre_icon">
                                 <i class="fas fa-image" aria-hidden="true"></i>
@@ -48,19 +48,24 @@
                         </div>
                         {{$item->id}}<br>
                         {{$item->created_at->format('Y年m月d日') }}<br>
-                        購入時の金額：￥{{$item->fee_at_that_time }}{{-- 購入時の金額を取得 --}}<br>
-                        <br>
+                        購入時の金額：￥{{number_format($item->fee_at_that_time) }}{{-- 購入時の金額を取得 --}}<br>
+                         
+                        <a class="btn btn-warning loopbuttton"
+                            href="{{ url('/storage/stock_data/')}}/{{$item->path}}" role="button" download>
+                            <i class="fas fa-arrow-down">データダウンロード</i>
+                        </a>
+
                     </div>
                 </div>
                 @endforeach
             </div>
-             <div class="text-center" style="width: 200px;margin: 20px auto;">
-              {{$items->links()}}
-              </div>
+            <div class="text-center" style="width: 200px;margin: 20px auto;">
+                {{$items->links()}}
+            </div>
             @else
-           
+
             <p class="text-center">購入履歴はありません</p>
-            
+
             @endif
         </div>
     </div>

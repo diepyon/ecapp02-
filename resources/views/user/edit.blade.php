@@ -20,7 +20,7 @@
               <div>
                 <input type="text" name="email" class="form-control" value="{{ $user->email }}">
               </div>
-              <button type="submit" class="user-btn">変更</button>
+              <button type="submit" class="user-btn">更新</button>
               {{ csrf_field() }}
           </form>
         </div>

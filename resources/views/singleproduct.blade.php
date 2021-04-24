@@ -2,11 +2,20 @@
 
 @section('content')
 
+
+
 <div class="container-fluid">
+
     <div class="">
         <div class="mx-auto" style="max-width:1200px">
 
+            @if($stock->status == 'delete')
+            <p class="text-center">この投稿は削除されました。</p>
+
+            @else
+
             @section('title', $stock->name)
+
             <h1 style="color:#555555; text-align:center; font-size:1.2em; padding:24px 0px; font-weight:bold;">
                 {{$stock->name}}</h1>
 
@@ -21,7 +30,7 @@
                 <div class="col-sm-4" id="single_form">
 
                     <div id="stock_info">
-                        <ul class="list-group list-group-flush">                            
+                        <ul class="list-group list-group-flush">
                             <li class="list-group-item">{{$width}}x{{$height}}px</li>
                             <li class="list-group-item">{{$mime}}</li>
                             <li class="list-group-item">{{$filesize}}</li>
@@ -69,8 +78,8 @@
                         <button class="btn btn-warning cart_button btn-lg btn-primary btn-lg btn-block"><i
                                 class="fas fa-cart-arrow-down">カートに追加</i></button>
                     </form>
-                    @endif
 
+                    @endif
 
                     <div id="author">
                         <img src="{{asset('storage/user_icon/')}}/{{ $user->user_icon }}" id="previewImage">
@@ -79,7 +88,7 @@
 
                 </div>
             </div>
-
+            @endif
         </div>
     </div>
 </div>

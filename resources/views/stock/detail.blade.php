@@ -3,10 +3,13 @@
 
 <div class="d-flex flex-row flex-wrap">
     <div class="mx-auto" style="max-width:1200px">
-
-        @foreach($stocks as $stock)
-        <p class="text-center"> {{$status ?? '' }}</p><br>
-        <form id="search_form" action="/stock/{{$stock->id}}/edit/" method="get">
+        @if($stock->status == 'delete')
+        この投稿は削除されました。
+        @elseif($user_id==$stock->user_id)
+        
+        @section('title', $stock->name)
+        
+        <p class="text-center">   {{ session('message') }}{{$message ?? ''}}</p><br>
             <table class="table">
                 <tbody>
                     <tr>
@@ -61,19 +64,26 @@
 
                     <tr>
                         <th scope="row"></th>
-                        <td><button id="mypage_submit" class="btn btn-outline-secondary" type="submit" id="">編集</button>
+                        <td>
+                            <form id="search_form" action="/stock/{{$stock->id}}/edit/" method="get">
+                            @csrf
+                                <button id="mypage_submit" class="btn btn-outline-secondary" type="submit" id="">編集</button>
+                            </form>
+
+                            <form id="search_form" action="/stock/delete/" method="post">
+                            @csrf
+                            <input type="hidden" name="stock_id" value="{{ $stock->id }}">
+                                <button id="mypage_submit" class="btn btn-outline-secondary" type="submit" id="">削除</button>
+                            </form>
+
                         </td>
                     </tr>
                 </tbody>
             </table>
-        </form>
-
-
-
-
-
-        @endforeach
-
+        
+        @else
+        この投稿を編集する権限がありません。
+        @endif
         @endsection
 
     </div>

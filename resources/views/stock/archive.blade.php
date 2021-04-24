@@ -4,43 +4,42 @@
     <div class="">
         <div class="mx-auto" style="max-width:1200px">
             <h1 class="text-center font-weight-bold" style="color:#555555;  font-size:1.2em; padding:24px 0px;">
-                {{ Auth::user()->name }}さんのカートの作品</h1>
-
+                {{ Auth::user()->name }}さんの投稿した作品</h1>
+                <p class="text-center">{{ $message ?? '' }}</p><br>
             <div class="">
-                
-
-                @if($items->isNotEmpty())
-                <div class="row">
-                    <div class="col-sm-8">
-                        <div class="d-flex flex-row flex-wrap">
-                            @foreach($items as $item)
-                            <div class="mycart_box mycart_box_incart">
-                                {{$item->stock->name}} <br>
-                                {{ number_format($item->stock->fee)}}円 <br>
-                                <a href ="{{url('/product/')}}/{{$item->stock->id}}">
-                                    <img src="/storage/stock_sample/{{$item->stock->path}}" alt="" class="incart">
-                                </a>
-                                <br>
-                                <form action="/cartdelete" method="post">
-                                    @csrf
-                                    <input type="hidden" name="stock_id" value="{{ $item->stock->id }}">
-                                    <input type="submit" value="カートから削除する">
-                                </form>
+            @if($items->isNotEmpty())
+            <div class="d-flex flex-row flex-wrap">
+                @foreach($items as $item)
+                <div class="col-xs-6 col-sm-4 col-md-4 img_box ">
+                    <div class="mycart_box">
+                        {{$item->name}}<br>
+                        ジャンル：{{$item->genre}} <br>
+                        <div class="stock_thumbnail">
+                            <a href="{{url('/stock/')}}/{{$item->id}}">
+                                <img src="{{url('/storage/stock_thumbnail')}}/{{$item->path}}" alt="" class="incart">
+                            </a>
+                            <div class="genre_icon">
+                                <i class="fas fa-image" aria-hidden="true"></i>
                             </div>
-                            @endforeach
                         </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="text-center p-2">
-                            作品数：件<br>
-                        </div>
-
-
+                        {{$item->id}}<br>
+                        {{"" ?? $item->created_at->format('Y年m月d日') }}<br>
+                       ￥{{number_format($item->fee) }}<br>
+                        <br>
                     </div>
                 </div>
-                @else
-                <p class="text-center">投稿はありません。</p>
-                @endif
+                @endforeach
+            </div>
+             <div class="text-center" style="width: 200px;margin: 20px auto;">
+              {{$items->links()}}
+              </div>
+            @else
+           
+            <p class="text-center">投稿した作品はありません。</p>
+            
+            @endif               
+
+
             </div>
         </div>
     </div>

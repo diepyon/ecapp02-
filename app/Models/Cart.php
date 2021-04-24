@@ -81,6 +81,8 @@ class Cart extends Model
                 'tag4' =>$item->stock->tag4,
                 'tag5' =>$item->stock->tag5,
                 'detail'=>$item->stock->detail,
+
+                
                 'path'=>$item->stock->path
             ]);
         }

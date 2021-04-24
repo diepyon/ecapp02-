@@ -36,7 +36,6 @@
                     <div class="form-group">
                         <label for="exampleFormControlSelect1">ジャンル</label>
                         <select class="form-control" id="genreSelect" name="genre" readonly>
-
                         </select>
                     </div>
 
