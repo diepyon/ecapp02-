@@ -14,6 +14,7 @@ use App\Mail\Thanks;//メール
 use Intervention\Image\Facades\Image;//画像加工のライブラリ
 
 
+
 use Illuminate\Http\Request;
 
 class ShopController extends Controller
@@ -52,7 +53,9 @@ class ShopController extends Controller
     public function singleProduct($stocks_id)//コントローラーから{{stock_id}}を取得
     
     {//商品個別ページを表示するメソッド
-        //$hoge = gmp_lcm("12", "21");
+        //dd(phpinfo());
+        $hoge = gmp_lcm("12", "21");
+
 
         $stock = DB::table('stocks')->where('id', $stocks_id)->first();//商品の情報を取得
         $author_id = ($stock->user_id);//商品投稿者のidを取得

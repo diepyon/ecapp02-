@@ -6,6 +6,7 @@ use App\Http\Requests\StockRequest;
 use App\Models\Stock; //いると思う
 use \InterventionImage;//画像リサイズライブラリ
 use DB;
+use Illuminate\Support\Facades\Storage;//保存やダウンロードに関するやつ
 
 use Illuminate\Http\Request;
 
@@ -25,7 +26,6 @@ class StockController extends Controller
     'stock_name' => 'required|max:20',
     'detail'=>'required',
     ]);
-
 
 
        $file= $request->file('stock_file')->getClientOriginalName();//アップロード前のファイル名
@@ -124,8 +124,36 @@ class StockController extends Controller
 
         $data = $stock->myPosts($stock_record);
 
-        return view('stock/archive',$data)->with('message', $message);//削除後のルーティングに問題あり
-      
+        return view('stock/archive',$data)->with('message', $message);//削除後のルーティングに問題あ
+    }
+
+    //↓メソッド化したいが、モデルからコントローラーに変数が渡せない
+    public function download(Request $request, Stock $stock)//urlを知られずにファイルをダウンロードさせる
+    {
+        $user_id =Auth::user()->id;//ログインユーザーのIDを取得
+
+        $orderhistories =  DB::table('orderhistories')->where('user_id', $user_id)->get();//購入履歴テーブルからログインユーザーが購入した商品のレコードを取得
+
+        foreach($orderhistories as $orderhistorie){
+            $orderhistoriesID[]= $orderhistorie->stock_id;
+        }//購入済み商品のstock_idを配列に格納
+
+         $stock_id=$request->stock_id;//ダウンロードボタンから商品IDを取得
+         $stockPath= DB::table('stocks')->where('id', $stock_id)->first()->path;//該当商品IDのファイルパスを取得
+         $stockPath='public/stock_data/'.$stockPath;//実際のファイルパスを生成  
+         $mimeType = Storage::mimeType($stockPath);//マイム情報を取得
+         $extension = pathinfo($stockPath, PATHINFO_EXTENSION);//拡張子のみ  
+         $headers = [['Content-Type' => $mimeType]];//ダウンロード用にマイムタイプをにゃほにゃほする
+         $fileName =  substr(bin2hex(random_bytes(8)), 0, 8).'.'.$extension;//「ファイル名はランダム英数字.拡張子」      
+
+         //ソースコードからstock_idを書き換えられてもダウンロードできないように対処
+         if(in_array((int)$stock_id, $orderhistoriesID,true)) {//ログインユーザーの購入履歴に該当stock_idが存在する場合
+            return Storage::download($stockPath, $fileName, $headers);//ファイルをダウンロードさせる処理
+         }else{//ログインユーザーの購入履歴に該当stock_idが存在しない場合（ソースコードが改ざん時など）
+
+        return redirect()->back()->with('message', "そのIDの商品は未購入なのでダウンロードできません。");
+            //わかりにくい、jsでポップアップしたい
+         }             
     }
     
 }

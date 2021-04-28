@@ -3,11 +3,9 @@
 @section('content')
 <div class="container-fluid">
     <div class="">
-
+    <p class="text-center">{{ session('message') ?? '' }}</p>
+    
         <div class="mx-auto" style="max-width:1200px">
-
-
-
             <p>購入履歴検索</p>
             <div class="input-group mb-3">
                 <form id="search_form" action="{{url('/searchorderhistory')}}">
@@ -46,14 +44,18 @@
                                 <i class="fas fa-image" aria-hidden="true"></i>
                             </div>
                         </div>
-                        {{$item->id}}<br>
                         {{$item->created_at->format('Y年m月d日') }}<br>
                         購入時の金額：￥{{number_format($item->fee_at_that_time) }}{{-- 購入時の金額を取得 --}}<br>
-                         
-                        <a class="btn btn-warning loopbuttton"
-                            href="{{ url('/storage/stock_data/')}}/{{$item->path}}" role="button" download>
-                            <i class="fas fa-arrow-down">データダウンロード</i>
-                        </a>
+
+
+
+                        <form id="search_form" action="/download/" method="post">
+                            @csrf
+                            <input type="hidden" name="stock_id" value="{{ $item->stock->id }}">
+                                <button id="" class="btn btn-warning loopbuttton " type="submit" id="">
+                                    <i class="fas fa-arrow-down">データダウンロード</i>
+                                </button>
+                        </form>
 
                     </div>
                 </div>

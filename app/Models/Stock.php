@@ -100,15 +100,7 @@ class Stock extends Model
     
 
 
-/*     $delete = $this->where('user_id', $user_id)->where('id', $stock_id)->delete();//投稿者がログインユーザーかつ該当商品のIDであれば削除
 
-    //user_idがログインユーザーと一致し、尚且つformからpostされてきた$stock_idとstock_idカラムの内容が一致するレコードを削除
-    if ($delete > 0) {
-        $message = '投稿を削除しました。';
-    } else {
-        $message = '削除できませんでした。';
-    }
-    return $message;   */   
    }
 
 }

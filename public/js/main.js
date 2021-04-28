@@ -120,3 +120,7 @@ function stockPreView(event) {
     imageArea.remove();//プレビュー画像削除
   }
   
+/*htmlを書き換えて未購入商品をダウンロードしようとしたとき*/
+function blockDownload(){
+    alert('あかんで')
+}

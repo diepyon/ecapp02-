@@ -31,6 +31,8 @@ Route::group(['middleware' => ['auth']], function () {//ログインしている
 
     Route::get('/orderhistory', 'ShopController@orderHistory');//購入履歴表示
     Route::get('/searchorderhistory', 'ShopController@searchOrderHistory');//購入履歴検索
+
+    Route::post('/download', 'StockController@download');//商品強制ダウンロード
     
     Route::get('/mypage', 'UserController@myPage');//マイページ表示
     Route::get('/mypage/edit', 'UserController@myPageEdit');//マイページ編集画面表示
