@@ -35,7 +35,7 @@ class StockController extends Controller
        $uploaded_filename= $user->id.'_'.substr(bin2hex(random_bytes(8)), 0, 8).'.'.$extension;//アップロード後のファイル名は「ユーザーID_8文字のランダムな英数字.拡張子」  
 
        //データをそのまま保存
-       $request->file('stock_file')->storeAs('public/stock_data',$uploaded_filename);
+       $request->file('stock_file')->storeAs('private/stock_data',$uploaded_filename);
       
         if(strpos($mime,'image') !== false){
            $stock->saveStockImg($request,$user,$uploaded_filename);
@@ -98,13 +98,15 @@ class StockController extends Controller
             ]);
         $stock = DB::table('stocks')->where('id', $stocks_id)->first();
         
-        //メソッド化したいのでまだ画像を差し替える処理は書いていない
         return view('stock/detail', compact('stock','user_id'))->with('message','更新しました。');
     }
 
     public function archive(Stock $stock)
     {
         $data = $stock->myPosts();
+
+        //dd($data);
+
         return view('stock/archive', $data);
     }
 
@@ -140,7 +142,7 @@ class StockController extends Controller
 
          $stock_id=$request->stock_id;//ダウンロードボタンから商品IDを取得
          $stockPath= DB::table('stocks')->where('id', $stock_id)->first()->path;//該当商品IDのファイルパスを取得
-         $stockPath='public/stock_data/'.$stockPath;//実際のファイルパスを生成  
+         $stockPath='private/stock_data/'.$stockPath;//実際のファイルパスを生成  
          $mimeType = Storage::mimeType($stockPath);//マイム情報を取得
          $extension = pathinfo($stockPath, PATHINFO_EXTENSION);//拡張子のみ  
          $headers = [['Content-Type' => $mimeType]];//ダウンロード用にマイムタイプをにゃほにゃほする

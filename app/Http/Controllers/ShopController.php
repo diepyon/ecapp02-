@@ -54,7 +54,7 @@ class ShopController extends Controller
     
     {//商品個別ページを表示するメソッド
         //dd(phpinfo());
-        $hoge = gmp_lcm("12", "21");
+        //$hoge = gmp_lcm("12", "21");
 
 
         $stock = DB::table('stocks')->where('id', $stocks_id)->first();//商品の情報を取得

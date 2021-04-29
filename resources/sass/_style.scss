@@ -354,3 +354,23 @@ div#stockPreview img {
 .loopbuttton {
     margin: 2px auto 25px;
 }
+
+/*-----
+自分の投稿一覧
+-----*/
+img.myPost {
+    max-width: 100%;
+    height: 100%;
+    -o-object-fit: cover;
+    object-fit: cover;
+}
+
+/* .buttonArea{
+    position:relative;
+}
+
+.jumpButton {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+} */

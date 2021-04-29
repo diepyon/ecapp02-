@@ -19,26 +19,10 @@
                         <th class="table_subject" scope="row" style="width:%">データ</th>
                         <td class="table_content" style="width:%">
                             <div id="">
-
-                                <span id="file_input_area">
-                                    <input type="file" class="form-control-file " id="myImage" name="stock_file"
-                                        onChange="stockPreView(event)"
-                                        accept=".jpg,.jpeg,.png,.gif,.mp3,.wav,.m4a,.mp4">
-
-                                    <span id="mimemessage">
-                                        @error('stock_file')
-                                        <div class=""><span
-                                                class="invalid_message"><strong>{{ $message }}</strong></span></div>
-                                        @enderror
-                                    </span>
-                                    <input type="button" id="btn1" value="クリア" onclick="clear_file();">
-                                </span>
-
                                 <div id="stockPreview">
                                     <img src="/storage/stock_sample/{{$stock->path}}" alt="" class="ditail_image"
                                         id="previewImage">
                                 </div>
-
                             </div>
                         </td>
                         <td></td>
@@ -46,7 +30,6 @@
                     <tr>
                         <th scope="row" style="width:%">作品名：</th>
                         <td style="width:%">
-
                             <input type="text" id="name" name="stock_name"
                                 value="{{old('stock->name') ??   $stock->name}}" required="required" autocomplete="name"
                                 autofocus="autofocus" class="form-control">

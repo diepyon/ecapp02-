@@ -77,16 +77,16 @@ class Stock extends Model
    //
    {
        $user_id = Auth::id(); //ログインしているユーザーのIDを取得
-       $data['loops'] = $this->where('user_id', $user_id)->orderBy('created_at', 'desc')->get();
+       //$data['loops'] = $this->where('user_id', $user_id)->orderBy('created_at', 'desc')->get();
        //ログインユーザーのIDと同じ値を持つuser_idカラムのレコードを連想配列$dataのキー「items」に格納
 
        $data['items'] = $this->where('user_id', $user_id)->where('status', 'publish')->orderBy('created_at', 'desc')->paginate(30);
       //公開状態の投稿のみ表示（deleteなら非表示、下書きなども今は非表示）
 
-       foreach ($data['loops'] as $loop) {
+/*        foreach ($data['loops'] as $loop) {
             $data['orderhistory_list'][] = $loop->id;
        }
-       $data['orderhistory_list'][] ='dammy'; 
+       $data['orderhistory_list'][] ='dammy';  */
 
        return $data; //連想配列データを実行結果として返す
    }
