@@ -122,10 +122,7 @@ class ShopController extends Controller
     
     public function deleteCart(Request $request, Cart $cart)
     {
-        $stock_id=$request->stock_id;
-
-       
-
+        $stock_id=$request->stock_id;  
         $message = $cart->deleteCart($stock_id);//Cartモデルのshowcartメソッドの実行結果を格納（stock_idもCartモデルに連れて行ってね）
         $data = $cart->showCart($stock_id);
         return redirect()->back()->with('message', $message);//ページを移管させたくないから今いるページに移管

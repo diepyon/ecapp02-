@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;//ログイン情報取得できるやつ
 use App\Http\Requests\StockRequest; 
 use App\Models\Stock; //いると思う
+use App\Models\Cart; //Cartテーブルを使うぜ
+use App\Models\Favorite;
 use \InterventionImage;//画像リサイズライブラリ
 use DB;
 use Illuminate\Support\Facades\Storage;//保存やダウンロードに関するやつ
@@ -42,8 +44,6 @@ class StockController extends Controller
         }else{
         //ポストされたデータが画像以外なら（作成段階）
         }     
-
-        //dd($message);
 
        $stock = new Stock();//Stockモデルのインスタンスを作成する
        $stock->name = $request->stock_name;
@@ -103,30 +103,30 @@ class StockController extends Controller
 
     public function archive(Stock $stock)
     {
-        $data = $stock->myPosts();
-
-        //dd($data);
-
+        $data = $stock->myPosts();       
         return view('stock/archive', $data);
     }
 
+
+
     public function delete(Request $request, Stock $stock)
     {
-        $stock_record = Stock::where('id',$request->stock_id);
-
-
+        $stock_record = Stock::where('id',$request->stock_id);//postされてきたstock_idを持つレコードをstocksテーブルから取得
+        $cart_record = Cart::where('stock_id',$request->stock_id);//postされてきたstock_idを持つレコードをcartsテーブルから取得
+        $favorite_record = Favorite::where('stock_id',$request->stock_id);//postされてきたstock_idを持つレコードをfavoritesテーブルから取得
 
     if($stock_record->first()->status !=='delete') {
         $message = '削除しました。';
     }else{//既に削除済みの場合
         $message = '削除できませんでした。';
     }
-
         $stock_record->update(['status' => 'delete']);//statusをdeleteに変更（レコード自体は消さない）
+        $cart_record->delete();//cartsテーブルから該当stock_idを持つレコードを削除（みんなの買い物かごから消える）
+        $favorite_record->delete();//favoritesテーブルから該当stock_idを持つレコードを削除（みんなのお気に入りから消える）
 
         $data = $stock->myPosts($stock_record);
 
-        return view('stock/archive',$data)->with('message', $message);//削除後のルーティングに問題あ
+        return view('stock/archive',$data)->with('message', $message);
     }
 
     //↓メソッド化したいが、モデルからコントローラーに変数が渡せない
@@ -157,5 +157,4 @@ class StockController extends Controller
             //わかりにくい、jsでポップアップしたい
          }             
     }
-    
 }

@@ -13,6 +13,7 @@ class Cart extends Model
     public function showCart()//追加
     {
         $user_id = Auth::id(); //ログインしているユーザーのIDを取得
+        
         $data['items'] = $this->where('user_id', $user_id)->get();//ログインユーザーのIDと同じ値を持つuser_idカラムのレコードを連想配列$dataのキー「my_carts」に格納
         $data['count']=0; //カート内の商品の個数は０からカウントアップするぜ
         $data['sum']=0; //合計金額も０からカウントアップするぜ
@@ -26,14 +27,16 @@ class Cart extends Model
             //繰り返すたびにsumに数字が足されていく
             $data['cart_list'][] = $item->stock->id;//連想配列$dataのcart_listキーにカート登録済み商品のIDを配列として格納
         }
-        $data['cart_list'][] ='dammy'; 
-        //dd($data['cart_list']);
+        $data['cart_list'][] =''; //空だと怒られるので。
+        
         return $data; //連想配列データを実行結果として返す
     }
+    
     public function stock()
     {
         return $this->belongsTo('\App\Models\Stock');//Cartテーブル内に書かれたメソッドにもかかわらずストックテーブルの中身も参照できるようにするメソッド
     }
+
     public function addCart($stock_id)
     {
         $user_id = Auth::id(); //ログインユーザーのIDを取得
