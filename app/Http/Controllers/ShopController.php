@@ -25,7 +25,7 @@ class ShopController extends Controller
     }
     public function images() //stocksテーブルのgenreカラムの値がimageのレコードを取得する
     {
-        $stocks = DB::table('stocks')->where('genre', 'image')->where('status', 'publish')->Paginate(30);//genreがimageのデータをページネーションで取得
+        $stocks = DB::table('stocks')->where('genre', 'image')->where('status', 'publish')->Paginate(4);//genreがimageのデータをページネーションで取得
         return view('images', compact('stocks'));
     }
 
@@ -51,12 +51,7 @@ class ShopController extends Controller
     }
 
     public function singleProduct($stocks_id)//コントローラーから{{stock_id}}を取得
-    
     {//商品個別ページを表示するメソッド
-        //dd(phpinfo());
-        //$hoge = gmp_lcm("12", "21");
-
-
         $stock = DB::table('stocks')->where('id', $stocks_id)->first();//商品の情報を取得
         $author_id = ($stock->user_id);//商品投稿者のidを取得
 
@@ -94,12 +89,33 @@ class ShopController extends Controller
         
           return $file_size;
         }
-
         $filesize =  calcFileSize(filesize('./storage/stock_sample/'.$stock->path));
 
-        //$hoge = gmp_lcm("12", "21");←最小公倍数　エラーになるのでコメントアウト
-        
-        return view('singleproduct', compact('stock', 'user','width','height','mime','filesize'));
+        function aspect($a, $b)
+        {
+            if ($a === 0) {
+                return $a ;
+            }
+            $diff = $a > $b ? $a - $b : $b - $a ;
+            $A = $diff ;
+            $B = $b ;
+            if ($B - $A) {
+                $A = $b ;
+                $B = $diff ;
+            }
+            while (true) {
+                if ($B === 0) {
+                    return $a/$A.':'. $b/$A ;
+                }
+                $A %= $B ;
+                if ($A === 0) {
+                    return $a/$B.':'. $b/$B ;
+                }
+                $B %= $A ;
+            }
+        }
+        $aspect= (aspect($width, $height));  
+        return view('singleproduct', compact('stock', 'user','width','height','mime','filesize','aspect'));
     }
     
     public function myCart(Cart $cart)

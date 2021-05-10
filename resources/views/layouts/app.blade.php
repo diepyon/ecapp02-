@@ -16,6 +16,10 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
+    
+    @if(\Route::is('delete'))
+    <script src="{{asset('js/delete.js')}}" defer></script>
+    @endif
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -136,7 +140,9 @@
         </footer>
     </div>
 </body>
+
 <script src="{{ asset('js/main.js') }}" defer></script>
 <?php //自作した/js/main.jsを読み込み?>
+
 
 </html>

@@ -9,6 +9,7 @@ use App\Models\Favorite;
 use \InterventionImage;//画像リサイズライブラリ
 use DB;
 use Illuminate\Support\Facades\Storage;//保存やダウンロードに関するやつ
+use FFMpeg;
 
 use Illuminate\Http\Request;
 
@@ -56,7 +57,6 @@ class StockController extends Controller
        $stock->created_at = now();
        $stock->updated_at = now();
        $stock->save();
-
 
        //「投稿する」をクリックしたら投稿情報表示ページへリダイレクト        
        return redirect()->route('stocks.detail', [
@@ -108,7 +108,6 @@ class StockController extends Controller
     }
 
 
-
     public function delete(Request $request, Stock $stock)
     {
         $stock_record = Stock::where('id',$request->stock_id);//postされてきたstock_idを持つレコードをstocksテーブルから取得
@@ -156,5 +155,71 @@ class StockController extends Controller
         return redirect()->back()->with('message', "そのIDの商品は未購入なのでダウンロードできません。");
             //わかりにくい、jsでポップアップしたい
          }             
+    }
+    public function henkan(){
+        //https://qiita.com/Nishi53454367/items/1ab543782f7c36fa4b87
+        //変換前のファイル取得
+        $media = FFMpeg::fromDisk('public')->open('kengo.mp4');
+        
+        $mediaStreams = $media->getStreams()[0];  
+
+        //再生時間を取得
+        $durationInSeconds = $media->getDurationInSeconds();
+
+        // コーデックを取得
+        $codec = $mediaStreams->get('codec_name');
+     
+
+        // 解像度(縦)を取得
+        $height = $mediaStreams->get('height');
+
+        // 解像度(横)を取得
+        $width = $mediaStreams->get('width');
+
+        // ビットレートを取得
+        $bit_rate = $mediaStreams->get('bit_rate');
+
+        //HDに変換(もし元データがHDより大きいなら)
+        $media->addFilter(function ($filters) {
+            $filters->resize(new \FFMpeg\Coordinate\Dimension(1920, 1080));
+        })
+        ->export()
+        ->toDisk('public')
+        ->inFormat(new \FFMpeg\Format\Video\X264('aac'))
+        ->save('sample_HD.mp4');
+
+        // SD画質に変換
+        $media->addFilter(function ($filters) {
+            $filters->resize(new \FFMpeg\Coordinate\Dimension(720, 480));
+        })
+        ->export()
+        ->toDisk('public')
+        ->inFormat(new \FFMpeg\Format\Video\X264('aac'))
+        ->save('sample_SD.mp4');
+
+        // 変換後のファイル取得
+        $mediaSD = FFMpeg::fromDisk('public')->open('sample_SD.mp4');
+        $mediaStreamsSD = $mediaSD->getStreams()[0];
+
+        // 解像度(縦)を取得
+        $height_SD = $mediaStreamsSD->get('height');
+
+        // 解像度(横)を取得
+        $width_SD = $mediaStreamsSD->get('width');
+
+        // ビットレートを取得
+        $bit_rate_SD = $mediaStreamsSD->get('bit_rate');
+
+        // Viewで確認
+        return view('home')->with([
+            "durationInSeconds" => $durationInSeconds,
+            "codec" => $codec,
+            "height" => $height,
+            "width" => $width,
+            "bit_rate" => $bit_rate,
+            "height_SD" => $height_SD,
+            "width_SD" => $width_SD,
+            "bit_rate_SD" => $bit_rate_SD,
+        ]);
     }
 }

@@ -9,6 +9,10 @@
             @include('layouts.itemloop')
         </div>
     </div>
+  
+<div class="d-flex justify-content-center">
+<div class="" style="width:350px; overflow:scroll;">{{$stocks->onEachSide(2)->links()}}</div>
+</div>    
 </div>
-<div class="text-center" style="width: 200px;margin: 20px auto;">{{$stocks->links()}}</div>
+
 @endsection

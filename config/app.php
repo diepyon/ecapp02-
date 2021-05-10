@@ -179,7 +179,8 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\ComposerSeriviceProvider::class,//追記
 
-
+        ProtoneMedia\LaravelFFMpeg\Support\ServiceProvider::class,//ffmgpeg追加
+        //Pbmedia\LaravelFFMpeg\FFMpegServiceProvider::class,
     ],
 
     /*
@@ -234,6 +235,9 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+
+        //'FFMpeg' => ProtoneMedia\LaravelFFMpeg\Support\FFMpeg::class,//ffmpeg追加
+        'FFMpeg' => Pbmedia\LaravelFFMpeg\FFMpegServiceProvider::class,
 
     ],
 

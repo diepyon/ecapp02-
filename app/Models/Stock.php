@@ -89,10 +89,6 @@ class Stock extends Model
     $uploaded_filename=$this->where('id', $stock_id)->first()->path;//データのファイル名を取得
 
     Storage::delete(['public/stock_sample/'.$uploaded_filename, 'public/stock_download_sample/'.$uploaded_filename]);//販売データとループ用サムネイル以外削除（全部消すと買った人が困るから）
-    
-
-
-
    }
 
 }

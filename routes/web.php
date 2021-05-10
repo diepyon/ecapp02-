@@ -40,7 +40,7 @@ Route::group(['middleware' => ['auth']], function () {//ログインしている
     Route::post('/mypage/update', 'UserController@myPageUpdate');//ユーザー情報編集アクション
 
     //投稿を削除する
-    Route::post('/stock/delete', 'StockController@delete');
+    Route::post('/stock/delete', 'StockController@delete')->name('delete');
     //Route::get('/stock/delete', 'StockController@archive');
 
     //投稿一覧ページ
@@ -58,10 +58,10 @@ Route::group(['middleware' => ['auth']], function () {//ログインしている
 
     //投稿編集からのポストアクション
     Route::post('/stock/{stock_id}/update', 'StockController@update')->name('stocks.update');
-    
-
 });
 Auth::routes();
+
+Route::get('/henkan', 'StockController@henkan');
 
 
 

@@ -2,6 +2,9 @@
 
 @section('content')
 
+<?php
+
+?>
 
 
 <div class="container-fluid">
@@ -34,7 +37,7 @@
                             <li class="list-group-item">{{$width}}x{{$height}}px</li>
                             <li class="list-group-item">{{$mime}}</li>
                             <li class="list-group-item">{{$filesize}}</li>
-                            <li class="list-group-item">アスペクト比</li>
+                            <li class="list-group-item">{{$aspect}}</li>
                             <li class="list-group-item">￥{{ number_format($stock->fee)}}</li>
                         </ul>
                     </div>

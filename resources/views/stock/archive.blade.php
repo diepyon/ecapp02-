@@ -5,7 +5,7 @@
         <div class="mx-auto" style="max-width:1200px">
             <h1 class="text-center font-weight-bold" style="color:#555555;  font-size:1.2em; padding:24px 0px;">
                 {{ Auth::user()->name }}さんの投稿した作品</h1>
-            <p class="text-center">{{ $message ?? '' }}</p><br>
+            <p id='deleteMessage' class="text-center">{{ $message ?? '' }}</p><br>
             <div class="">
 
                 <?php
@@ -128,4 +128,5 @@
 </div>
 </div>
 </div>
+
 @endsection
