@@ -29,21 +29,23 @@ class StockController extends Controller
     'stock_name' => 'required|max:20',
     'detail'=>'required',
     ]);
-
-
        $file= $request->file('stock_file')->getClientOriginalName();//アップロード前のファイル名
        $mime= $request->file('stock_file')->getClientMimeType();//アップロード前のマイムタイプ
        $extension = pathinfo($file, PATHINFO_EXTENSION);//拡張子のみ  
 
        $uploaded_filename= $user->id.'_'.substr(bin2hex(random_bytes(8)), 0, 8).'.'.$extension;//アップロード後のファイル名は「ユーザーID_8文字のランダムな英数字.拡張子」  
 
-       //データをそのまま保存
+       //拡張子にかかわらずデータをそのまま保存
        $request->file('stock_file')->storeAs('private/stock_data',$uploaded_filename);
       
         if(strpos($mime,'image') !== false){
            $stock->saveStockImg($request,$user,$uploaded_filename);
+        }elseif(strpos($mime,'video') !== false){
+
+
         }else{
         //ポストされたデータが画像以外なら（作成段階）
+        dd($mime);//意図しないファイルがアップされたらいったんmimeタイプを表示（最終的には消す）
         }     
 
        $stock = new Stock();//Stockモデルのインスタンスを作成する
@@ -103,10 +105,9 @@ class StockController extends Controller
 
     public function archive(Stock $stock)
     {
-        $data = $stock->myPosts();       
+        $data = $stock->myPosts(); //自分の投稿一覧
         return view('stock/archive', $data);
     }
-
 
     public function delete(Request $request, Stock $stock)
     {
@@ -156,48 +157,28 @@ class StockController extends Controller
             //わかりにくい、jsでポップアップしたい
          }             
     }
-    public function henkan(){
+
+    public function henkan(Stock $stock){//変換処理は審査後に走らせたほうがいい気がしてきた
         //https://qiita.com/Nishi53454367/items/1ab543782f7c36fa4b87
         //変換前のファイル取得
         $media = FFMpeg::fromDisk('public')->open('kengo.mp4');
-        
         $mediaStreams = $media->getStreams()[0];  
-
         //再生時間を取得
         $durationInSeconds = $media->getDurationInSeconds();
-
         // コーデックを取得
-        $codec = $mediaStreams->get('codec_name');
-     
-
+        $codec = $mediaStreams->get('codec_name');     
         // 解像度(縦)を取得
         $height = $mediaStreams->get('height');
-
         // 解像度(横)を取得
         $width = $mediaStreams->get('width');
-
+        $aspect=$stock->gcd($width, $height);
         // ビットレートを取得
-        $bit_rate = $mediaStreams->get('bit_rate');
+        $bit_rate = $mediaStreams->get('bit_rate');  
+        
+        $stock->videoEncode($media,$width,$height);//変換処理
 
-        //HDに変換(もし元データがHDより大きいなら)
-        $media->addFilter(function ($filters) {
-            $filters->resize(new \FFMpeg\Coordinate\Dimension(1920, 1080));
-        })
-        ->export()
-        ->toDisk('public')
-        ->inFormat(new \FFMpeg\Format\Video\X264('aac'))
-        ->save('sample_HD.mp4');
 
-        // SD画質に変換
-        $media->addFilter(function ($filters) {
-            $filters->resize(new \FFMpeg\Coordinate\Dimension(720, 480));
-        })
-        ->export()
-        ->toDisk('public')
-        ->inFormat(new \FFMpeg\Format\Video\X264('aac'))
-        ->save('sample_SD.mp4');
-
-        // 変換後のファイル取得
+/*         // 変換後のファイル取得
         $mediaSD = FFMpeg::fromDisk('public')->open('sample_SD.mp4');
         $mediaStreamsSD = $mediaSD->getStreams()[0];
 
@@ -208,10 +189,10 @@ class StockController extends Controller
         $width_SD = $mediaStreamsSD->get('width');
 
         // ビットレートを取得
-        $bit_rate_SD = $mediaStreamsSD->get('bit_rate');
+        $bit_rate_SD = $mediaStreamsSD->get('bit_rate'); */
 
         // Viewで確認
-        return view('home')->with([
+        return view('home')/* ->with([
             "durationInSeconds" => $durationInSeconds,
             "codec" => $codec,
             "height" => $height,
@@ -220,6 +201,6 @@ class StockController extends Controller
             "height_SD" => $height_SD,
             "width_SD" => $width_SD,
             "bit_rate_SD" => $bit_rate_SD,
-        ]);
+        ]) */;
     }
 }

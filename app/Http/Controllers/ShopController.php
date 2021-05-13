@@ -12,9 +12,6 @@ use DB;
 use Illuminate\Support\Facades\Mail; //メール
 use App\Mail\Thanks;//メール
 use Intervention\Image\Facades\Image;//画像加工のライブラリ
-
-
-
 use Illuminate\Http\Request;
 
 class ShopController extends Controller
@@ -29,7 +26,6 @@ class ShopController extends Controller
         return view('images', compact('stocks'));
     }
 
-
     public function searchItems(Request $request)
     {
         #キーワード受け取り
@@ -38,7 +34,6 @@ class ShopController extends Controller
 
         #クエリ生成(Stockテーブルを参照)
         $query = Stock::query();
-       
         $query->where('name', 'like', '%'.$key.'%')
                   ->Where('genre', 'like', $genre)
                   ->where('status', 'publish');
@@ -50,72 +45,21 @@ class ShopController extends Controller
         //->with('genre', $genre)も渡さないとフォームの入力内容をページ移管後に維持できない
     }
 
-    public function singleProduct($stocks_id)//コントローラーから{{stock_id}}を取得
+    public function singleProduct(Stock $stock,$stocks_id)//コントローラーから{{stock_id}}を取得
     {//商品個別ページを表示するメソッド
-        $stock = DB::table('stocks')->where('id', $stocks_id)->first();//商品の情報を取得
-        $author_id = ($stock->user_id);//商品投稿者のidを取得
-
+        $stock_record = DB::table('stocks')->where('id', $stocks_id)->first();//商品の情報を取得
+        $author_id = ($stock_record->user_id);//商品投稿者のidを取得
         $user = DB::table('users')->where('id', $author_id)->first();//商品投稿者の情報を取得
+        $file = './storage/stock_sample/'.$stock_record->path;//販売データのファイルパスを取得
 
-        $file = './storage/stock_sample/'.$stock->path;//販売データのファイルパスを取得
+        //genreが画像ならのif文が欲しい
         $imgSize = getimagesize($file);//販売画像データ情報を取得
         $width = $imgSize[0];//販売画像データの横幅を取得
         $height= $imgSize[1];//販売画像データの高さを取得
         $mime =$imgSize['mime']; 
-    
-        function calcFileSize($size)
-        {//ファイルサイズをいい感じの単位に調整する関数
-          $b = 1024;    // バイト
-          $mb = pow($b, 2);   // メガバイト
-          $gb = pow($b, 3);   // ギガバイト
-        
-          switch(true){
-            case $size >= $gb:
-              $target = $gb;
-              $unit = 'GB';
-              break;
-            case $size >= $mb:
-              $target = $mb;
-              $unit = 'MB';
-              break;
-            default:
-              $target = $b;
-              $unit = 'KB';
-              break;
-          }
-        
-          $new_size = round($size / $target, 2);
-          $file_size = number_format($new_size, 2, '.', ',') . $unit;
-        
-          return $file_size;
-        }
-        $filesize =  calcFileSize(filesize('./storage/stock_sample/'.$stock->path));
-
-        function aspect($a, $b)
-        {
-            if ($a === 0) {
-                return $a ;
-            }
-            $diff = $a > $b ? $a - $b : $b - $a ;
-            $A = $diff ;
-            $B = $b ;
-            if ($B - $A) {
-                $A = $b ;
-                $B = $diff ;
-            }
-            while (true) {
-                if ($B === 0) {
-                    return $a/$A.':'. $b/$A ;
-                }
-                $A %= $B ;
-                if ($A === 0) {
-                    return $a/$B.':'. $b/$B ;
-                }
-                $B %= $A ;
-            }
-        }
-        $aspect= (aspect($width, $height));  
-        return view('singleproduct', compact('stock', 'user','width','height','mime','filesize','aspect'));
+        $filesize =  $stock->calcFileSize(filesize('./storage/stock_sample/'.$stock_record->path));
+        $aspect=$stock->aspect($width, $height);  
+        return view('singleproduct', compact('stock_record', 'user','width','height','mime','filesize','aspect'));
     }
     
     public function myCart(Cart $cart)
@@ -150,8 +94,7 @@ class ShopController extends Controller
        $mail_data['user']=$user->name; //ログインユーザーのnameカラムの情報を取得
        $mail_data['checkout_items']=$cart->checkoutCart(); //checkoutCartメソッドの実行結果を連想配列$mail_dataのキーcheckout_itemsに格納
        Mail::to($user->email)->send(new Thanks($mail_data));//ログインユーザーのemailカラムの情報（メールアドレス）を取得して、そのメールアドレスに情報を送る
-
-        return view('checkout');
+    return view('checkout');
     }
     public function myFavorite(Favorite $favorite)
     {
@@ -177,7 +120,6 @@ class ShopController extends Controller
         return redirect()->back()->with('message', $message);//ページを移管させたくないから今いるページに移管
         //配列$dataをビューファイル->メソッド実行結果を格納した$messageも渡す（$data['message']=$message;と同じ意味）
     }
-
 
     public function searchOrderHistory(Orderhistory $orderhistory, Request $request)
     {//注文履歴を検索するメソッド

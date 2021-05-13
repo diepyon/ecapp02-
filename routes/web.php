@@ -61,8 +61,6 @@ Route::group(['middleware' => ['auth']], function () {//ログインしている
 });
 Auth::routes();
 
-Route::get('/henkan', 'StockController@henkan');
+Route::get('/henkan', 'StockController@henkan');//動画変換、後で消す
 
-
-
-Route::get('/home', 'HomeController@index')->name('home');//これを消すとログイン後に移管するページがなくてバグる
+Route::get('/home', 'HomeController@index')->name('home');//LoginControllerとブレードを書き換えて「dashboard」にする？

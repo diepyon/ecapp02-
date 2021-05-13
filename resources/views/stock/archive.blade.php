@@ -7,7 +7,6 @@
                 {{ Auth::user()->name }}さんの投稿した作品</h1>
             <p id='deleteMessage' class="text-center">{{ $message ?? '' }}</p><br>
             <div class="">
-
                 <?php
             function calcFileSize($size)
             {//ファイルサイズをいい感じの単位に調整する関数
@@ -32,22 +31,28 @@
             
             $new_size = round($size / $target, 2);
             $file_size = number_format($new_size, 2, '.', ',') . $unit;
-            
             return $file_size;
             }     
             ?>
-
                 @if($items->isNotEmpty())
                 @foreach($items as $item)
-
-                <?php 
+                <?php
+                    if($item->genre=='image'){
                         $file = './storage/stock_sample/'.$item->path;//販売データのファイルパスを取得
                         $imgSize = getimagesize($file);//販売画像データ情報を取得
                         $width = $imgSize[0];//販売画像データの横幅を取得
                         $height= $imgSize[1];//販売画像データの高さを取得
                         $mime =$imgSize['mime']; //ファイルタイプ取得
                         $filesize =  calcFileSize(filesize('./storage/stock_sample/'.$item->path));
-                    ?>
+                    }
+                    if($item->status=='publish'){
+                        $status = '公開';}elseif($item->status=='inspection'){
+                        $status = '審査中';
+                        }else{
+                        $status = 'その他';
+                        }
+                    //「下書き」なども追加予定
+                ?>
 
                 <div class="card mb-3" style="max-width: ;">
                     <div class="no-gutters" style="display: flex;">
@@ -59,17 +64,18 @@
                         </div>
                         <div class="col-9">
                             <div class="card-body">
-                            <a href="{{url('/stock/')}}/{{$item->id}}">
-                        <h2 class="card-title">{{$item->name}}</h2>
-                    </a>
+                                <a href="{{url('/stock/')}}/{{$item->id}}">
+                                    <h2 class="card-title">{{$item->name}}</h2>
+                                </a>
                                 <div id="stock_info">
                                     <ul class="list-group list-group-flush">
-                                        <li class="list-group-item">{{$width}}x{{$height}}px</li>
-                                        <li class="list-group-item">{{$mime}}</li>
+                                        <li class="list-group-item">{{$status}}</li>
+                                        <li class="list-group-item">{{$width ?? ''}}x{{$height?? ''}}px</li>
+                                        <li class="list-group-item">{{$mime?? ''}}</li>
                                         <li class="list-group-item">アスペクト比</li>
-                                        <li class="list-group-item">{{$filesize}}</li>
+                                        <li class="list-group-item">{{$filesize?? ''}}</li>
                                         <li class="list-group-item">￥{{ number_format($item->fee)}}</li>
-                                        <li class="list-group-item"> {{ "" ?? $item->created_at->format('Y/m/d') }}</li>
+                                        <li class="list-group-item">@if($item->created_at){{ $item->created_at->format('Y/m/d')}}@endif</li>{{--日付が空でなければ変換して表示--}}
                                     </ul>
                                 </div>
                             </div>
@@ -113,20 +119,14 @@
     </div>
     --}}
     @endforeach
-
     <div class="text-center" style="width: 200px;margin: 20px auto;">
         {{$items->links()}}
     </div>
     @else
-
     <p class="text-center">投稿した作品はありません。</p>
-
     @endif
-
-
 </div>
 </div>
 </div>
 </div>
-
 @endsection
