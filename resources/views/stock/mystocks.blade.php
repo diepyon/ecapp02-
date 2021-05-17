@@ -120,7 +120,7 @@
     --}}
     @endforeach
     <div class="text-center" style="width: 200px;margin: 20px auto;">
-        {{$stocks->links()}}
+    {{$stocks->onEachSide(2)->links()}}
     </div>
     @else
     <p class="text-center">投稿した作品はありません。</p>

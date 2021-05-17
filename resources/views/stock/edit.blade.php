@@ -92,7 +92,14 @@
 
                     <tr>
                         <th scope="row"></th>
-                        <td><button id="mypage_submit" class="btn btn-outline-secondary" type="submit" id="">更新</button>
+                        <td><button id="" class="btn btn-outline-secondary mypage_submit" type="submit" id="">更新</button>
+
+                        <form id="" action="/stock/delete/" method="post">
+                            @csrf
+                            <input type="hidden" name="stock_id" value="{{ $stock->id }}">
+                            <button style="margin-top: 16px;" class="btn btn-outline-secondary mypage_submit" type="submit" id="">削除</button>
+                        </form>
+
                         </td>
                     </tr>
                 </tbody>
@@ -100,20 +107,7 @@
         </form>
 
 
-        <table class="table">
-            <tbody>
-                <tr>
-                    <th scope="row"></th>
-                    <td>
-                        <form id="search_form" action="/stock/delete/" method="post">
-                            @csrf
-                            <input type="hidden" name="stock_id" value="{{ $stock->id }}">
-                            <button id="mypage_submit" class="btn btn-outline-secondary" type="submit" id="">削除</button>
-                        </form>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+
 
         @else
         この投稿を編集する権限がありません。

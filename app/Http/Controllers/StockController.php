@@ -11,6 +11,12 @@ use DB;
 use Illuminate\Support\Facades\Storage;//保存やダウンロードに関するやつ
 use FFMpeg;
 
+//videoのwatermark関連で必要そうなもの
+use FFMpeg\Format\VideoInterface;
+use FFMpeg\Media\Video;
+use ProtoneMedia\LaravelFFMpeg\Filters\WatermarkFactory;
+use ProtoneMedia\LaravelFFMpeg\Filters\WatermarkFilter;
+
 use Illuminate\Http\Request;
 
 class StockController extends Controller
@@ -42,12 +48,10 @@ class StockController extends Controller
            $stock->saveStockImg($request,$user,$uploaded_filename);
         }elseif(strpos($mime,'video') !== false){
 
-
         }else{
         //ポストされたデータが画像以外なら（作成段階）
         dd($mime);//意図しないファイルがアップされたらいったんmimeタイプを表示（最終的には消す）
         }     
-
        $stock = new Stock();//Stockモデルのインスタンスを作成する
        $stock->name = $request->stock_name;
        $stock->genre = $request->genre;
@@ -109,6 +113,29 @@ class StockController extends Controller
         return view('stock/archive', $data);
     }
 
+    public function searchPosts(Request $request)
+    {
+        $user_id =Auth::user()->id;//ログインユーザーのIDを取得   
+        #キーワード受け取り
+        $key = $request->input('key');//inputタグに入力されたキーワードを取得
+        $genre = $request->genre;//selectタグからジャンルのvalueを取得
+
+        #クエリ生成(Stockテーブルを参照)
+        $query = Stock::query();
+
+        $query->where('name', 'like', '%'.$key.'%')
+                  ->Where('genre', 'like', $genre)
+                  ->where('status', 'publish');
+  
+        #ページネーション
+        $stocks = $query->orderBy('created_at', 'desc')->paginate(2);
+        
+        //paginate(2);
+       
+        return view('stock/mystocks', compact('stocks'))->with('genre', $genre)->with('key', $key);
+        //->with('genre', $genre)も渡さないとフォームの入力内容をページ移管後に維持できない
+    } 
+
     public function delete(Request $request, Stock $stock)
     {
         $stock_record = Stock::where('id',$request->stock_id);//postされてきたstock_idを持つレコードをstocksテーブルから取得
@@ -161,7 +188,7 @@ class StockController extends Controller
     public function henkan(Stock $stock){//変換処理は審査後に走らせたほうがいい気がしてきた
         //https://qiita.com/Nishi53454367/items/1ab543782f7c36fa4b87
         //変換前のファイル取得
-        $media = FFMpeg::fromDisk('public')->open('kengo.mp4');
+        $media = FFMpeg::fromDisk('local')->open('private/kengo.mp4');
         $mediaStreams = $media->getStreams()[0];  
         //再生時間を取得
         $durationInSeconds = $media->getDurationInSeconds();
@@ -177,6 +204,25 @@ class StockController extends Controller
         
         $stock->videoEncode($media,$width,$height);//変換処理
 
+        //SDロゴ付き（関数にまとめるのでいったんコメントアウト）
+/*         $watermark = new WatermarkFilter(storage_path('app/public/watermark/logo.png'),[
+            'position'=>'relative',
+            'bottom' => 0,
+            'right' => 0,
+        ]);
+
+        FFMpeg::open('public/sample_SD.mp4')
+            ->export()
+            ->inFormat(new \FFMpeg\Format\Video\X264('aac'))
+            ->addFilter($watermark)
+            ->save('public/watermark_sd.mp4'); */
+        
+            
+
+
+
+
+        //$this->assertTrue(Storage::disk('local')->exists('watermark.mp4'));
 
 /*         // 変換後のファイル取得
         $mediaSD = FFMpeg::fromDisk('public')->open('sample_SD.mp4');
@@ -192,7 +238,7 @@ class StockController extends Controller
         $bit_rate_SD = $mediaStreamsSD->get('bit_rate'); */
 
         // Viewで確認
-        return view('home')/* ->with([
+        return view('home');/* ->with([
             "durationInSeconds" => $durationInSeconds,
             "codec" => $codec,
             "height" => $height,
@@ -201,6 +247,6 @@ class StockController extends Controller
             "height_SD" => $height_SD,
             "width_SD" => $width_SD,
             "bit_rate_SD" => $bit_rate_SD,
-        ]) */;
+        ]) */
     }
 }

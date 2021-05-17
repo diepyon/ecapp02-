@@ -46,6 +46,10 @@ Route::group(['middleware' => ['auth']], function () {//ログインしている
     //投稿一覧ページ
     Route::get('/stock', 'StockController@archive');    
 
+    //投稿ページ検索
+    Route::get('/stock/search', 'StockController@searchPosts');
+
+
     //投稿フォームページ
     Route::get('/stock/create', 'StockController@showCreateForm');
     Route::post('/stock', 'StockController@create');
@@ -58,9 +62,12 @@ Route::group(['middleware' => ['auth']], function () {//ログインしている
 
     //投稿編集からのポストアクション
     Route::post('/stock/{stock_id}/update', 'StockController@update')->name('stocks.update');
+
+    
 });
 Auth::routes();
 
 Route::get('/henkan', 'StockController@henkan');//動画変換、後で消す
+Route::get('/ongen', 'StockController@ongen');//音源変換、後で消す
 
 Route::get('/home', 'HomeController@index')->name('home');//LoginControllerとブレードを書き換えて「dashboard」にする？

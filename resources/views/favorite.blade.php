@@ -14,6 +14,7 @@
                 <div class="d-flex flex-row flex-wrap">
 
                     @foreach($items as $item)
+                    <a href="{{url('/product/')}}/{{$item->stock->id}}">
                     <div class="mycart_box mycart_box_incart">
                         {{$item->stock->name}} <br>
                         {{ number_format($item->stock->fee)}}円 <br>
@@ -25,6 +26,7 @@
                             <input type="submit" value="お気に入りから削除する">
                         </form>
                     </div>
+                    </a>
                     @endforeach
                 </div>
 

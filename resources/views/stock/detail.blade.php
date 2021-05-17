@@ -65,17 +65,21 @@
                     <tr>
                         <th scope="row"></th>
                         <td>
-                            <form id="search_form" action="/stock/{{$stock->id}}/edit/" method="get">
+                            <form id="" action="/stock/{{$stock->id}}/edit/" method="get">
                             @csrf
-                                <button id="mypage_submit" class="btn btn-outline-secondary" type="submit" id="">編集</button>
+                                <button id="" class="btn btn-outline-secondary mypage_submit" type="submit" id="">編集</button>
                             </form>
 
-                            <form id="search_form" action="/stock/delete/" method="post">
+                            <form id="" action="/stock/delete/" method="post">
                             @csrf
                             <input type="hidden" name="stock_id" value="{{ $stock->id }}">
-                                <button id="mypage_submit" class="btn btn-outline-secondary" type="submit" id="">削除</button>
+                                <button id="" class="btn btn-outline-secondary mypage_submit" type="submit" id="">削除</button>
                             </form>
-
+                            @if($stock->status=='publish')
+                            <a href="{{url('/product/')}}/{{$stock->id}}">
+                                <p class="text-right">販売ページへ移動</p>
+                            </a>
+                            @endif
                         </td>
                     </tr>
                 </tbody>
