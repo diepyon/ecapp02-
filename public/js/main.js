@@ -90,8 +90,6 @@ function stockPreView(event) {
         reader.readAsDataURL(file);//画像をプレビュー
         document.getElementById('genreSelect').innerHTML = '<option value="image">画像</option>'
     }else if(file.type.match('video')){
-        alert('動画やん！')
-        reader.readAsDataURL(file);//画像をプレビュー
         document.getElementById('genreSelect').innerHTML = '<option value="movie">動画</option>'
     }else if(file.type.match('audio')){
         alert('オーディオやん')

@@ -23,7 +23,7 @@
 
             <div class="row">
                 <div class="col-sm-8">
-                    <img src="/storage/stock_sample/{{$stock_record->path}}" alt="" class="ditail_image">
+                　 <img src="/storage/stock_sample/{{$stock_record->path}}" alt="" class="ditail_image">
                 </div>
                 <div class="col-sm-4" id="single_form">
 
@@ -64,10 +64,15 @@
                     </form>
                     @elseif(in_array($stock_record->id, $orderhistory_data['orderhistory_list'],true))
 
-                    <a class="btn btn-warning cart_button btn-lg btn-primary btn-lg btn-block"
-                        href="{{ url('/storage/stock_data/')}}/{{$stock_record->path}}" role="button" download>
-                        <i class="fas fa-arrow-down">データダウンロード</i>
-                    </a>
+
+
+                    <form id="search_form" action="/download/" method="post">
+                            @csrf
+                            <input type="hidden" name="stock_id" value="{{$stock_record->id }}">
+                                <button id="" class="btn btn-warning cart_button btn-lg btn-primary btn-lg btn-block" type="submit" id="">
+                                    <i class="fas fa-arrow-down">データダウンロード</i>
+                                </button>
+                    </form>                    
 
                     @else
                     <form action="/mycart" method="post">
@@ -80,7 +85,11 @@
                     @endif
 
                     <div id="author">
+                    @if($user->user_icon)
                         <img src="{{asset('storage/user_icon/')}}/{{ $user->user_icon }}" id="previewImage">
+                    @else
+                    <img src="{{asset('storage/user_icon/default_icon.jpg')}}" id="previewImage">
+                    @endif
                         投稿者　{{ $user->name }}
                     </div>
 

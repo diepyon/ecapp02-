@@ -22,12 +22,12 @@ class UserController extends Controller
 {
     public function myPage()
     {
-        return view('mypage');
+        return view('account');
     }
 
     public function myPageEdit()
     {
-        return view('mypage_edit');
+        return view('account_edit');
     }
     public function myPageUpdate(Request $request, User $user)
     {
@@ -72,6 +72,6 @@ class UserController extends Controller
 
         $status = "更新しました";
 
-        return view('mypage')->with('aftername', $aftername)->with('afteremail', $afteremail)->with('status', $status);
+        return view('account')->with('aftername', $aftername)->with('afteremail', $afteremail)->with('status', $status);
     }
 }

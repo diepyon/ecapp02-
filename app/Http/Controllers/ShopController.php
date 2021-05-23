@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Mail; //メール
 use App\Mail\Thanks;//メール
 use Intervention\Image\Facades\Image;//画像加工のライブラリ
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;//保存やダウンロードに関するやつ
 
 class ShopController extends Controller
 {
@@ -51,16 +52,28 @@ class ShopController extends Controller
         $stock_record = DB::table('stocks')->where('id', $stocks_id)->first();//商品の情報を取得
         $author_id = ($stock_record->user_id);//商品投稿者のidを取得
         $user = DB::table('users')->where('id', $author_id)->first();//商品投稿者の情報を取得
-        $file = './storage/stock_sample/'.$stock_record->path;//販売データのファイルパスを取得
+        $file =  './storage/stock_sample/'.$stock_record->path;//透かしありの圧縮なしファイルの情報を取得（販売データはprivate配下にあるから使えず）
 
-        //genreが画像ならのif文が欲しい
-        $imgSize = getimagesize($file);//販売画像データ情報を取得
-        $width = $imgSize[0];//販売画像データの横幅を取得
-        $height= $imgSize[1];//販売画像データの高さを取得
-        $mime =$imgSize['mime']; 
-        $filesize =  $stock->calcFileSize(filesize('./storage/stock_sample/'.$stock_record->path));
-        $aspect=$stock->aspect($width, $height);  
-        return view('singleproduct', compact('stock_record', 'user','width','height','mime','filesize','aspect'));
+        if($stock_record->genre=='image'){
+        //genreがimageなら
+            $imgSize = getimagesize($file);//販売画像データ情報を取得（物理的な大きさやファイルタイプ）
+            $width = $imgSize[0];//販売画像データの横幅を取得（透かしありの圧縮なし画像を参照）
+            $height= $imgSize[1];//販売画像データの高さを取得（透かしありの圧縮なし画像を参照）
+            $mime =$imgSize['mime']; //販売データのマイムタイプを取得マイムタイプを取得（透かしありの圧縮なし画像を参照）
+            $filesize =  $stock->calcFileSize(Storage::size('private/stock_data/'.$stock_record->path));//実際の販売データのファイルサイズを取得
+            $aspect=$stock->aspect($width, $height);  //アスペクト比を取得
+            return view('singleproduct', compact('stock_record', 'user','width','height','mime','filesize','aspect'));            
+        }else{
+            //それ以外なら(view表示の時に怒られるからいったん中身をnull)
+            $width = null;
+            $height=null;
+            $mime =null;
+            $filesize =null;  
+            $aspect=null;
+            return view('singleproduct', compact('stock_record', 'user','width','height','mime','filesize','aspect'));   
+        }
+
+
     }
     
     public function myCart(Cart $cart)

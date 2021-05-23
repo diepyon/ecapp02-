@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;//ログイン情報取得できるやつ
 use App\Http\Requests\StockRequest; 
@@ -44,9 +43,11 @@ class StockController extends Controller
        //拡張子にかかわらずデータをそのまま保存
        $request->file('stock_file')->storeAs('private/stock_data',$uploaded_filename);
       
-        if(strpos($mime,'image') !== false){
+        if(strpos($mime,'image') !== false){//画像なら
            $stock->saveStockImg($request,$user,$uploaded_filename);
-        }elseif(strpos($mime,'video') !== false){
+
+        }elseif(strpos($mime,'video') !== false){//動画なら
+            $stock->makeVideoThumbnail($uploaded_filename);//動画からサムネイル作成
 
         }else{
         //ポストされたデータが画像以外なら（作成段階）
@@ -74,26 +75,24 @@ class StockController extends Controller
     public function detail($stocks_id)
     {
         $user_id =Auth::user()->id;//ログインユーザーのIDを取得
-        $stock = DB::table('stocks')->where('id', $stocks_id)->first();
+        $stock = DB::table('stocks')->where('id', $stocks_id)->first();   
+
         return view('stock/detail', compact('stock','user_id'));
     }
     
     public function edit($stocks_id)
     {    
         $user_id =Auth::user()->id;//ログインユーザーのIDを取得   
-        $stock = DB::table('stocks')->where('id', $stocks_id)->first();
-       
+        $stock = DB::table('stocks')->where('id', $stocks_id)->first(); 
         return view('stock/edit', compact('stock','user_id'));
     }
 
     public function update($stocks_id,Request $request,Stock $stock)
-    { 
+    { //投稿済み商品編集
         $user_id =Auth::user()->id;//ログインユーザーのIDを取得   
         $stock_record = Stock::where('id', $stocks_id);
-
         $stock_record->update(['name' => $request->stock_name]);
         $stock_record->update(['fee' => $request->fee]);
-
         $stock_record->update(['genre'=>$request->genre]);
         $stock_record->update(['detail' => $request->detail]);
 
@@ -114,26 +113,18 @@ class StockController extends Controller
     }
 
     public function searchPosts(Request $request)
-    {
+    {//ステータス別に投稿済み作品を検索
         $user_id =Auth::user()->id;//ログインユーザーのIDを取得   
-        #キーワード受け取り
-        $key = $request->input('key');//inputタグに入力されたキーワードを取得
-        $genre = $request->genre;//selectタグからジャンルのvalueを取得
-
+        $status = $request->input('status');//inputタグに入力されたキーワードを取得
+        
         #クエリ生成(Stockテーブルを参照)
         $query = Stock::query();
-
-        $query->where('name', 'like', '%'.$key.'%')
-                  ->Where('genre', 'like', $genre)
-                  ->where('status', 'publish');
+        $query->where('user_id',$user_id)->where('status', $status);//
   
-        #ページネーション
-        $stocks = $query->orderBy('created_at', 'desc')->paginate(2);
-        
-        //paginate(2);
+        #ページネーションorder
+        $stocks = $query->By('created_at', 'desc')->paginate(2);     
+        return view('stock/mystocks', compact('stocks'))->with('status', $status);
        
-        return view('stock/mystocks', compact('stocks'))->with('genre', $genre)->with('key', $key);
-        //->with('genre', $genre)も渡さないとフォームの入力内容をページ移管後に維持できない
     } 
 
     public function delete(Request $request, Stock $stock)
@@ -160,12 +151,18 @@ class StockController extends Controller
     public function download(Request $request, Stock $stock)//urlを知られずにファイルをダウンロードさせる
     {
         $user_id =Auth::user()->id;//ログインユーザーのIDを取得
-
         $orderhistories =  DB::table('orderhistories')->where('user_id', $user_id)->get();//購入履歴テーブルからログインユーザーが購入した商品のレコードを取得
+        $posthistories =  DB::table('stocks')->where('user_id', $user_id)->get();//stocksテーブルからログインユーザーがとうした商品のレコードを取得
+
+   
 
         foreach($orderhistories as $orderhistorie){
             $orderhistoriesID[]= $orderhistorie->stock_id;
         }//購入済み商品のstock_idを配列に格納
+
+        foreach($posthistories as $posthistorie){
+            $posthistoriesID[]= $posthistorie->id;
+        }//自分が投稿した商品のstock_idを配列に格納        
 
          $stock_id=$request->stock_id;//ダウンロードボタンから商品IDを取得
          $stockPath= DB::table('stocks')->where('id', $stock_id)->first()->path;//該当商品IDのファイルパスを取得
@@ -173,10 +170,10 @@ class StockController extends Controller
          $mimeType = Storage::mimeType($stockPath);//マイム情報を取得
          $extension = pathinfo($stockPath, PATHINFO_EXTENSION);//拡張子のみ  
          $headers = [['Content-Type' => $mimeType]];//ダウンロード用にマイムタイプをにゃほにゃほする
-         $fileName =  substr(bin2hex(random_bytes(8)), 0, 8).'.'.$extension;//「ファイル名はランダム英数字.拡張子」      
+         $fileName =  substr(bin2hex(random_bytes(8)), 0, 8).'.'.$extension;//「ファイル名はランダム英数字.拡張子」    
 
          //ソースコードからstock_idを書き換えられてもダウンロードできないように対処
-         if(in_array((int)$stock_id, $orderhistoriesID,true)) {//ログインユーザーの購入履歴に該当stock_idが存在する場合
+         if(in_array((int)$stock_id, $orderhistoriesID,true) or in_array((int)$stock_id, $posthistoriesID,true)) {//ログインユーザーの購入履歴に該当stock_idが存在する場合
             return Storage::download($stockPath, $fileName, $headers);//ファイルをダウンロードさせる処理
          }else{//ログインユーザーの購入履歴に該当stock_idが存在しない場合（ソースコードが改ざん時など）
 
@@ -188,7 +185,8 @@ class StockController extends Controller
     public function henkan(Stock $stock){//変換処理は審査後に走らせたほうがいい気がしてきた
         //https://qiita.com/Nishi53454367/items/1ab543782f7c36fa4b87
         //変換前のファイル取得
-        $media = FFMpeg::fromDisk('local')->open('private/kengo.mp4');
+        $media = FFMpeg::fromDisk('local')->open('private/stock_data/kengo.mp4');
+
         $mediaStreams = $media->getStreams()[0];  
         //再生時間を取得
         $durationInSeconds = $media->getDurationInSeconds();
@@ -204,25 +202,6 @@ class StockController extends Controller
         
         $stock->videoEncode($media,$width,$height);//変換処理
 
-        //SDロゴ付き（関数にまとめるのでいったんコメントアウト）
-/*         $watermark = new WatermarkFilter(storage_path('app/public/watermark/logo.png'),[
-            'position'=>'relative',
-            'bottom' => 0,
-            'right' => 0,
-        ]);
-
-        FFMpeg::open('public/sample_SD.mp4')
-            ->export()
-            ->inFormat(new \FFMpeg\Format\Video\X264('aac'))
-            ->addFilter($watermark)
-            ->save('public/watermark_sd.mp4'); */
-        
-            
-
-
-
-
-        //$this->assertTrue(Storage::disk('local')->exists('watermark.mp4'));
 
 /*         // 変換後のファイル取得
         $mediaSD = FFMpeg::fromDisk('public')->open('sample_SD.mp4');
@@ -249,4 +228,49 @@ class StockController extends Controller
             "bit_rate_SD" => $bit_rate_SD,
         ]) */
     }
+
+    public function henkan2(){//wateremarkテスト
+        FFMpeg::fromDisk('local')->open('private/stock_data/kengo.mp4')
+         ->addWatermark(function(WatermarkFactory $factory){ 
+             $factory->open('app/private/watermark/logo.png')      
+                ->bottom(25)
+                ->left(25);
+        })
+        ->export()
+        ->inFormat(new X264('aac')) //inFormat(new \FFMpeg\Format\Video\X264('aac'))
+        ->save('watermarkpositiontest.mp4');
+    }
+
+    public function approval(Request $request,Stock $stock) {//投稿のステータスを公開に変える
+        $stock_record = Stock::where('id', $request->stock_id);//承認ボタンが押された投稿idのレコードを取得
+
+        $media = FFMpeg::fromDisk('local')->open('private/stock_data/'.$stock_record->first()->path);
+        $mediaStreams = $media->getStreams()[0];  
+        //再生時間を取得
+        $durationInSeconds = $media->getDurationInSeconds();
+        // コーデックを取得
+        $codec = $mediaStreams->get('codec_name');     
+        // 解像度(縦)を取得
+        $height = $mediaStreams->get('height');
+        // 解像度(横)を取得
+        $width = $mediaStreams->get('width');
+        $aspect=$stock->gcd($width, $height);
+        // ビットレートを取得
+        $bit_rate = $mediaStreams->get('bit_rate');  
+        
+        $stock->videoEncode($media,$width,$height);//サンプル用ファイル生成するための動画変換処理        
+
+        
+        $stock_record->update(['status' => 'publish']);
+        return redirect()->back()->with('message', "承認しました。");
+    }
+    public function reject(Request $request,Stock $stock) {
+        $stock_record = Stock::where('id',$request->stock_id)->first();//postされてきたstock_idを持つレコードをstocksテーブルから取得
+
+        //いらなくなるサンプルデータや元データも削除したい
+
+        $stock_record->update(['status' => 'rejected']);//statusをregectedに変更
+
+        return redirect()->back()->with('message', "却下しました。");
+    }    
 }

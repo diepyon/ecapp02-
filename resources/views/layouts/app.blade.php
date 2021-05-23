@@ -16,7 +16,7 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
-    
+
     @if(\Route::is('delete'))
     <script src="{{asset('js/delete.js')}}" defer></script>
     @endif
@@ -69,11 +69,14 @@
                                 {{$aftername ?? Auth::user()->name}} <span class="caret"></span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="/mypage">
+                                <a class="dropdown-item" href="/home">
                                     {{ __('マイページ') }}
                                 </a>
                                 <a class="dropdown-item" href="{{ url('/orderhistory') }}">
                                     <i class="fas fa-arrow-down"></i>購入履歴
+                                </a>
+                                <a class="dropdown-item" href="{{ url('/stock') }}">
+                                   <i class="fas fa-boxes"></i>投稿作品
                                 </a>
 
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST"
@@ -98,11 +101,11 @@
                         <li>
                             <a class="nav-link" href="{{ url('/mycart') }}">
                                 <i class="fas fa-cart-arrow-down"></i>
-                                    @if($count !==0)
-                                    <span class="circle">
-                                     {{$count ??''}}
-                                     </span>
-                                    @endif
+                                @if($count !==0)
+                                <span class="circle">
+                                    {{$count ??''}}
+                                </span>
+                                @endif
                             </a>
                         </li>
                         @endguest

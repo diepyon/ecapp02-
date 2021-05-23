@@ -77,24 +77,46 @@ class Stock extends Model
               })
           ->save(storage_path('app/public/stock_download_sample/'.$uploaded_filename),100);   
    }
+    static function makeVideoThumbnail($uploaded_filename){
+        
+        $filiname_remove_extension= pathinfo($uploaded_filename, PATHINFO_FILENAME);//ファイル名から拡張子を除外
+
+        //動画サムネイルを生成
+        $media = FFMpeg::fromDisk('local')
+        ->open('private/stock_data/'.$uploaded_filename)
+        ->getFrameFromSeconds(1)//1フレーム目
+        ->export()
+        ->save('public/stock_thumbnail/'.$filiname_remove_extension.'.jpg');//ファイル名をjpgに変換
+
+        
+        //動画サムネイルリサイズ（でかすぎると思いから縮小）
+        $fileinfo= storage_path('app/public/stock_thumbnail/'.$filiname_remove_extension.'.jpg');
+        InterventionImage::make($fileinfo)->resize(750, 750, function ($constraint) {
+            $constraint->aspectRatio();
+        })->save($fileinfo);
+    }
+   
 
    public function myPosts()
    //自分の投稿を一覧
    {
        $user_id = Auth::id(); //ログインしているユーザーのIDを取得
-       $data['stocks'] = $this->where('user_id', $user_id)->where('status', 'publish')->orWhere('status', 'inspection')->orderBy('created_at', 'desc')->paginate(30);
-      //公開状態の投稿のみ表示（deleteなら非表示、下書きなども今は非表示）
+
+       //自分の作品で、公開中または審査中の作品を取得
+       $data['stocks'] = 
+        $this
+            ->where(function($query){
+                $query->where('status', 'publish')
+                ->orWhere('status', 'rejected')
+                ->orWhere('status', 'inspection');
+            })
+            ->where('user_id', $user_id)
+            ->orderBy('created_at', 'desc')
+            ->paginate(30);
+              //公開状態の投稿のみ表示（deleteなら非表示、下書きなども今は非表示）
        return $data; //連想配列データを実行結果として返す
    }
 
-   public function searchPosts(){
-        $user_id = Auth::id(); //ログインしているユーザーのIDを取得
-        
-        $query = Stock::query(); //クエリ生成(Stockテーブルを参照) 
-        $data['stocks'] =$query->where('user_id', $user_id)->orderBy('created_at', 'desc')->paginate(30);;
-                  //->where('status', 'publish');
-        return $data; //連想配列データを実行結果として返す
-   }
 
    public function deleteStock($stock_id)//statusを削除変更するメソッド（レコード自体は消さない）
    {
@@ -121,7 +143,6 @@ class Stock extends Model
             $B %= $A ;
         }
     }
-
     static function aspect($a, $b)
         {//アスペクト比を求める関数
             if ($a === 0) {
@@ -169,79 +190,57 @@ class Stock extends Model
             $file_size = number_format($new_size, 2, '.', ',') . $unit;
             return $file_size;
         }
-    static function videoEncode($media,$width,$height){
+            static function videoEncode($media,$width,$height){
+            $stock = new Stock;
 
-//おもいから今はコメントアウト、後で外す        
-/*         if($width > 3840){//横が3840以上なら4Kに変換して保存
-            $media->addFilter(function ($filters)use ($width,$height) {
-                $filters->resize(new \FFMpeg\Coordinate\Dimension(3840,2160));
-            })
-            ->export()
-            ->toDisk('public')
-            ->inFormat(new \FFMpeg\Format\Video\X264('aac'))
-            ->save('sample_4K.mp4');            
-        }elseif($width == 3840){//横が4kジャストならそのままコピー(requestにすると書き方変わると思う&4kよりでかい素材がないからそもそも変換ができるのか不明)
-           if(Storage::disk('local')->exists('public/sample_4k.mp4')==false){Storage::copy('public/kengo.mp4', 'public/sample_4k.mp4');}//まだファイルが存在しないならコピー
-        } */
-        
-/*         if($width >= 1920){//横が1920以上ならHDに変換して保存
-            $media->addFilter(function ($filters)use ($width,$height) {
-                $changeWidth = round($width*1080/$height);
-                if($changeWidth%2==1){$changeWidth = $changeWidth+1;}  
-                $filters->resize(new \FFMpeg\Coordinate\Dimension($changeWidth, 1080));
-            })
-            ->export()
-            ->toDisk('public')
-            ->inFormat(new \FFMpeg\Format\Video\X264('aac'))
-            ->save('sample_HD.mp4');
-        } */
+                    //保存先ちゃんと決めよ
+                    //ジャストサイズならそのサイズの名前で保存しよう。普通にstock_dataから名前を変えてコピーするだけかも
 
 
-        //SD画質に変換
-        $media->addFilter(function ($filters)use ($width,$height) {
-            $changeWidth = round($width*480/$height);
-            if($changeWidth%2==1){$changeWidth = $changeWidth+1;}           
-            $filters->resize(new \FFMpeg\Coordinate\Dimension($changeWidth, 480));
-        })
-        ->export()
-        ->toDisk('local')
-        ->inFormat(new \FFMpeg\Format\Video\X264('aac'))
-        ->save('private/sample_SD.mp4');
+                    if($width > 3840){//元データが4kより大きいなら4kにリサイズ（動作未検証）
+                        $stock->resizeVideo(2160,'hogehoge_movie_name_4K.mp4',$media,$width,$height);
+                        $stock->addWatermark('app/private/watermark/logo.png', 'private/hogehoge_movie_name_4K.mp4', 'private/hogehoge_watermark_4K.mp4');
+                    }
+                    if($width >= 1920){//元データがフルHD以上ならフルHDにリサイズ
+                        $stock->resizeVideo(1080,'hogehoge_movie_name_HD.mp4',$media,$width,$height);
+                        $stock->addWatermark('app/private/watermark/logo_hd.png', 'private/hogehoge_movie_name_HD.mp4', 'private/hogehoge_watermark_HD.mp4',$width,$height);
+                    } 
 
+                    $stock->resizeVideo(480, 'hogehoge_movie_name_SD.mp4',$media,$width,$height);//sd画質に変換する関数を実行
+                    $stock->addWatermark('app/private/watermark/logo.png', 'private/hogehoge_movie_name_SD.mp4', 'private/hogehoge_watermark_SD.mp4',$width,$height);//sd画質のデータにサンプルロゴを追加
+            }
 
-
-        //ビデオ画質変換関数(ビデオ縦幅,保存先とデータ名)($mediaをスコープ内に渡せない)
-/*         function resizeVideo($size,$saveat) {
-            $media->addFilter(function ($filters)use ($width,$height) {
+        //ビデオ画質変換関数(ビデオ縦幅,保存先とデータ名)
+        private function resizeVideo($size, $saveat,$media,$width,$height)
+        {
+            $media->addFilter(function ($filters) use ($width, $height,$size) {
                 $changeWidth = round($width*$size/$height);
-                if($changeWidth%2==1){$changeWidth = $changeWidth+1;}           
+    
+                if ($changeWidth%2==1) {
+                    $changeWidth = $changeWidth+1;
+                }
                 $filters->resize(new \FFMpeg\Coordinate\Dimension($changeWidth, $size));
             })
             ->export()
             ->toDisk('local')
             ->inFormat(new \FFMpeg\Format\Video\X264('aac'))
-            ->save('private/.'.$saveat);//いったんsaveat
-        } */
-        //resizeVideo(480,'sample_SD.mp4');//sd画質に変換する関数を実行
-
-
+            ->save('private/'.$saveat);//いったんsaveat
+        }
+        
         //watermark追加関数（ロゴのパス,編集元データ,保存先）
-        function addWatermark($logo,$sourceFile,$saveat){
-            $watermark = new WatermarkFilter(storage_path($logo),[
+        private function addWatermark($logo, $sourceFile, $saveat,$width,$height) 
+        {
+            $watermark = new WatermarkFilter(storage_path($logo), [
                 'position'=>'relative',
-                'bottom' => 0,
-                'right' => 0,
+                'bottom' => $height/3,
+                'left' => $width/4,
             ]);
     
             FFMpeg::open($sourceFile)
                 ->export()
                 ->inFormat(new \FFMpeg\Format\Video\X264('aac'))
                 ->addFilter($watermark)
-                ->save($saveat);            
-        }
-
-        addWatermark('app/private/watermark/logo.png','private/sample_SD.mp4','private/watermark_sd.mp4');//sd画質のデータにサンプルロゴを追加
-
-
-    }
+                ->save($saveat);
+        } 
+              
 }

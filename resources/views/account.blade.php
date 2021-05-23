@@ -9,7 +9,7 @@
         
             <p class="text-center"> {{$status ?? '' }}</p><br>
 
-            <form id="search_form" action="{{url('/mypage/edit')}} " method="get" >
+            <form id="search_form" action="{{url('/account/edit')}} " method="get" >
                 <table class="table">
                     <tbody>
                         <tr>

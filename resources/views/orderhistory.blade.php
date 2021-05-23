@@ -46,9 +46,6 @@
                         </div>
                         {{$item->created_at->format('Y年m月d日') }}<br>
                         購入時の金額：￥{{number_format($item->fee_at_that_time) }}{{-- 購入時の金額を取得 --}}<br>
-
-
-
                         <form id="search_form" action="/download/" method="post">
                             @csrf
                             <input type="hidden" name="stock_id" value="{{ $item->stock->id }}">
@@ -56,7 +53,6 @@
                                     <i class="fas fa-arrow-down">データダウンロード</i>
                                 </button>
                         </form>
-
                     </div>
                 </div>
                 @endforeach

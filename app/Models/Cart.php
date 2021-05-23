@@ -72,6 +72,7 @@ class Cart extends Model
             DB::table('orderhistories')->insert([
                 'user_id'=>$user_id,
                 'stock_id'=>$item->stock_id,
+                'author_id'=>$item->stock->user_id,//stocksテーブルにおけるuser_idを購入履歴テーブルのauthor_id(著者ID)に書き込み
                 'created_at' => now(),
                 'updated_at' => now(),
                 'name'=>$item->stock->name,
@@ -83,9 +84,7 @@ class Cart extends Model
                 'tag3' =>$item->stock->tag3,
                 'tag4' =>$item->stock->tag4,
                 'tag5' =>$item->stock->tag5,
-                'detail'=>$item->stock->detail,
-
-                
+                'detail'=>$item->stock->detail,                
                 'path'=>$item->stock->path
             ]);
         }

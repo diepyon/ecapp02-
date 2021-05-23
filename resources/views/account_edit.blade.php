@@ -9,7 +9,7 @@
             <h1 class="text-center font-weight-bold" style="color:#555555;  font-size:1.2em; padding:24px 0px;">
                 {{$aftername ?? Auth::user()->name}}さんのアカウント情報</h1>
 
-            <form id="search_form" action="{{url('/mypage/update')}} " method="post" enctype="multipart/form-data">
+            <form id="search_form" action="{{url('/account/update')}} " method="post" enctype="multipart/form-data">
                 @csrf
                 <table class="table">
                     <tbody>
@@ -109,7 +109,7 @@
                         <tr>
                             <th scope="row"></th>
 
-                            <td><button id="mypage_submit" class="btn btn-outline-secondary" type="submit"
+                            <td><button id="" class="btn btn-outline-secondary btn-right" type="submit"
                                     id="">更新</button></td>
                         </tr>
                     </tbody>
