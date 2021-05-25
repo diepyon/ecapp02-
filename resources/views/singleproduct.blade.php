@@ -22,8 +22,13 @@
             <p class="text-center">{{ session('message') ?? '' }}</p>
 
             <div class="row">
+            
                 <div class="col-sm-8">
+                @if($stock_record->genre=='image')
                 　 <img src="/storage/stock_sample/{{$stock_record->path}}" alt="" class="ditail_image">
+                @elseif($stock_record->genre=='movie')
+                    ここにロゴ入りの動画を表示(まだ正しいディレクトリに正しい名前で保存できていない)
+                @endif
                 </div>
                 <div class="col-sm-4" id="single_form">
 

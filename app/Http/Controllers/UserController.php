@@ -70,8 +70,25 @@ class UserController extends Controller
             $user_record->update(['password' => $password]);
         }
 
+        $password = Hash::make($request->input('password'));
         $status = "更新しました";
 
         return view('account')->with('aftername', $aftername)->with('afteremail', $afteremail)->with('status', $status);
     }
+        public function passwordUpdate(Request $request, User $user)
+    {//passwordだけモーダルで変更させる機能実装中
+        $user =Auth::user();
+        
+        $request->validate([
+        'password' => ['confirmed','required'],
+
+    ]);
+        $password = Hash::make($request->input('password'));
+        $user_record = User::where('id', $user->id);
+        $user_record->update(['password' => $password]);
+        return view('account');//いったんメッセージなしで更新してページ移管
+    }
+        public function userEdit($user_id){
+        dd('a');
+    } 
 }

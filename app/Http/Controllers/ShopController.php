@@ -52,11 +52,12 @@ class ShopController extends Controller
         $stock_record = DB::table('stocks')->where('id', $stocks_id)->first();//商品の情報を取得
         $author_id = ($stock_record->user_id);//商品投稿者のidを取得
         $user = DB::table('users')->where('id', $author_id)->first();//商品投稿者の情報を取得
-        $file =  './storage/stock_sample/'.$stock_record->path;//透かしありの圧縮なしファイルの情報を取得（販売データはprivate配下にあるから使えず）
+        
+        $sample =  './storage/stock_sample/'.$stock_record->path;//透かしありの圧縮なしファイルの情報を取得（販売データはprivate配下にあるから使えず）
 
         if($stock_record->genre=='image'){
         //genreがimageなら
-            $imgSize = getimagesize($file);//販売画像データ情報を取得（物理的な大きさやファイルタイプ）
+            $imgSize = getimagesize($sample);//販売画像データ情報を取得（物理的な大きさやファイルタイプ）
             $width = $imgSize[0];//販売画像データの横幅を取得（透かしありの圧縮なし画像を参照）
             $height= $imgSize[1];//販売画像データの高さを取得（透かしありの圧縮なし画像を参照）
             $mime =$imgSize['mime']; //販売データのマイムタイプを取得マイムタイプを取得（透かしありの圧縮なし画像を参照）

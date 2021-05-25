@@ -109,8 +109,11 @@ class StockController extends Controller
     public function archive(Stock $stock)
     {
         $data = $stock->myPosts(); //自分の投稿一覧
+
         return view('stock/archive', $data);
     }
+
+    
 
     public function searchPosts(Request $request)
     {//ステータス別に投稿済み作品を検索

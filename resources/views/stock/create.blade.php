@@ -31,6 +31,7 @@
                         </span>
 
                         <div id="stockPreview">
+
                         </div>
                     </div>
                     <div class="form-group">
@@ -48,7 +49,6 @@
                             <option value="20000">￥20,000</option>
                         </select>
                     </div>
-
 
                     <div class="form-group">
                         <label for="exampleFormControlTextarea1">商品説明</label>

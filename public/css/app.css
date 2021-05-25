@@ -11288,10 +11288,14 @@ td.table_content {
 /*バリテーションデザイン*/
 
 /*-----
-post
+新規作品投稿(stock/create)
 -----*/
 
 div#stockPreview img {
+  max-width: 100%;
+}
+
+#previewFile {
   max-width: 100%;
 }
 

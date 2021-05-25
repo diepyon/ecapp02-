@@ -20,12 +20,12 @@
                                 <span id="file_input_area">
                                     <input type="file" class="form-control-file " id="myImage" name="profile_file"
                                         onChange="imgPreView(event)" accept=".jpg,.jpeg,.png,.gif">
-                                    
+
                                     <span id="mimemessage">
-                                    @error('profile_file')
-                                    <div class=""><span
-                                            class="invalid_message"><strong>{{ $message }}</strong></span></div>
-                                    @enderror
+                                        @error('profile_file')
+                                        <div class=""><span
+                                                class="invalid_message"><strong>{{ $message }}</strong></span></div>
+                                        @enderror
                                     </span>
 
                                     <input type="button" id="btn1" value="クリア" onclick="clear_file();">
@@ -72,33 +72,17 @@
                             <td></td>
                         </tr>
                         <tr>
-                            <th scope="row">パスワード(変更時のみ入力)</th>
+                            <th scope="row">パスワード</th>
                             <td>
-                                <input id="password" type="password"
-                                    class="form-control @error('password') is-invalid @enderror" name="password"
-                                    value="" autocomplete="password">
-                                @error('password')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                                @enderror
+                                <!-- Button trigger modal -->
+                                <button type="button" class="btn btn-outline-secondary" data-toggle="modal"
+                                    data-target="#exampleModalCenter">
+                                    パスワード変更
+                                </button>
                             </td>
                             <td></td>
                         </tr>
-                        <tr>
-                            <th scope="row">パスワード確認用(変更時のみ入力)</th>
-                            <td>
-                                <input id="password-confirm" type="password"
-                                    class="form-control @error('password') is-invalid @enderror"
-                                    name="password_confirmation" value="" autocomplete="password">
-                                @error('password')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                                @enderror
-                            </td>
-                            <td></td>
-                        </tr>
+
 
                         <tr>
                             <th scope="row">アカウント登録日</th>
@@ -115,6 +99,59 @@
                     </tbody>
                 </table>
             </form>
+            <div class="returnblock">
+                <a href="{{url('/account/')}}/">
+                    <p class="text-right">戻る</p>
+                </a>
+            </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+                aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <form id="" action="/account/passwordupdate" method="post" enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalCenterTitle">パスワード変更</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                新しいパスワードを入力してください。
+                                <input id="password" type="password"
+                                    class="form-control @error('password') is-invalid @enderror" name="password"
+                                    value="" autocomplete="password" required>
+                                @error('password')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                                <br>
+                                <input id="password-confirm" type="password"
+                                    class="form-control @error('password') is-invalid @enderror"
+                                    name="password_confirmation" value="" autocomplete="password" required>
+                                @error('password')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+
+                            </div>
+                            <div class="modal-footer">
+                                @csrf
+                                <input type="hidden" name="stock_id" value="">
+                                <button type="submit" class="btn btn-primary">変更</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">キャンセル</button>
+                            </div>
+                        </div>
+                </form>
+
+            </div>
         </div>
+
+
     </div>
-    @endsection
+</div>
+@endsection

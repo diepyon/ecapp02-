@@ -21,6 +21,14 @@
     <script src="{{asset('js/delete.js')}}" defer></script>
     @endif
 
+    @if(\Route::is('create'))
+    <script src="{{asset('js/create.js')}}" defer></script>
+    @endif
+
+    @if(\Route::is('account.edit'))
+    <script src="{{asset('js/accountEdit.js')}}" defer></script>
+    @endif    
+
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
@@ -29,6 +37,8 @@
 
     <!-- Favicon -->
     <link rel="shortcut icon" href="{{ asset('/siteparts/favicon.ico') }}">
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
 </head>
 
 <body>

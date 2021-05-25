@@ -56,6 +56,8 @@ Route::group(['middleware' => ['auth']], function () {//ログインしている
     Route::get('/account/update', 'UserController@myPageUpdate');
     Route::post('/account/update', 'UserController@myPageUpdate');//ユーザー情報編集アクション
 
+    Route::post('/account/passwordupdate', 'UserController@passwordUpdate');//パスワード変更アクション（実装途中）
+
     
     /*----
     作品投稿
@@ -64,7 +66,7 @@ Route::group(['middleware' => ['auth']], function () {//ログインしている
     //Route::get('/stock/delete', 'StockController@archive');
     Route::get('/stock', 'StockController@archive'); //投稿一覧ページ    
     Route::get('/stock/search', 'StockController@searchPosts');//投稿ページ検索
-    Route::get('/stock/create', 'StockController@showCreateForm');//投稿フォームページ
+    Route::get('/stock/create', 'StockController@showCreateForm')->name('create');;//投稿フォームページ
     Route::post('/stock', 'StockController@create');
     Route::get('/stock/{stock_id}', 'StockController@detail')->name('stocks.detail');//投稿確認ページ
     Route::get('/stock/{stock_id}/edit', 'StockController@edit')->name('stocks.edit');//投稿編集ページ
@@ -75,6 +77,9 @@ Route::group(['middleware' => ['auth']], function () {//ログインしている
     ----*/
     Route::post('/stock/approval', 'StockController@approval');//審査待ちの作品を承認（公開）
     Route::post('/stock/reject', 'StockController@reject');//審査待ちの作品を承認（公開）
+
+    Route::get('/account/{user_id}/edit', 'UserController@userEdit');//ユーザー情報を編集
+
 
 });
 Auth::routes();

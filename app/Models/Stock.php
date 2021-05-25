@@ -114,6 +114,36 @@ class Stock extends Model
             ->orderBy('created_at', 'desc')
             ->paginate(30);
               //公開状態の投稿のみ表示（deleteなら非表示、下書きなども今は非表示）
+
+            foreach ($data['stocks'] as $key => $stock) {
+
+                if($stock->status=='publish'){
+                    $data['stocks'][$key]['status']  = '公開';
+                }elseif($stock->status=='inspection'){
+                    $data['stocks'][$key]['status'] = '審査中';
+                }elseif($stock->status=='rejected'){
+                    $data['stocks'][$key]['status'] = '却下';
+                }else{
+                    $data['stocks'][$key]['status'] = 'その他';
+                    }
+                //「下書き」「却下」なども追加予定
+                    
+                if ($stock->genre=='image') {//ジャンルが画像なら
+                    $sample = getimagesize('./storage/stock_sample/'.$stock->path);//private配下にあるがゆえに本データからは取得できないような情報はサンプル画像から取得する
+                    $data['stocks'][$key]['size'] = $this->calcFileSize(Storage::size('/private/stock_data/'.$stock->path));//実際の販売データのファイルサイズを取得
+                    $data['stocks'][$key]['mime'] = $sample['mime'];//サンプルデータからmimeタイプを取得（販売データprivateにいて取れないので）                   
+                    $data['stocks'][$key]['width'] = $sample[0];//サンプルデータから横幅を取得（販売データprivateにいて取れないので）
+                    $data['stocks'][$key]['height'] = $sample[1];//サンプルデータから縦幅を取得（販売データprivateにいて取れないので）    
+                    $data['stocks'][$key]['thumbnail'] = url('/storage/stock_thumbnail/'.$stock->path);//サムネイル画像を取得
+                    $data['stocks'][$key]['aspectValue'] =$this->aspect( $data['stocks'][$key]['width'], $data['stocks'][$key]['height'] );  //アスペクト比を取得
+                    
+
+                }elseif($stock->genre=='movie') {//ジャンルが映像なら
+                    $data['stocks'][$key]['thumbnail'] = url('/storage/stock_thumbnail/'.pathinfo($stock->path, PATHINFO_FILENAME).'.jpg');//サムネイル画像を取得
+                    
+                }
+                
+            }
        return $data; //連想配列データを実行結果として返す
    }
 
@@ -143,6 +173,7 @@ class Stock extends Model
             $B %= $A ;
         }
     }
+
     static function aspect($a, $b)
         {//アスペクト比を求める関数
             if ($a === 0) {
@@ -166,6 +197,8 @@ class Stock extends Model
                 $B %= $A ;
             }
         }
+
+
     static function calcFileSize($size)
         {//ファイルサイズをいい感じの単位に調整する関数
           $b = 1024;    // バイト

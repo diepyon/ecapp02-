@@ -1,77 +1,21 @@
-
-<?php
-    function calcFileSize($size)
-    {//ファイルサイズをいい感じの単位に調整する関数
-        $b = 1024;    // バイト
-        $mb = pow($b, 2);   // メガバイト
-        $gb = pow($b, 3);   // ギガバイト
-
-        switch(true){
-            case $size >= $gb:
-            $target = $gb;
-            $unit = 'GB';
-            break;
-            case $size >= $mb:
-            $target = $mb;
-            $unit = 'MB';
-            break;
-            default:
-            $target = $b;
-            $unit = 'KB';
-            break;
-    }
-    $new_size = round($size / $target, 2);
-    $file_size = number_format($new_size, 2, '.', ',') . $unit;
-    return $file_size;
-}     
-?>
-
 @extends('layouts.app')
 @section('content')
 <div class="container-fluid">
-
     <div class="">
         <div class="mx-auto" style="max-width:1200px">
             <h1 class="text-center font-weight-bold" style="color:#555555;  font-size:1.2em; padding:24px 0px;">
                 {{ Auth::user()->name }}さんの投稿した作品</h1>
-
                 <a  class="btn btn-secondary btn-lg" href="{{ url('/stock/create')}}" role="button">投稿する</a>
-               
-
             <p id='deleteMessage' class="text-center">{{ $message ?? '' }}</p><br>
             <div class="">
                 @if($stocks->isNotEmpty())
                 @foreach($stocks as $stock)
-                <?php
-                    if($stock->genre=='image'){//画像なら
-                        $file = './storage/stock_sample/'.$stock->path;//販売データのファイルパスを取得←ん？これサンプルデータじゃない？
-                        $imgSize = getimagesize($file);//販売画像データ情報を取得
-                        $width = $imgSize[0];//販売画像データの横幅を取得
-                        $height= $imgSize[1];//販売画像データの高さを取得
-                        $mime =$imgSize['mime']; //ファイルタイプ取得
-                        $filesize =  calcFileSize(filesize('./storage/stock_thumbnail/'.$stock->path));//サムネイルのファイルサイズを取得してしまっている
-                        $thunbmbnail_file = $stock->path;//サムネイルのパスを取得
-                    }elseif($stock->genre=='movie'){
-                        $thunbmbnail_file =pathinfo($stock->path, PATHINFO_FILENAME).'.jpg';//サムネイルのパスを取得（動画の拡張子になってしまうのでjpgに置換）
-                        //$mime= $file->getClientMimeType();//マイムタイプ
-                    }
-                    if($stock->status=='publish'){
-                        $status = '公開';}elseif($stock->status=='inspection'){
-                        $status = '審査中';
-                        }elseif($stock->status=='rejected'){
-                        $status = '却下';
-                        }else{
-                        $status = 'その他';
-                        }
-                    //「下書き」「却下」なども追加予定
-                ?>
-
                 <div class="card mb-3" style="max-width: ;">
                     <div class="no-gutters" style="display: flex;">
                         <!-- displayflexあとでcssに移して-->
                         <div class="col-3">
                             <a href="{{url('/stock/')}}/{{$stock->id}}">
-                                <img src="{{url('/storage/stock_thumbnail')}}/{{$thunbmbnail_file}}" alt=""
+                                <img src="{{$stock->thumbnail}}" alt=""
                                     class="myPost">
                             </a>
                         </div>
@@ -82,11 +26,11 @@
                                 </a>
                                 <div id="stock_info">
                                     <ul class="list-group list-group-flush">
-                                        <li class="list-group-item">{{$status}}</li>
-                                        <li class="list-group-item">{{$width ?? ''}}x{{$height?? ''}}px</li>
-                                        <li class="list-group-item">{{$mime?? ''}}</li>
-                                        <li class="list-group-item">アスペクト比</li>
-                                        <li class="list-group-item">{{$filesize?? ''}}</li>
+                                        <li class="list-group-item">{{$stock->status}}</li>
+                                        <li class="list-group-item">{{$stock->width ?? ''}}x{{$stock->height?? ''}}px</li>
+                                        <li class="list-group-item">{{$stock->mime ?? ''}}</li>
+                                        <li class="list-group-item">{{$stock->aspectValue ?? ''}}</li>
+                                        <li class="list-group-item">{{$stock->size ?? ''}}</li>
                                         <li class="list-group-item">￥{{ number_format($stock->fee)}}</li>
                                         <li class="list-group-item">
                                             @if($stock->created_at){{ $stock->created_at->format('Y/m/d')}}@endif</li>
