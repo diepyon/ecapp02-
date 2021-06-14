@@ -26,7 +26,7 @@ parts
 }
 
 .added_favorite i {
-    color: $pink; //ハイフンあかんのか？
+    color: $pink; 
 }
 
 .icon_expert {
@@ -395,3 +395,20 @@ img.myPost {
 .returnblock{
     padding:0 0.75em 0 0;
 }//戻るリンクの余白
+
+/*-----
+home
+-----*/
+.modal-content {
+    color: #212529;
+}//モーダルが親テーブルのスタイルを受け継いでしまうので修正
+
+
+.modal-content th, .modal-content td {
+    border-top: 1px solid #dee2e6;
+}//モーダルが親テーブルのスタイルを受け継いでしまうので修正
+
+.modal-content table {
+    border-collapse: initial;
+}
+

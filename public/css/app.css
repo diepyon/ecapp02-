@@ -11353,6 +11353,23 @@ img.myPost {
   padding: 0 0.75em 0 0;
 }
 
+/*-----
+home
+-----*/
+
+.modal-content {
+  color: #212529;
+}
+
+.modal-content th,
+.modal-content td {
+  border-top: 1px solid #dee2e6;
+}
+
+.modal-content table {
+  border-collapse: initial;
+}
+
 /*!
  * Font Awesome Free 5.15.2 by @fontawesome - https://fontawesome.com
  * License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)

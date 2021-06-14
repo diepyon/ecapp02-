@@ -3,16 +3,6 @@
 <div class="">
     <div class="d-flex flex-row flex-wrap">
         @foreach($stocks as $stock)
-        <?php
-            if($stock->genre=='image'){//ジャンルアイコン
-            $genre_icon_class ='fa-image';      
-            }elseif($stock->genre=='movie'){
-            $genre_icon_class ='fa-video';
-             }else{
-                $genre_icon_class =null;
-             }
-        ?>
-
         <div class="col-xs-6 col-sm-4 col-md-4 img_box ">
             <div class="mycart_box">
                 id:{{$stock->id}}<br>
@@ -29,7 +19,16 @@
                         購入済み
                     </div>
                     <div class="genre_icon">
-                    <i class="fas <?php echo $genre_icon_class;?>" aria-hidden="true"></i>
+                    <?php
+                        if($stock->genre=='image'){//ジャンルアイコン
+                        $genre_icon_class ='fa-image';      
+                        }elseif($stock->genre=='movie'){
+                        $genre_icon_class ='fa-video';
+                        }else{
+                            $genre_icon_class =null;
+                        }
+                        echo "<i class='fas  ${genre_icon_class}' aria-hidden='true'></i>";
+                    ?>    
                     </div>
                 </div>
                 @else
@@ -59,7 +58,16 @@
                     </form>
                     @endif
                     <div class="genre_icon">
-                    <i class="fas <?php echo $genre_icon_class;?>" aria-hidden="true"></i>
+                    <?php
+                        if($stock->genre=='image'){//ジャンルアイコン
+                        $genre_icon_class ='fa-image';      
+                        }elseif($stock->genre=='movie'){
+                        $genre_icon_class ='fa-video';
+                        }else{
+                            $genre_icon_class =null;
+                        }
+                        echo "<i class='fas  ${genre_icon_class}' aria-hidden='true'></i>";
+                    ?>                    
                     </div>
 
                     @if(in_array($stock->id, $cart_data['cart_list'],true))

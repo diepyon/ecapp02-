@@ -73,22 +73,25 @@ Route::group(['middleware' => ['auth']], function () {//ログインしている
     Route::post('/stock/{stock_id}/update', 'StockController@update')->name('stocks.update');//投稿編集からのポストアクション
 
     /*----
-    管理者権限
+    管理者権限（管理者じゃなくても触れそうなので要修正）
     ----*/
-    Route::post('/stock/approval', 'StockController@approval');//審査待ちの作品を承認（公開）
-    Route::post('/stock/reject', 'StockController@reject');//審査待ちの作品を承認（公開）
+    Route::post('/stock/approval', 'ConversionController@approval');//審査待ちの作品を承認（公開）
+    Route::post('/stock/reject', 'ConversionController@reject');//審査待ちの作品を承認（公開）
 
-    Route::get('/account/{user_id}/edit', 'UserController@userEdit');//ユーザー情報を編集
+    Route::post('/account/edit', 'UserController@userEdit');//ユーザー情報を編集(ノーマルユーザーのget　/account/editと名前ぶってる)
 
+    Route::post('/account/{user_id}/delete', 'UserController@userDelete');//ユーザー消すやつ
 
 });
 Auth::routes();
 
 
 
-Route::get('/henkan', 'StockController@henkan');//動画変換、後で消す
-Route::get('/henkan2', 'StockController@henkan2');//動画変換、後で消す
+Route::get('/henkan', 'ConversionController@henkan');//動画変換、後で消す
+Route::get('/henkan2', 'ConversionController@henkan2');//動画変換、後で消す
 
 Route::get('/ongen', 'StockController@ongen');//音源変換、後で消す
+
+Route::get('/gousei', 'ConversionController@gousei');//音源合成、後で消す
 
 Route::get('/home', 'HomeController@index')->name('home');//LoginControllerとブレードを書き換えて「dashboard」にする？

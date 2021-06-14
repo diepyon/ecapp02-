@@ -25,7 +25,7 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index(Orderhistory $orderhistory,Stock $stock)
+    public function index(Orderhistory $orderhistory,Stock $stock,Request $request)
     {
         $user_id = Auth::id(); //ログインしているユーザーのIDを取得
 
@@ -49,33 +49,31 @@ class HomeController extends Controller
             $percentage['sound'] = 0;
         }
 
-        //集計しようと頑張ってるけど無理やったやつ
-        foreach($order_items as $order_item){
-            $stock_id= $order_item->stock_id;
-            //dd($stock_id);
-        }
-    
-        //$stock_count = array_count_values($stock_id);//それぞれのstock_idの出現回数を取得
-        ///$unique_stocks = array_unique($stock_id);//stock_id配列より重複を削除
+
+        $toalSalesMonth = Orderhistory::where('author_id',$user_id)
+        ->whereBetween("created_at", [date("Y-m-01"),date("Y-m-t")])->sum("fee_at_that_time");//ログインユーザーの今月の売上合計(マージンとられてない状態)
+                
+        $totalPostsCount = Stock::where('user_id',$user_id)->where('status','publish')->count();//販売中の作品数
               
         //管理者向け機能(承認機能)
 
         //全部のレコードを取得してしまうけど、渡してしまって大丈夫なのか、ifで変数自体に処理を加えなくていいのか
-        $inspection_items = DB::table('stocks')->where('status', 'inspection')->orderBy('created_at', 'asc')->get();
+        $inspection_items = DB::table('stocks')->where('status', 'inspection')->orderBy('created_at', 'asc')->get();//審査待ちの作品を取得
 
         //これも全部渡しちゃって大丈夫なのか、メールアドレスとか漏れそう
-        $users = DB::table('users')->get();
+        $users = DB::table('users')->where('status','publish')->get();//削除されていないユーザーを取得
 
-        $hoge = Stock::where('user_id', 1)->count();//ユーザーごとの投稿数をカウントしようとしている
-        //1にあたる部分が可変しても大丈夫なように関数化したいが、ブレードに関数を書くことに気乗りしない。コントローラーかモデルに書いて呼び出したい。
-   
-        session()->flash('flash_message', 'ログインしました（ずっとでやがる）');
+    
+        $status = $request->session()->flash('status', 'Task was successful!');
 
         return view('home')->with([
             "order_items" => $order_items,
             "percentage" => $percentage,
             "inspection_items" => $inspection_items,
             "users" => $users,
+            "toalSalesMonth"=>$toalSalesMonth,//ログインユーザーの今月の合計売上(配列にしてまとめて渡したほうがクールかも)
+            "totalPostsCount"=>$totalPostsCount,
+            "user_id"=>$user_id,
          ]);
     }
 

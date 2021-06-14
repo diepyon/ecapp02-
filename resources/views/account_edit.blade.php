@@ -32,8 +32,12 @@
                                 </span>
 
                                 <div id="preview">
+                                    @if( Auth::user()->user_icon=="")
+                                    <img src="{{asset('storage/user_icon/')}}/default_icon.jpg" id="previewImage">
+                                    @else
                                     <img src="{{asset('storage/user_icon/')}}/{{ Auth::user()->user_icon }}?<?= uniqid() ?>"
                                         id="previewImage">
+                                    @endif
                                 </div>
                             </td>
                             <td class="table_other"></td>
@@ -99,6 +103,11 @@
                     </tbody>
                 </table>
             </form>
+
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#withdrawalModal">
+                Launch demo modal
+            </button>
             <div class="returnblock">
                 <a href="{{url('/account/')}}/">
                     <p class="text-right">戻る</p>
@@ -147,10 +156,35 @@
                             </div>
                         </div>
                 </form>
-
             </div>
         </div>
-
+        
+        <!-- Modal -->
+        <div class="modal fade" id="withdrawalModal" tabindex="-1" role="dialog" aria-labelledby="withdrawalModalTitle"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="withdrawalModalTitle">確認</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        退会すると次のこと
+                        <ul>
+                            <li>購入済み作品のダウンロードができなくなります</li>
+                            <li>投稿済み作品は全て削除されます</li>
+                            <li>まだ受け取っていない収益を受け取れなくなります</li>
+                        </ul>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </div>
 </div>

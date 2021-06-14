@@ -101,7 +101,6 @@ class Stock extends Model
    //自分の投稿を一覧
    {
        $user_id = Auth::id(); //ログインしているユーザーのIDを取得
-
        //自分の作品で、公開中または審査中の作品を取得
        $data['stocks'] = 
         $this
@@ -127,6 +126,35 @@ class Stock extends Model
                     $data['stocks'][$key]['status'] = 'その他';
                     }
                 //「下書き」「却下」なども追加予定
+        
+                $reasons= $stock->rejected_reason;
+                $reasons= str_replace("\"","",$reasons);//"を削除
+                $reasons= str_replace("[", "",$reasons);//[ を(に置き換え
+                $reasons= str_replace("]", "",$reasons);//]を)に置き換え
+                $reasons= explode(",", $reasons);//変数を配列に変換
+
+                $types =array(
+                    'rough'=>'画質が荒い',
+                    'BlackFrame'=>'黒枠が含まれている',
+                    'LongOrShort'=>'長すぎるか短すぎる',
+                    'Existing'=>'既に酷似する投稿が存在する',
+                    'OtherSite'=>'ほかの販売サイトにも登録されている（正規の投稿者か見分けがつかない）',
+                    'LowQuality'=>'クオリティーが低い',
+                    'morals'=>'公序良俗に反する',
+                    'other'=>'その他'
+                );//却下理由を日本語化
+               
+                $reasonsTranslated="";//空だとforeach1発目で怒られる
+                foreach($reasons as $reason){
+                    if(isset($reason)){
+                    //$reasonsTranslated = $reasonsTranslated.$types[$reason].'/';
+                }
+
+                }//該当する却下理由だけを日本語に変換して再出力
+
+                $reasonsTranslated = rtrim($reasonsTranslated, '/');//最後のスラッシュを削除
+
+                //dd($reasonsTranslated);//dd外すとindexエラー（配列がおかしいみたいな）
                     
                 if ($stock->genre=='image') {//ジャンルが画像なら
                     $sample = getimagesize('./storage/stock_sample/'.$stock->path);//private配下にあるがゆえに本データからは取得できないような情報はサンプル画像から取得する
@@ -135,12 +163,10 @@ class Stock extends Model
                     $data['stocks'][$key]['width'] = $sample[0];//サンプルデータから横幅を取得（販売データprivateにいて取れないので）
                     $data['stocks'][$key]['height'] = $sample[1];//サンプルデータから縦幅を取得（販売データprivateにいて取れないので）    
                     $data['stocks'][$key]['thumbnail'] = url('/storage/stock_thumbnail/'.$stock->path);//サムネイル画像を取得
-                    $data['stocks'][$key]['aspectValue'] =$this->aspect( $data['stocks'][$key]['width'], $data['stocks'][$key]['height'] );  //アスペクト比を取得
-                    
+                    $data['stocks'][$key]['aspectValue'] =$this->aspect( $data['stocks'][$key]['width'], $data['stocks'][$key]['height'] );  //アスペクト比を取得          
 
                 }elseif($stock->genre=='movie') {//ジャンルが映像なら
                     $data['stocks'][$key]['thumbnail'] = url('/storage/stock_thumbnail/'.pathinfo($stock->path, PATHINFO_FILENAME).'.jpg');//サムネイル画像を取得
-                    
                 }
                 
             }
@@ -274,6 +300,5 @@ class Stock extends Model
                 ->inFormat(new \FFMpeg\Format\Video\X264('aac'))
                 ->addFilter($watermark)
                 ->save($saveat);
-        } 
-              
+        }               
 }

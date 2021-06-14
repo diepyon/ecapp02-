@@ -46,7 +46,7 @@ class ShopController extends Controller
         //->with('genre', $genre)も渡さないとフォームの入力内容をページ移管後に維持できない
     }
 
-    
+
     public function singleProduct(Stock $stock,$stocks_id)//コントローラーから{{stock_id}}を取得
     {//商品個別ページを表示するメソッド
         $stock_record = DB::table('stocks')->where('id', $stocks_id)->first();//商品の情報を取得
@@ -73,8 +73,6 @@ class ShopController extends Controller
             $aspect=null;
             return view('singleproduct', compact('stock_record', 'user','width','height','mime','filesize','aspect'));   
         }
-
-
     }
     
     public function myCart(Cart $cart)

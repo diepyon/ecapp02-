@@ -26,7 +26,7 @@
                                 </a>
                                 <div id="stock_info">
                                     <ul class="list-group list-group-flush">
-                                        <li class="list-group-item">{{$stock->status}}</li>
+                                        <li class="list-group-item">{{$stock->status}} {{$stock->rejected_reason}}</li>
                                         <li class="list-group-item">{{$stock->width ?? ''}}x{{$stock->height?? ''}}px</li>
                                         <li class="list-group-item">{{$stock->mime ?? ''}}</li>
                                         <li class="list-group-item">{{$stock->aspectValue ?? ''}}</li>

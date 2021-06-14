@@ -1,5 +1,3 @@
-alert('accountEdit.jsが読み込まれています。');
-
 function imgPreView(event) {
     var file = event.target.files[0];//1個目のfile
     var reader = new FileReader();//新しいファイルリーダー

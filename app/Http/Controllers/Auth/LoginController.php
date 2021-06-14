@@ -27,6 +27,10 @@ class LoginController extends Controller
      */
     protected $redirectTo = '/home';
 
+/*     protected function redirectTo() {
+        session()->flash('flash_message', 'ログインしました');
+    }  *///これをうまく使えば行けるかもしれない。
+
     /**
      * Create a new controller instance.
      *

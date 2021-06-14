@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section('content')
 
+
 <div class="d-flex flex-row flex-wrap">
     <div class="mx-auto" style="max-width:1200px">
         <form method="post" action="/stock" enctype="multipart/form-data">
