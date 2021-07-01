@@ -37,6 +37,15 @@ parts
     border-radius: 10px;
 }
 
+.fa,
+.fas,
+.far,
+.fal,
+.fad,
+.fab {
+  line-height: unset !important;
+}/*fontawesomeの余白調整*/
+
 /*----
 検索ボックス
 -----*/
@@ -383,11 +392,6 @@ img.myPost {
 /*-----
 自分の投稿詳細・編集
 -----*/
-.btn-right {
-    display: block;
-    margin: 0 0 0 auto;
-}//削除ボタン右寄せ
-
 .dammy-form {
     margin-right:0.75em;
 }//form独特の余白をボタンに与えたい場合に使う
@@ -412,3 +416,15 @@ home
     border-collapse: initial;
 }
 
+/*-----
+ボタン関連
+-----*/
+.btn-right {
+    display: block;
+    margin: 0 0 0 auto;
+}//ボタン右寄せ
+
+.btn-right-continue{
+    display: block;
+    margin:16px 0 0 auto;
+}//ボタン右寄せ2つ目以降

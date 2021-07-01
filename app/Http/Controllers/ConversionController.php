@@ -147,4 +147,8 @@ class ConversionController extends Controller
             
             return redirect()->back()->with('message', "却下しました。");
         }    
+        
+        public function cmd(){
+            return view('test');
+                    }
 }

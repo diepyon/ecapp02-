@@ -10979,6 +10979,17 @@ parts
   border-radius: 10px;
 }
 
+.fa,
+.fas,
+.far,
+.fal,
+.fad,
+.fab {
+  line-height: unset !important;
+}
+
+/*fontawesomeの余白調整*/
+
 /*----
 検索ボックス
 -----*/
@@ -11340,11 +11351,6 @@ img.myPost {
 自分の投稿詳細・編集
 -----*/
 
-.btn-right {
-  display: block;
-  margin: 0 0 0 auto;
-}
-
 .dammy-form {
   margin-right: 0.75em;
 }
@@ -11368,6 +11374,20 @@ home
 
 .modal-content table {
   border-collapse: initial;
+}
+
+/*-----
+ボタン関連
+-----*/
+
+.btn-right {
+  display: block;
+  margin: 0 0 0 auto;
+}
+
+.btn-right-continue {
+  display: block;
+  margin: 16px 0 0 auto;
 }
 
 /*!

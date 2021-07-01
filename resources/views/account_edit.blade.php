@@ -9,7 +9,7 @@
             <h1 class="text-center font-weight-bold" style="color:#555555;  font-size:1.2em; padding:24px 0px;">
                 {{$aftername ?? Auth::user()->name}}さんのアカウント情報</h1>
 
-            <form id="search_form" action="{{url('/account/update')}} " method="post" enctype="multipart/form-data">
+            <form id="" action="{{url('/account/update')}} " method="post" enctype="multipart/form-data">
                 @csrf
                 <table class="table">
                     <tbody>
@@ -66,7 +66,6 @@
                                 <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
                                     name="email" value="{{old('email') ?? Auth::user()->email}}" required
                                     autocomplete="email">
-
                                 @error('email')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -86,8 +85,6 @@
                             </td>
                             <td></td>
                         </tr>
-
-
                         <tr>
                             <th scope="row">アカウント登録日</th>
                             <td>{{Auth::user()->created_at->format('Y年m月d日') }}</td>
@@ -98,22 +95,22 @@
                             <th scope="row"></th>
 
                             <td><button id="" class="btn btn-outline-secondary btn-right" type="submit"
-                                    id="">更新</button></td>
+                                    id="">更新</button>
+                                <!-- Button trigger modal -->
+                                <button type="button" class="btn btn-secondary  btn-right-continue" data-toggle="modal"
+                                    data-target="#withdrawalModal">
+                                    退会
+                                </button>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
             </form>
-
-            <!-- Button trigger modal -->
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#withdrawalModal">
-                Launch demo modal
-            </button>
             <div class="returnblock">
                 <a href="{{url('/account/')}}/">
                     <p class="text-right">戻る</p>
                 </a>
             </div>
-
             <!-- Modal -->
             <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
                 aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -138,6 +135,7 @@
                                 </span>
                                 @enderror
                                 <br>
+                                確認のためもう1度入力してください。
                                 <input id="password-confirm" type="password"
                                     class="form-control @error('password') is-invalid @enderror"
                                     name="password_confirmation" value="" autocomplete="password" required>
@@ -158,7 +156,6 @@
                 </form>
             </div>
         </div>
-        
         <!-- Modal -->
         <div class="modal fade" id="withdrawalModal" tabindex="-1" role="dialog" aria-labelledby="withdrawalModalTitle"
             aria-hidden="true">
@@ -170,18 +167,25 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div class="modal-body">
-                        退会すると次のこと
-                        <ul>
-                            <li>購入済み作品のダウンロードができなくなります</li>
-                            <li>投稿済み作品は全て削除されます</li>
-                            <li>まだ受け取っていない収益を受け取れなくなります</li>
-                        </ul>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
-                    </div>
+                    <form action="{{url('/withdrawal')}} " method="post">
+                        @csrf
+                        <div class="modal-body">
+                            <ul>
+                                <li>購入済み作品のダウンロードができなくなります</li>
+                                <li>投稿済み作品は全て削除されます</li>
+                                <li>まだ受け取っていない収益を受け取れなくなります</li>
+                            </ul>
+                            <p>上記に確認の上、退会する場合はパスワードを入力してください</p>
+                            <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
+                            <input id="password" type="password"
+                                class="form-control @error('password') is-invalid @enderror" name="password" value=""
+                                autocomplete="password" required>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">退会</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">キャンセル</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

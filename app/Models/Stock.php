@@ -146,9 +146,8 @@ class Stock extends Model
                
                 $reasonsTranslated="";//空だとforeach1発目で怒られる
                 foreach($reasons as $reason){
-                    if(isset($reason)){
-                    //$reasonsTranslated = $reasonsTranslated.$types[$reason].'/';
-                }
+                   
+                //$reasonsTranslated = $reasonsTranslated.$types[$reason].'/';
 
                 }//該当する却下理由だけを日本語に変換して再出力
 

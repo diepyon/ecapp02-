@@ -2,18 +2,12 @@
 @section('content')
 
 <div class="d-flex flex-row flex-wrap">
-
-
     <div class="container-fluid">
         <div class="mx-auto" style="max-width:1200px">
-
             @if($stock->status == 'delete')
             <p class="text-center">この投稿は削除されました。</p>
-
             @elseif($user_id==$stock->user_id)
-
             @section('title', " [編集] ".$stock->name)
-
             <p class="text-center"> {{$status ?? '' }}</p><br>
             <form id="" action="/stock/{{$stock->id}}/update" method="post" enctype="multipart/form-data">
                 @csrf
@@ -97,19 +91,16 @@
                             <th scope="row"></th>
                             <td><button id="" class="btn btn-outline-secondary btn-right" type="submit"
                                     id="">更新</button>
-
                                 <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-outline-secondary btn-right" data-toggle="modal"
-                                    data-target="#modalcenter_{{$stock->id}}" style="margin-top:16px; ">
+                                <button type="button" class="btn btn-secondary btn-right-continue" data-toggle="modal"
+                                    data-target="#modalcenter_{{$stock->id}}" >
                                     削除
                                 </button>
-
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </form>
-
 
 
             <!-- Modal -->
@@ -142,14 +133,10 @@
                     <p class="text-right">戻る</p>
                 </a>
         </div>
-
-
             @else
             この投稿を編集する権限がありません。
             @endif
-
             @endsection
-
         </div>
     </div>
 </div

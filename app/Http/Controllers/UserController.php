@@ -100,8 +100,25 @@ class UserController extends Controller
             //ユーザー削除と同時に作品も非公開にしたい
             $user_record = User::where('id',$user_id);//postされてきたstock_idを持つレコードをstocksテーブルから取得
             $user_record->update(['status' => 'delete']);
-            
             return redirect()->back()->with('message','削除しました')->with('user_id',$user_id)->with('modalMessage',$modalMessage);
-            
+        }
+        public function withdrawal(Request $request){
+            //ログインユーザーと削除対象ユーザーのIDが同じ
+            //パスワードが一致している
+            //のであれば
+            $user_id =Auth::user()->id;
+            $password=Auth::user()->password;
+
+            if($password==Hash::make($request->password)){
+                dd('パスワード一致');
+            }else{
+                dd('パスワード不一致'.$password.'と'.Hash::make($request->password));
+            }
+
+            if($user_id == $request->user_id){
+                dd('ログインユーザーと削除ユーザー一致');
+            }else{
+                dd('ログインIDと削除対象IDが一致しないので退会できません。');
+            }
         }
 }

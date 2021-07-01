@@ -58,6 +58,8 @@ Route::group(['middleware' => ['auth']], function () {//ログインしている
 
     Route::post('/account/passwordupdate', 'UserController@passwordUpdate');//パスワード変更アクション（実装途中）
 
+    Route::post('/withdrawal', 'UserController@withdrawal');//退会
+
     
     /*----
     作品投稿
@@ -80,7 +82,7 @@ Route::group(['middleware' => ['auth']], function () {//ログインしている
 
     Route::post('/account/edit', 'UserController@userEdit');//ユーザー情報を編集(ノーマルユーザーのget　/account/editと名前ぶってる)
 
-    Route::post('/account/{user_id}/delete', 'UserController@userDelete');//ユーザー消すやつ
+    Route::post('/account/{user_id}/delete', 'UserController@userDelete');//管理者がユーザー消すやつ
 
 });
 Auth::routes();
@@ -93,5 +95,8 @@ Route::get('/henkan2', 'ConversionController@henkan2');//動画変換、後で�
 Route::get('/ongen', 'StockController@ongen');//音源変換、後で消す
 
 Route::get('/gousei', 'ConversionController@gousei');//音源合成、後で消す
+
+Route::get('/cmd', 'ConversionController@cmd');//コマンド実行テスト、後で消す
+
 
 Route::get('/home', 'HomeController@index')->name('home');//LoginControllerとブレードを書き換えて「dashboard」にする？
