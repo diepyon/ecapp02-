@@ -27,8 +27,7 @@ function stockPreView(event) {
         document.getElementById('genreSelect').innerHTML = '<option value="movie">動画</option>' //ジャンルのセレクトボックスを画像に変更
 
     } else if (file.type.match('audio')) {
-        alert('オーディオやん')
-        document.getElementById('genreSelect').innerHTML = '<option value="bgm">BGM</option>'
+        document.getElementById('genreSelect').innerHTML = '<option value="audio">オーディオ</option>'
 
     } else { //想定されないファイルが選ばれたら
         let mimeError = '<div class=""><span id="invalid_message" class="invalid_message"><strong>選択できない形式のデータです。</strong></span></div>'
@@ -36,19 +35,19 @@ function stockPreView(event) {
     }
 }
 
-/*ファイル選択キャンセル*/
-function clear_file() {
-    var area = document.getElementById('file_input_area');
-    var temp = area.innerHTML;
-    area.innerHTML = temp; //span#file_input_are内を空にする
+    /*ファイル選択キャンセル*/
+    function clear_file() {
+        var area = document.getElementById('file_input_area');
+        var temp = area.innerHTML;
+        area.innerHTML = temp; //span#file_input_are内を空にする
 
-    var invalidMessage = document.getElementById('mimemessage');
-    invalidMessage.innerHTML = '' //プロフィールアイコンに画像以外が選択されていた場合に表示されるエラーメッセージを削除
+        var invalidMessage = document.getElementById('mimemessage');
+        invalidMessage.innerHTML = '' //プロフィールアイコンに画像以外が選択されていた場合に表示されるエラーメッセージを削除
 
-    if (document.getElementById('genreSelect')) {
-        var genreSelect = document.getElementById('genreSelect');
-        genreSelect.innerHTML = '' //ファイル選択時に自動判別される製品ジャンルをクリア
+        if (document.getElementById('genreSelect')) {
+            var genreSelect = document.getElementById('genreSelect');
+            genreSelect.innerHTML = '' //ファイル選択時に自動判別される製品ジャンルをクリア
+        }
+        var imageArea = document.getElementById('previewFile');
+        if(imageArea){imageArea.remove()} //プレビュー画像削除
     }
-    var imageArea = document.getElementById('previewFile');
-    imageArea.remove(); //プレビュー画像削除
-}

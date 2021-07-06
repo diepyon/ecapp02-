@@ -38,7 +38,8 @@ class StockController extends Controller
 
         }elseif(strpos($mime,'video') !== false){//動画なら
             $stock->makeVideoThumbnail($uploaded_filename);//動画からサムネイル作成
-
+        }elseif(strpos($mime,'audio') !== false){//音源なら
+            //今のところ特に処理はなし
         }else{
         //ポストされたデータが画像以外なら（作成段階）
         dd($mime);//意図しないファイルがアップされたらいったんmimeタイプを表示（最終的には消す）

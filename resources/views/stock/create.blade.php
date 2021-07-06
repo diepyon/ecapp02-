@@ -1,14 +1,12 @@
 @extends('layouts.app')
 @section('content')
 
-
 <div class="d-flex flex-row flex-wrap">
     <div class="mx-auto" style="max-width:1200px">
         <form method="post" action="/stock" enctype="multipart/form-data">
             @csrf
             <div class="form">
                 <div class="form-title">
-
                     <div class="form-group">
                         <label for="exampleFormControlInput1">作品名</label>
                         <input type="txt" class="form-control" id="exampleFormControlInput1"

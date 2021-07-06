@@ -65,7 +65,6 @@ Route::group(['middleware' => ['auth']], function () {//ログインしている
     作品投稿
     ----*/
     Route::post('/stock/delete', 'StockController@delete')->name('delete');//投稿を削除する
-    //Route::get('/stock/delete', 'StockController@archive');
     Route::get('/stock', 'StockController@archive'); //投稿一覧ページ    
     Route::get('/stock/search', 'StockController@searchPosts');//投稿ページ検索
     Route::get('/stock/create', 'StockController@showCreateForm')->name('create');;//投稿フォームページ
@@ -98,6 +97,7 @@ Route::get('/ongen', 'StockController@ongen');//音源変換、後で消す
 Route::get('/gousei', 'ConversionController@gousei');//音源合成、後で消す
 
 Route::get('/cmd', 'ConversionController@cmd');//コマンド実行テスト、後で消す
+Route::get('/cmd2', 'ConversionController@cmd2');//コマンド実行テスト、後で消す
 
 
 Route::get('/home', 'HomeController@index')->name('home');//LoginControllerとブレードを書き換えて「dashboard」にする？
