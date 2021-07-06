@@ -148,14 +148,17 @@ class ConversionController extends Controller
             return redirect()->back()->with('message', "却下しました。");
         }    
         
-        public function cmd(){
-             $cmd = 'cd ../storage/app/private && /usr/bin/ffmpeg -i motoongen.wav -i ongen.m4a -filter_complex amix=inputs=2:duration=longest output.mp3';
-            exec($cmd,$opt);
-            print_r($opt);
+public function cmd(){
+    $cmd = 'ls  /usr/bin/ffmpeg' ;
+    //exec($cmd,$opt,$result);
+    //print_r($opt);
 
-            return $opt;
+    //cd /usr/bin/  && ls
 
-            //return view('test');
-
-                    }
+if (!exec('apt update  2>&1', $array)) {
+    //command失敗を検知して処理したい
+    echo "NG";
+}
+    var_dump($array);
+    }
 }
