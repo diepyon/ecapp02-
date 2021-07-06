@@ -63,7 +63,6 @@ class HomeController extends Controller
         //これも全部渡しちゃって大丈夫なのか、メールアドレスとか漏れそう
         $users = DB::table('users')->where('status','publish')->get();//削除されていないユーザーを取得
 
-    
         $status = $request->session()->flash('status', 'Task was successful!');
 
         return view('home')->with([

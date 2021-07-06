@@ -5,17 +5,11 @@
     <div class="">
         <div class="mx-auto" style="max-width:1200px">
             <h1 style=" text-align:center;">ホーム</h1>
-
-            </nav>
-
-
-
             @if (session('status'))
             <div class="alert alert-success">
                 {{ session('status') }}
             </div>
             @endif
-            <p> {{ session('message') }}削除しましたメッセージはjavascriptにしてユーザー管理にジャンプさせたほうがいい（＃でスライドジャンプ）</p>
 
             <div class=”container”>
                 <div class="card">
@@ -73,6 +67,8 @@
                 @endif
 
                 @if(Auth::user()->role=='administrator')
+               
+                <p> {{ session('message') }}</p>
                 <div class="card text-white bg-dark mb-3" id="userManage" style="">
                     <div class="card-header">ユーザー管理</div>
                     <div class="card-body">
@@ -105,7 +101,7 @@
                                             編集
                                         </button>
                                         <!-- Modal -->
-                                        <form id="search_form" action="{{url('/account/edit')}} " method="post"
+                                        <form id="" action="{{url('/account/edit')}} " method="post"
                                             enctype="multipart/form-data">
                                             @csrf
                                             <input type="hidden" value="{{$user->id}}" name="user_id">

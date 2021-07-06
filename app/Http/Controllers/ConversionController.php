@@ -149,6 +149,13 @@ class ConversionController extends Controller
         }    
         
         public function cmd(){
-            return view('test');
+             $cmd = 'cd ../storage/app/private && /usr/bin/ffmpeg -i motoongen.wav -i ongen.m4a -filter_complex amix=inputs=2:duration=longest output.mp3';
+            exec($cmd,$opt);
+            print_r($opt);
+
+            return $opt;
+
+            //return view('test');
+
                     }
 }

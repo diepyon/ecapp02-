@@ -99,8 +99,14 @@ class UserController extends Controller
         public function userDelete(Request $request ,User $user,$user_id){//ユーザー削除
             //ユーザー削除と同時に作品も非公開にしたい
             $user_record = User::where('id',$user_id);//postされてきたstock_idを持つレコードをstocksテーブルから取得
-            $user_record->update(['status' => 'delete']);
-            return redirect()->back()->with('message','削除しました')->with('user_id',$user_id)->with('modalMessage',$modalMessage);
+ 
+            if($user_record->first()->status !=='delete') {
+                $message = 'ID:'.$user_id.'「'.$user_record->first()->name.'」を削除しました';
+                $user_record->update(['status' => 'delete']);
+            }else{//既に削除済みの場合
+                $message = '削除できませんでした。';
+            }            
+            return redirect()->back()->with('message',$message);
         }
         public function withdrawal(Request $request){
             //ログインユーザーと削除対象ユーザーのIDが同じ
@@ -120,5 +126,11 @@ class UserController extends Controller
             }else{
                 dd('ログインIDと削除対象IDが一致しないので退会できません。');
             }
+        }
+        public function userShow(){
+            $user_id = Auth::id();
+            $users = DB::table('users')->where('status','publish')->get();
+
+            return view('users')->with("users" ,$users)->with("user_id",$user_id);
         }
 }

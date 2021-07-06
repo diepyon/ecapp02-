@@ -80,9 +80,10 @@ Route::group(['middleware' => ['auth']], function () {//ログインしている
     Route::post('/stock/approval', 'ConversionController@approval');//審査待ちの作品を承認（公開）
     Route::post('/stock/reject', 'ConversionController@reject');//審査待ちの作品を承認（公開）
 
-    Route::post('/account/edit', 'UserController@userEdit');//ユーザー情報を編集(ノーマルユーザーのget　/account/editと名前ぶってる)
+    Route::post('/account/edit', 'UserController@userEdit');//ユーザー情報を編集
+    Route::post('/account/{user_id}/delete', 'UserController@userDelete')->name('userDelete');//管理者がユーザー消すやつ
 
-    Route::post('/account/{user_id}/delete', 'UserController@userDelete');//管理者がユーザー消すやつ
+    Route::get('/users','UserController@userShow');
 
 });
 Auth::routes();
