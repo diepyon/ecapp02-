@@ -92,11 +92,7 @@ Auth::routes();
 Route::get('/henkan', 'ConversionController@henkan');//動画変換、後で消す
 Route::get('/henkan2', 'ConversionController@henkan2');//動画変換、後で消す
 
-Route::get('/ongen', 'StockController@ongen');//音源変換、後で消す
 
-Route::get('/gousei', 'ConversionController@gousei');//音源合成、後で消す
-
-Route::get('/cmd', 'ConversionController@cmd');//コマンド実行テスト、後で消す
 Route::get('/cmd2', 'ConversionController@cmd2');//コマンド実行テスト、後で消す
 
 

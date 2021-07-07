@@ -46,11 +46,26 @@ class ConversionController extends Controller
                 $stock->videoEncode($media,$width,$height);//サンプル用ファイル生成するための動画変換処理        
             
             }elseif($stock_record->first()->genre=='audio'){//音源の時は
-                $ffMpeg = FFMpeg::fromDisk('local')->open(['private/stock_data/'.$stock_record->first()->path, 'private/sample_parts/sample.m4a'])->export();
-                $ffMpeg->addFilter('[0][1]', 'amix=inputs=2:duration=longest', '[a]');
-                $ffMpeg->addFormatOutputMapping(new \FFMpeg\Format\Video\WebM, Media::make('local', 'public/stock_download_sample/'. pathinfo($stock_record->first()->path, PATHINFO_FILENAME).'.mp3'), ['[a]']);
-                $ffMpeg->save();
-                dd('音源変換成功');                
+           
+                $ffMpeg = FFMpeg::fromDisk('local')->open(['private/stock_data/'.$stock_record->first()->path])->export();
+
+                if(pathinfo($stock_record->first()->path, PATHINFO_EXTENSION)!=='wav'){//データがwav以外なら     
+                    //音源をwavに変換                    
+                    $ffMpeg->inFormat(new \FFMpeg\Format\Audio\Wav);
+                    $ffMpeg->save('private/stock_data/'.pathinfo($stock_record->first()->path, PATHINFO_FILENAME).'.wav');                      
+                }
+
+                if(pathinfo($stock_record->first()->path, PATHINFO_EXTENSION)!=='mp3'){//データがmp3以外なら
+                    //音源をmp3に変換
+                    $ffMpeg->inFormat(new \FFMpeg\Format\Audio\Mp3);
+                    $ffMpeg->save('private/stock_data/'.pathinfo($stock_record->first()->path, PATHINFO_FILENAME).'.mp3');  
+                }                
+
+                    //サンプル音源を生成
+                    $ffMpeg = FFMpeg::fromDisk('local')->open(['private/stock_data/'.$stock_record->first()->path, 'private/sample_parts/sample.m4a'])->export();
+                    $ffMpeg->addFilter('[0][1]', 'amix=inputs=2:duration=longest', '[a]');
+                    $ffMpeg->addFormatOutputMapping(new \FFMpeg\Format\Video\WebM, Media::make('local', 'public/stock_download_sample/'. pathinfo($stock_record->first()->path, PATHINFO_FILENAME).'.mp3'), ['[a]']);
+                    $ffMpeg->save();         
             }
             
             $stock_record->update(['status' => 'publish']);
@@ -81,13 +96,6 @@ if (!exec('apt update  2>&1', $array)) {
 }
     var_dump($array);
     }
-
-    public function cmd2(){
-        //生ffmpegを使わずともlaravel-ffmepgでできたのでこれを使おう。
-        $ffMpeg = FFMpeg::fromDisk('local')->open(['private/motoongen.wav', 'private/ongen.m4a'])->export();
-        $ffMpeg->addFilter('[0][1]', 'amix=inputs=2:duration=longest', '[a]');
-        $ffMpeg->addFormatOutputMapping(new \FFMpeg\Format\Video\WebM, Media::make('local', 'private/out.mp3'), ['[a]']);
-        $ffMpeg->save();
-        }    
+  
 }
 

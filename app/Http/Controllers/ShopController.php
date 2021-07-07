@@ -63,7 +63,7 @@ class ShopController extends Controller
             $mime =$imgSize['mime']; //販売データのマイムタイプを取得マイムタイプを取得（透かしありの圧縮なし画像を参照）
             $filesize =  $stock->calcFileSize(Storage::size('private/stock_data/'.$stock_record->path));//実際の販売データのファイルサイズを取得
             $aspect=$stock->aspect($width, $height);  //アスペクト比を取得
-            return view('singleproduct', compact('stock_record', 'user','width','height','mime','filesize','aspect'));            
+            return view('singleproduct/singleproduct', compact('stock_record', 'user','width','height','mime','filesize','aspect'));            
         }else{
             //それ以外なら(view表示の時に怒られるからいったん中身をnull)
             $width = null;
@@ -71,7 +71,7 @@ class ShopController extends Controller
             $mime =null;
             $filesize =null;  
             $aspect=null;
-            return view('singleproduct', compact('stock_record', 'user','width','height','mime','filesize','aspect'));   
+            return view('singleproduct/singleproduct', compact('stock_record', 'user','width','height','mime','filesize','aspect'));   
         }
     }
     

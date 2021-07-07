@@ -7,7 +7,7 @@
             <select class="form-control" id="genre_select" name="genre">
                 <option value="image" @if($genre =='image') selected @endif>画像</option>
                 <option value="movie" @if($genre =='movie') selected @endif>映像</option>
-                <option value="bgm"   @if($genre =='bgm') selected @endif>BGM</option>
+                <option value="audio"   @if($genre =='audio') selected @endif>音源</option>
             </select>
         </span>
         <input type="search" class="form-control" name="key" value="{{$key ?? ''}}" placeholder="keyword" aria-label=""
