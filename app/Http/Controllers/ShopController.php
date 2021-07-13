@@ -16,10 +16,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;//保存やダウンロードに関するやつ
 
 
-use FFMpeg;
-
-
-
 class ShopController extends Controller
 {
     public function index() //追加

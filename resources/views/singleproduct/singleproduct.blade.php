@@ -2,7 +2,9 @@
 
 @section('content')
 <div class="container-fluid">
-    <div class="">
+ 
+    <div id="app">
+       @{{msg}}
         <div class="mx-auto" style="max-width:1200px">
             @if($stock_record->status == 'delete')
                 <p class="text-center">この投稿は削除されました。</p>
@@ -25,5 +27,26 @@
             @endif
         </div>
     </div>
+
+    
 </div>
 @endsection
+
+
+   <script>
+       new Vue({
+           el: "#app",
+           data: {
+               msg: "Welcome"
+           },
+           methods: {
+               sayHello() {
+                   this.msg = "Hello!"
+               }
+           },
+           mounted() {
+               //表示後にやりたいことはここに書ける
+               alert('hogehoge');
+           }
+       })
+   </script>

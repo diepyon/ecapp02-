@@ -67,17 +67,28 @@ class StockController extends Controller
         $user_id =Auth::user()->id;//ログインユーザーのIDを取得
         $stock = DB::table('stocks')->where('id', $stocks_id)->first();   
 
+        if($stock->genre=='audio'){
+            
+                $reasons=array('dirty'=>'音質が悪い');
 
-        $reasons = array(
-            'rough'=>'画質が荒い',
-            'BlackFrame:'=>'黒枠が含まれている',
+        }else{
+                $reasons=array(
+                'rough'=>'画質が荒い',
+                'BlackFrame:'=>'黒枠が含まれている'
+                );
+        }
+    
+        $reasons = array_merge(
+            $reasons,array(
             'LongOrShort'=>'長すぎるか短すぎる',
             'Existing'=>'既に酷似する投稿が存在する',
             'OtherSite'=>'ほかの販売サイトにも登録されている（正規の投稿者か見分けがつかない）',
             'LowQuality'=>'クオリティーが低い',
             'morals'=>'公序良俗に反する',
             'other'=>'その他'
+            )
         );
+
 
         return view('stock/detail', compact('stock','user_id'))->with('reasons',$reasons);
     }
@@ -168,7 +179,15 @@ class StockController extends Controller
          $stockPath= DB::table('stocks')->where('id', $stock_id)->first()->path;//該当商品IDのファイルパスを取得
          $stockPath='private/stock_data/'.$stockPath;//実際のファイルパスを生成  
          $mimeType = Storage::mimeType($stockPath);//マイム情報を取得
-         $extension = pathinfo($stockPath, PATHINFO_EXTENSION);//拡張子のみ  
+
+         //オーディオの場合のみ、inputhiddenからダウンロードしたい拡張子を指定する
+         if($request->extension){//拡張子の指定があれば（audioの場合）
+             $extension = $request->extension;//拡張子のみ
+         }else{//拡張子の指定がなければ（audio以外の場合）
+             $extension = pathinfo($stockPath, PATHINFO_EXTENSION);//拡張子のみ
+
+         }
+           
          $headers = [['Content-Type' => $mimeType]];//ダウンロード用にマイムタイプをにゃほにゃほする
          $fileName =  substr(bin2hex(random_bytes(8)), 0, 8).'.'.$extension;//「ファイル名はランダム英数字.拡張子」    
 

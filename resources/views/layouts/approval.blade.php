@@ -2,8 +2,6 @@
 @if(Auth::user()->role=='administrator' and $stock->status=='inspection'){{--管理者なら　かつ投稿が承認待ちならにしたい andがきいてない--}}
 
 
-
-
 <!-- Modal -->
 <div class="modal fade" id="approvalModal" tabindex="-1" role="dialog" aria-labelledby="approvalModalTitle"
     aria-hidden="true">
@@ -41,6 +39,7 @@
             @csrf
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalCenterTitle">却下理由</h5>
+                    
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>

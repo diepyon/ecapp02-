@@ -5,10 +5,14 @@
         @foreach($stocks as $stock)
         <div class="col-xs-6 col-sm-4 col-md-4 img_box ">
             <div class="mycart_box">
+
+            
+
                 id:{{$stock->id}}<br>
                 ジャンル：{{$stock->genre}} <br>
                 {{ number_format($stock->fee)}}円<br>
                 @if(in_array($stock->id, $orderhistory_data['orderhistory_list'],true))
+
 
                 <div class="stock_thumbnail">
                     <a href="{{url('/product/')}}/{{$stock->id}}">
@@ -95,6 +99,9 @@
                 @endif
 
                 <br>
+            
+           
+
             </div>
         </div>
         @endforeach

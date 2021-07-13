@@ -11238,6 +11238,14 @@ div#author img {
 
 /*投稿者アイコン*/
 
+.inline-flex {
+  display: inline-flex;
+}
+
+.inline-flex form {
+  padding: 5px;
+}
+
 /*-----
 cart
 -----*/

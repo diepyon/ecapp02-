@@ -6,7 +6,7 @@
         この投稿は削除されました。
         <br><br><br>
         @elseif($user_id==$stock->user_id or Auth::user()->role=='administrator'){{--投稿者または管理者なら--}}
-
+        
         @section('title', $stock->name)
         <p class="text-center"> {{ session('message') }}{{$message ?? ''}}</p><br>
         <table class="table">
