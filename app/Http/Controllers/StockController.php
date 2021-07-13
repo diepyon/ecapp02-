@@ -111,7 +111,6 @@ class StockController extends Controller
     public function archive(Stock $stock)
     {
         $data = $stock->myPosts(); //自分の投稿一覧
-
         return view('stock/archive', $data);
     }
 
@@ -144,7 +143,6 @@ class StockController extends Controller
         $stock_record->update(['status' => 'delete']);//statusをdeleteに変更（レコード自体は消さない）
         $cart_record->delete();//cartsテーブルから該当stock_idを持つレコードを削除（みんなの買い物かごから消える）
         $favorite_record->delete();//favoritesテーブルから該当stock_idを持つレコードを削除（みんなのお気に入りから消える）
-
         $data = $stock->myPosts($stock_record);
 
         return view('stock/archive',$data)->with('message', $message);
@@ -156,8 +154,6 @@ class StockController extends Controller
         $user_id =Auth::user()->id;//ログインユーザーのIDを取得
         $orderhistories =  DB::table('orderhistories')->where('user_id', $user_id)->get();//購入履歴テーブルからログインユーザーが購入した商品のレコードを取得
         $posthistories =  DB::table('stocks')->where('user_id', $user_id)->get();//stocksテーブルからログインユーザーがとうした商品のレコードを取得
-
-   
 
         foreach($orderhistories as $orderhistorie){
             $orderhistoriesID[]= $orderhistorie->stock_id;

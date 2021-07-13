@@ -7,6 +7,7 @@
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <!-- title -->
     @hasSection('title')
     <title>@yield('title') | {{ config('app.name') }}</title>
@@ -38,7 +39,6 @@
     <!-- Favicon -->
     <link rel="shortcut icon" href="{{ asset('/siteparts/favicon.ico') }}">
 
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
 </head>
 
 <body>

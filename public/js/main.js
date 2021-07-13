@@ -34,8 +34,8 @@ itemloop（これも必要なルーディングにだけ配置したい）
     }
 
 
-  
 /*htmlを書き換えて未購入商品をダウンロードしようとしたとき*/
 function blockDownload(){
     alert('あかんで')
 }
+

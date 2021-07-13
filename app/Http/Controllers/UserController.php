@@ -115,10 +115,11 @@ class UserController extends Controller
             $user_id =Auth::user()->id;
             $password=Auth::user()->password;
 
-            if($password==Hash::make($request->password)){
+            if(Hash::check($request->password,$password)){
                 dd('パスワード一致');
             }else{
-                dd('パスワード不一致'.$password.'と'.Hash::make($request->password));
+                print($request->password);
+                dd('パスワード不一致　実際のパスワードは「'.$password.'」　リクエストの値は「'.Hash::check($request->password,$password).'」');
             }
 
             if($user_id == $request->user_id){
